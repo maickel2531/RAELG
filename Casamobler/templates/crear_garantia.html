@@ -29,8 +29,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="estado_reclamo" class="form-label">Estado del reclamo</label>
-                            <select id="estado_reclamo" name="estado_reclamo" class="form-select" required>
+                            <label for="estado_garantia" class="form-label">Estado de la Garantia</label>
+                            <select id="estado_garantia" name="estado_garantia" class="form-select" required>
                                 <option value="">Seleccione un estado</option>
                                 <option value="Pendiente">Pendiente</option>
                                 <option value="Rechazado">Rechazado</option>
@@ -44,8 +44,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="cliente_id" class="form-label">Cliente</label>
-                            <select id="cliente_id" name="cliente_id" class="form-select" required>
+                            <label for="cliente" class="form-label fw-bold">Cliente</label>
+                            <select id="cliente" name="cliente" class="form-select" required>
                                 <option value="">Seleccione un cliente</option>
                                 {% for cliente in clientes %}
                                     <option value="{{ cliente.id }}">{{ cliente.nombre_cliente }}</option>
@@ -54,14 +54,15 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="pedido_id" class="form-label">Pedido</label>
-                            <select id="pedido_id" name="pedido_id" class="form-select" required>
+                            <label for="pedido" class="form-label fw-bold">Pedido</label>
+                            <select id="pedido" name="pedido" class="form-select" required>
                                 <option value="">Seleccione un pedido</option>
                                 {% for pedido in pedidos %}
                                     <option value="{{ pedido.id }}">{{ pedido.producto }}</option>
                                 {% endfor %}
                             </select>
                         </div>
+
                         
                         <div class="d-grid">
                             <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">

@@ -7,9 +7,9 @@
                 <div class="card-body">
                   <div class="d-md-flex align-items-center">
                     <div>
-                      <h4 class="card-title">Clientes</h4>
+                      <h4 class="card-title">Garantias</h4>
                       <p class="card-subtitle">
-                        Panel de CLientes 
+                        Panel de Garantias 
                       </p>
                     </div>
                     <div class="ms-auto mt-3 mt-md-0">
@@ -53,14 +53,18 @@
                       <tbody>
                         {% for garantia in garantias %}
                         <tr>
-                            <td class="px-0"></td> 
+                            <td class="px-0">{{ garantia.producto }}</td>
+                            <td class="px-0">{{ garantia.motivo_reclamo }}</td>
+                            <td class="px-0">{{ garantia.fecha_reclamo }}</td>
+                            <td class="px-0 text-end">{{ garantia.estado_garantia }}</td>
+                            <td class="px-0 text-end">{{ garantia.observaciones }}</td>
+                            <td class="px-0 text-end">{{ garantia.cliente.nombre_cliente }}</td>
+                            <td class="px-0 text-end">{{ garantia.pedido.producto }}</td>
                             <td class="px-0 text-end">
                                 <a class="btn btn-primary"  href="{% url 'editar_garantia' garantia.id %}">Editar</a>
                                 <a class="btn btn-danger"  href="{% url 'eliminar_garantia' garantia.id %}">Eliminar</a>
                             </td>
                         </tr>
-
-
                         {% endfor %}
 
                       </tbody>
