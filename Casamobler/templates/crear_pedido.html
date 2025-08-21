@@ -1,0 +1,75 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center rounded-top-4">
+                    <h4 class="mb-0">Crear Pedido</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{% url 'crear_pedido' %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="fecha_pedido" class="form-label fw-bold">Fecha de Pedido</label>
+                            <input type="date" class="form-control" id="fecha_pedido" name="fecha_pedido" placeholder="Ingrese la fecha" required>
+                        </div>
+
+                        <div class="mb-3"> 
+                            <label for="producto" class="form-label fw-bold">Producto</label>
+                            <input type="text" class="form-control" id="producto" name="producto" placeholder="Ingrese el producto" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cantidad" class="form-label fw-bold">Cantidad</label>
+                            <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad" required>
+                        </div>
+
+                        <div class="mb-3"> 
+                            <label for="valor_unitario" class="form-label fw-bold">Valor Unitario</label>
+                            <input type="number" class="form-control" id="valor_unitario" name="valor_unitario" placeholder="Ingrese el valor unitario" required>
+                        </div>
+
+                        <div class="mb-3"> 
+                            <label for="valor_total" class="form-label fw-bold">Valor Total</label>
+                            <input type="number" class="form-control" id="valor_total" name="valor_total" placeholder="Ingrese el valor total" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <laber for="estado_pedido" class="form-label fw-bold">Estado Pedido</label>
+                            <select id="estado_pedido" name="estado_pedido" class="form-select" required>
+                                <option value="">Seleccione un estado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="En Progreso">En Progreso</option>
+                                <option value="Finalizado">Finalizado</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="usuario" class="form-label fw-bold">Usuario</label>
+                            <select id="usuario" name="cliente" class="form-select" required>
+                                <option value="">Seleccione un usuario</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}">{{ cliente.nombre_cliente }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                                <i class="bi bi-person-plus-fill"></i> Crear Pedido
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center text-muted small">
+                    Todos los campos son obligatorios
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

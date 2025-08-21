@@ -1,0 +1,80 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center rounded-top-4">
+                    <h4 class="mb-0">Crear Garantia</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{% url 'crear_garantia' %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="producto" class="form-label">Nombre del producto</label>
+                            <input type="text" class="form-control" id="producto" name="producto" placeholder="Nombre del producto">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="motivo_reclamo" class="form-label">Motivo de reclamo</label>
+                            <input type="text" class="form-control" id="motivo_reclamo" name="motivo_reclamo" placeholder="Motivo de reclamo">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="fecha_reclamo" class="from-label">Fecha del reclamo</label>
+                            <input type="date" class="form-control" id="fecha_reclamo" name="fecha_reclamo" placeholder="Fecha del reclamo">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="estado_reclamo" class="form-label">Estado del reclamo</label>
+                            <select id="estado_reclamo" name="estado_reclamo" class="form-select" required>
+                                <option value="">Seleccione un estado</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Rechazado">Rechazado</option>
+                                <option value="Aceptado">Aceptado</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" id="observaciones" name="observaciones" placeholder="Observaciones"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cliente_id" class="form-label">Cliente</label>
+                            <select id="cliente_id" name="cliente_id" class="form-select" required>
+                                <option value="">Seleccione un cliente</option>
+                                {% for cliente in clientes %}
+                                    <option value="{{ cliente.id }}">{{ cliente.nombre_cliente }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="pedido_id" class="form-label">Pedido</label>
+                            <select id="pedido_id" name="pedido_id" class="form-select" required>
+                                <option value="">Seleccione un pedido</option>
+                                {% for pedido in pedidos %}
+                                    <option value="{{ pedido.id }}">{{ pedido.producto }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                                <i class="bi bi-person-plus-fill"></i> Crear Garantia
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center text-muted small">
+                    Todos los campos son obligatorios
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

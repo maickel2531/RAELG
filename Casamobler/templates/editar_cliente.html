@@ -1,0 +1,55 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center rounded-top-4">
+                    <h4 class="mb-0">Crear Cliente</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{% url 'editar_cliente' cliente.id %}">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label fw-bold">Nombre</label>
+                            <input value="{{ cliente.nombre_cliente }}" type="text" class="form-control" id="nombre" name="nombre_cliente" placeholder="Ingrese el nombre" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="documento_id" class="form-label fw-bold">Documento ID</label>
+                            <input value="{{ cliente.documento_id }}" type="text" class="form-control" id="documento_id" name="documento_id" placeholder="Ingrese el documento id" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label fw-bold">Dirección</label>
+                            <input value="{{ cliente.direccion }}" type="text" class="form-control" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label fw-bold">Telefono</label>
+                            <input value="{{ cliente.telefono }}" type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese el telefono" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-bold">Correo electrónico</label>
+                            <input value="{{ cliente.correo_electronico }}" type="email" class="form-control" id="email" name="correo_electronico" placeholder="usuario@correo.com" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
+                                <i class="bi bi-person-plus-fill"></i> Editar Cliente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center text-muted small">
+                    Todos los campos son obligatorios
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

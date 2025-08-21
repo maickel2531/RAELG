@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}  
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+                <div class="card-body">
+                  <div class="d-md-flex align-items-center">
+                    <div>
+                      <h4 class="card-title">Pedidos</h4>
+                      <p class="card-subtitle">
+                        Panel de pedidos 
+                      </p>
+                    </div>
+                    <div class="ms-auto mt-3 mt-md-0">
+                      <select class="form-select theme-select border-0" aria-label="Default select example">
+                        <option value="1">March 2025</option>
+                        <option value="2">March 2025</option>
+                        <option value="3">March 2025</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="table-responsive mt-4">
+                    <table class="table mb-0 text-nowrap varient-table align-middle fs-3">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="px-0 text-muted">
+                            Fecha de Pedido
+                          </th>
+                          <th scope="col" class="px-0 text-muted">
+                            Producto
+                          </th>
+                          <th scope="col" class="px-0 text-muted">
+                            Cantidad
+                          </th>
+                          <th scope="col" class="px-0 text-muted text-end">
+                            Valor Unitario
+                          </th>
+                          <th scope="col" class="px-0 text-muted text-end">
+                            Total
+                          </th>
+                          <th scope="col" class="px-0 text-muted text-end">
+                            Estado Pedido
+                          </th>
+                          <th scope="col" class="px-0 text-muted text-end">
+                            Cliente
+                          </th>
+                          <th scope="col" class="px-0 text-muted text-end">
+                            Acciones
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for pedido in pedidos %}
+                        <tr>
+                          <td class="px-0">{{ pedido.fecha_pedido }}</td>
+                          <td class="px-0">{{ pedido.producto }}</td>
+                          <td class="px-0">{{ pedido.cantidad }}</td>
+                          <td class="px-0 text-end">{{ pedido.valor_unitario }}</td>
+                          <td class="px-0 text-end">{{ pedido.valor_total }}</td>
+                          <td class="px-0 text-end">{{ pedido.estado_pedido }}</td>
+                          <td class="px-0 text-end">{{ pedido.cliente.nombre_cliente }}</td>
+                          <td class="px-0 text-end">
+                            <a class="btn btn-primary"  href="{% url 'editar_pedido' pedido.id %}">Editar</a>
+                            <a class="btn btn-danger"  href="{% url 'eliminar_pedido' pedido.id %}">Eliminar</a>
+                          </td>
+                        </tr>
+                        {% endfor %}
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <a class="btn btn-primary"  href="{% url 'crear_pedido' %}">Agregar</a>
+                </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}    
