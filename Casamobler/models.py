@@ -12,6 +12,7 @@ class Cliente(models.Model):
 
     def __str__(self):
         return self.nombre_cliente or f"Cliente {self.id}"
+    
 
 
 class Pedido(models.Model):
@@ -73,7 +74,6 @@ class Usuario(models.Model):
     nombre_usuario = models.CharField(max_length=100, null=True, blank=True)
     correo = models.EmailField(unique=True, null=True, blank=True)
     contraseña = models.CharField(max_length=255, null=True, blank=True)
-    estado = models.CharField(max_length=20, null=True, blank=True)
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
