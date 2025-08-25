@@ -23,5 +23,4 @@ urlpatterns = [
     path('garantias/crear/', views.crear_garantia, name='crear_garantia'),
     path('garantias/editar/<int:id>/', views.editar_garantia, name='editar_garantia'),
     path('garantias/eliminar/<int:id>/', views.eliminar_garantia, name='eliminar_garantia'),
-    
     ]

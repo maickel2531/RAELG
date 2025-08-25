@@ -7,7 +7,7 @@ def index(request):
     return render(request, 'index.html')
 
 def lista_usuarios(request):
-    return render(request, 'lista_usuarios.html', {'usuarios': Usuario.objects.all()})
+    return render(request, 'usuario/lista_usuarios.html', {'usuarios': Usuario.objects.all()})
 
 def crear_usuarios(request):
     if request.method == 'POST':
@@ -25,12 +25,12 @@ def crear_usuarios(request):
             rol=rol
         )
     
-    return render(request, 'crear_usuarios.html', {'roles': Rol.objects.all()})
+    return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
 
 def eliminar_usuarios(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     usuario.delete()
-    return redirect('lista_usuarios')
+    return redirect('usuario/lista_usuarios')
 
 def editar_usuarios(request, id):
     usuario = get_object_or_404(Usuario, id=id)
@@ -43,8 +43,8 @@ def editar_usuarios(request, id):
             usuario.contraseña = request.POST.get('contraseña')  # ⚠ Hashear en producción  # ⚠ Hashear en producción
         usuario.rol = rol
         usuario.save()
-        return redirect('lista_usuarios')
-    return render(request, 'editar_usuarios.html', {'usuario': usuario, 'roles': roles})
+        return redirect('usuario/lista_usuarios')
+    return render(request, 'usuario/editar_usuarios.html', {'usuario': usuario, 'roles': roles})
 
 def crear_cliente(request):
     if request.method == 'POST':
@@ -60,10 +60,10 @@ def crear_cliente(request):
             telefono=telefono,
             correo_electronico=correo_electronico
         )
-    return render(request, 'crear_cliente.html')
+    return render(request, 'cliente/crear_cliente.html')
 
 def lista_cliente(request):
-    return render(request, 'lista_cliente.html', {'clientes': Cliente.objects.all()})
+    return render(request, 'cliente/lista_cliente.html', {'clientes': Cliente.objects.all()})
 
 
 def editar_cliente(request, id):
@@ -80,16 +80,16 @@ def editar_cliente(request, id):
         cliente.telefono = telefono
         cliente.correo_electronico = correo_electronico
         cliente.save()
-        return redirect('lista_cliente')
-    return render(request, 'editar_cliente.html', {'cliente': cliente})
+        return redirect('cliente/lista_cliente')
+    return render(request, 'cliente/editar_cliente.html', {'cliente': cliente})
 
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
     cliente.delete()
-    return redirect('lista_cliente')
+    return redirect('cliente/lista_cliente')
 
 def lista_pedido(request):
-    return render(request, 'lista_pedido.html', {'pedidos': Pedido.objects.all()})
+    return render(request, 'pedido/lista_pedido.html', {'pedidos': Pedido.objects.all()})
 
 def crear_pedido(request):
     if request.method == 'POST':
@@ -109,8 +109,8 @@ def crear_pedido(request):
             estado_pedido=estado_pedido,
             cliente=cliente
         )
-        return redirect('lista_pedido')
-    return render(request, 'crear_pedido.html', {'clientes': Cliente.objects.all()})
+        return redirect('pedido/lista_pedido')
+    return render(request, 'pedido/crear_pedido.html', {'clientes': Cliente.objects.all()})
 
 def editar_pedido(request, id):
     pedido = get_object_or_404(Pedido, id=id)
@@ -130,16 +130,16 @@ def editar_pedido(request, id):
         pedido.estado_pedido = estado_pedido
         pedido.cliente = cliente
         pedido.save()
-        return redirect('lista_pedido')
-    return render(request, 'editar_pedido.html', {'pedido': pedido, 'clientes': Cliente.objects.all()})
+        return redirect('pedido/lista_pedido')
+    return render(request, 'pedido/editar_pedido.html', {'pedido': pedido, 'clientes': Cliente.objects.all()})
 
 def eliminar_pedido(request, id):
     pedido = get_object_or_404(Pedido, id=id)
     pedido.delete()
-    return redirect('lista_pedido')
+    return redirect('pedido/lista_pedido')
 
 def lista_recibo_de_caja(request):
-    return render(request, 'lista_recibo_de_caja.html', {'recibos': ReciboCaja.objects.all()})
+    return render(request, 'recibo/lista_recibo_de_caja.html', {'recibos': ReciboCaja.objects.all()})
 
 def crear_recibo_de_caja(request):
     if request.method == "POST":
@@ -159,9 +159,9 @@ def crear_recibo_de_caja(request):
             observaciones=observaciones
         )
 
-        return redirect("lista_recibo_de_caja")
+        return redirect("recibo/lista_recibo_de_caja")
 
-    return render(request, "crear_recibo_de_caja.html", {
+    return render(request, "recibo/crear_recibo_de_caja.html", {
         "pedidos": Pedido.objects.all()})
 
 def editar_recibo_de_caja(request, id):
@@ -177,19 +177,19 @@ def editar_recibo_de_caja(request, id):
         recibo.pedido = Pedido.objects.get(id=pedido_id)
 
         recibo.save()
-        return redirect("lista_recibo_de_caja")
+        return redirect("recibo/lista_recibo_de_caja")
 
-    return render(request, "editar_recibo_de_caja.html", {
+    return render(request, "recibo/editar_recibo_de_caja.html", {
         "recibo": recibo,
         "pedidos": Pedido.objects.all()})
 
 def eliminar_recibo_de_caja(request, id):
     recibo = get_object_or_404(ReciboCaja, id=id)
     recibo.delete()
-    return redirect('lista_recibo_de_caja')
+    return redirect('recibo/lista_recibo_de_caja')
 
 def lista_garantia(request):
-    return render(request, 'lista_garantia.html', {'garantias': Garantia.objects.all()})
+    return render(request, 'garantia/lista_garantia.html', {'garantias': Garantia.objects.all()})
 
 def crear_garantia(request):
     if request.method == 'POST':
@@ -212,7 +212,7 @@ def crear_garantia(request):
             cliente=cliente,
             pedido=pedido
         )
-    return render(request, 'crear_garantia.html', {'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
+    return render(request, 'garantia/crear_garantia.html', {'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
 
 
 
@@ -238,13 +238,13 @@ def editar_garantia(request, id):
         garantia.cliente            = cliente
         garantia.pedido             = pedido
         garantia.save()
-        return redirect('lista_garantia')
-    return render(request, 'editar_garantia.html', {'garantia': garantia, 'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
+        return redirect('garantia/lista_garantia')
+    return render(request, 'garantia/editar_garantia.html', {'garantia': garantia, 'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
 
 
 def eliminar_garantia(request, id):
     garantia = get_object_or_404(Garantia, id=id)
     garantia.delete()
-    return redirect('lista_garantia')
+    return redirect('garantia/lista_garantia')
     
 
