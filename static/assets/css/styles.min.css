@@ -15868,9 +15868,11 @@ body {
 .body-wrapper {
   position: relative;
   border-radius: 20px;
+  background-color: #f7f7f7
 }
 .body-wrapper .body-wrapper-inner {
   min-height: calc(100vh - 110px);
+  background-color: #f7f7f7;
 }
 .body-wrapper .container-fluid, .body-wrapper .container-sm, .body-wrapper .container-md, .body-wrapper .container-lg, .body-wrapper .container-xl, .body-wrapper .container-xxl {
   max-width: 1300px;
