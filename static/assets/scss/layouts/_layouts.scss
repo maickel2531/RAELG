@@ -11,21 +11,24 @@ body {
   position: relative;
 }
 
+
 .body-wrapper {
   position: relative;
+  margin-left: 250px;
   border-radius: 20px;
+
 
   .body-wrapper-inner{
     min-height: calc(100vh - 110px);
-    background-color: #f7f7f7;
   }
 
   .container-fluid {
-    max-width: $boxed-width;
-    margin: 0 auto;
-    padding: $grid-gutter-width;
-    transition: 0.2s ease-in;
-    padding-top: 180px;
+  max-width: $boxed-width;
+  margin: 0 auto;
+  padding: $grid-gutter-width;
+  transition: 0.2s ease-in;
+  padding-top: 70px; // ← Ajusta aquí el espacio superior
+
 
     @include media-breakpoint-down(lg){
       padding-top: 230px;

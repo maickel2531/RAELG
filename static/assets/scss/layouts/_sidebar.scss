@@ -3,100 +3,20 @@
   top: 70px;
   left: 0;
   width: 250px;
-  height: calc(100vh - 70px); // solo esta altura
-  background: $sidebar-bg;
-  min-height: calc(100vh - 70px);
+  height: calc(100vh - 70px);
+  background: #f7f7f7;
   box-shadow: 2px 0 8px $sidebar-shadow;
-  overflow: hidden; // solo scroll interno
+  overflow: hidden;
   z-index: 1000;
   transition: all 0.3s ease;
-
-  &.collapsed {
-    width: 70px;
-    .hide-menu {
-      display: none;
-    }
-  }
+  border-right: 1px solid #eee; // Opcional: línea divisoria
 }
 
-
-
-
-
-.left-sidebar {
-  position: fixed;
-  top: 70px;
-  left: 0;
-  width: 250px;
-  height: calc(100vh - 70px); // solo esta altura
-  background: $sidebar-bg;
-  min-height: calc(100vh - 70px);
-  box-shadow: 2px 0 8px $sidebar-shadow;
-  overflow: hidden; // solo scroll interno
-  z-index: 1000;
-  transition: all 0.3s ease;
-
-  &.collapsed {
-    width: 70px;
-    .hide-menu {
-      display: none;
-    }
-  }
-
-  .brand-logo {
-    background: #f8f9fa;
-    border-bottom: 1px solid $sidebar-border;
-
-    img {
-      border-radius: 50%;
-    }
-  }
-
-  .sidebar-nav {
-    padding: 0.5rem;
-    list-style: none;
-
-    .nav-small-cap {
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      color: $sidebar-muted;
-      margin-top: 20px;
-      text-transform: uppercase;
-    }
-
-    .sidebar-item {
-      margin-bottom: 5px;
-
-      .sidebar-link {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 15px;
-        border-radius: 6px;
-        text-decoration: none;
-        color: $sidebar-text;
-        transition: all 0.3s ease;
-
-        .icon {
-          font-size: 18px;
-          color: $sidebar-hover-bg;
-          transition: transform 0.3s ease, color 0.3s ease;
-        }
-
-        &:hover {
-          background: $sidebar-hover-bg;
-          color: #fff;
-
-          .icon {
-            color: #fff;
-            transform: rotate(20deg) scale(1.2);
-          }
-        }
-      }
-    }
-  }
+.scroll-sidebar {
+  height: calc(100vh - 70px);
+  overflow-y: auto;
 }
+
 .left-sidebar {
   transform: translateX(0);
   transition: transform 0.3s ease;
@@ -104,9 +24,4 @@
   &.collapsed {
     transform: translateX(-100%);
   }
-}
-
-.scroll-sidebar {
-  height: 100%; // ocupa todo el alto del sidebar
-  overflow-y: auto;
 }
