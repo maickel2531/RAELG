@@ -15,7 +15,13 @@ $header-shadow: 1px 0px 20px 0px rgb(0 0 0 / 12%);
 // Sidebar
 // ---------------------------------------------- 
 
-$sidebar-width-full: 270px;
-$sidebar-spacing-x: 0 24px;
+// Colores base
+$sidebar-bg: #ffffff;
+$sidebar-hover-bg: #dc3545; // rojo bootstrap
+$sidebar-text: #343a40;
+$sidebar-muted: #6c757d;
+$sidebar-border: #dee2e6;
+$sidebar-shadow: rgba(0,0,0,0.05);
+
 
 $boxed-width: 1300px; // boxed layout width

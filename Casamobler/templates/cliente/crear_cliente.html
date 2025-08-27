@@ -1,55 +1,128 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-primary text-white text-center rounded-top-4">
-                    <h4 class="mb-0">Crear Cliente</h4>
-                </div>
-                <div class="card-body p-4">
-                    <form method="POST" action="{% url 'crear_cliente' %}">
-                        {% csrf_token %}
-                        
-                        <div class="mb-3">
-                            <label for="nombre" class="form-label fw-bold">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre_cliente" placeholder="Ingrese el nombre" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="documento_id" class="form-label fw-bold">Documento ID</label>
-                            <input type="text" class="form-control" id="documento_id" name="documento_id" placeholder="Ingrese el documento id" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="direccion" class="form-label fw-bold">Dirección</label>
-                            <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="telefono" class="form-label fw-bold">Telefono</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese el telefono" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label fw-bold">Correo electrónico</label>
-                            <input type="email" class="form-control" id="email" name="correo_electronico" placeholder="usuario@correo.com" required>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
-                                <i class="bi bi-person-plus-fill"></i> Crear Cliente
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center text-muted small">
-                    Todos los campos son obligatorios
-                </div>
+<style>
+    body {
+        background: #f7f7f7; /* crema claro */
+    }
+    .form-container {
+        background-color: white;
+        border: 1px solid #8B0000; /* rojo oscuro */
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 900px; /* más ancho */
+        margin: 0 auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #8B0000;
+    }
+    .form-header {
+        background-color: #f7f7f7; 
+        color: #8B0000;
+        font-weight: bold;
+        padding: 12px 20px;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+        font-size: 1.2em;
+    }
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #8B0000;
+    }
+    .form-input {
+        width: 100%;
+        padding: 8px 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 1em;
+        color: #333;
+    }
+    .form-button {
+        background-color: #f7f7f7;
+        color: #8B0000;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+    .form-button:hover {
+        background-color: #700000;
+        color: #fff;
+    }
+    .form-row {
+        display: flex;
+        gap: 16px;
+    }
+    .form-col {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    @media (max-width: 700px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+<div class="form-container">
+    <div class="form-header">
+        Crear Cliente
+    </div>
+    <form method="POST" action="{% url 'crear_cliente' %}">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-col">
+                <label for="nombre" class="form-label">Primer nombre</label>
+                <input type="text" class="form-input" id="nombre" name="p_nombrec" placeholder="Ingrese el nombre" required>
+            </div>
+            <div class="form-col">
+                <label for="s_nombre" class="form-label">Segundo nombre</label>
+                <input type="text" class="form-input" id="s_nombre" name="s_nombrec" placeholder="Ingrese el segundo nombre">
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-col">
+                <label for="apellido" class="form-label">Primer apellido</label>
+                <input type="text" class="form-input" id="apellido" name="p_apellidoc" placeholder="Ingrese el apellido" required>
+            </div>
+            <div class="form-col">
+                <label for="s_apellido" class="form-label">Segundo apellido</label>
+                <input type="text" class="form-input" id="s_apellido" name="s_apellidoc" placeholder="Ingrese el segundo apellido">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-col">
+                <label for="documento_id" class="form-label">Documento ID</label>
+                <input type="text" class="form-input" id="documento_id" name="documento_id" placeholder="Ingrese el documento id" required>
+            </div>
+            <div class="form-col">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" class="form-input" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-col">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-input" id="telefono" name="telefono" placeholder="Ingrese el teléfono" required>
+            </div>
+            <div class="form-col">
+                <label for="email" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-input" id="email" name="correo_electronico" placeholder="usuario@correo.com" required>
+            </div>
+        </div>
+        <button type="submit" class="form-button">
+            Crear Cliente
+        </button>
+    </form>
+    <div class="text-center text-muted small" style="margin-top:10px;">
+        Todos los campos son obligatorios
     </div>
 </div>
 {% endblock %}

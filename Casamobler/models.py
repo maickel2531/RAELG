@@ -4,7 +4,10 @@
 from django.db import models
 
 class Cliente(models.Model):
-    nombre_cliente = models.CharField(max_length=100, null=True, blank=True)
+    p_nombrec = models.CharField(max_length=100, null=True, blank=True)
+    s_nombrec = models.CharField(max_length=100, null=True, blank=True)
+    p_apellidoc = models.CharField(max_length=100, null=True, blank=True)
+    s_apellidoc = models.CharField(max_length=100, null=True, blank=True)
     documento_id = models.CharField(max_length=15, null=True, blank=True)
     direccion = models.CharField(max_length=150, null=True, blank=True)
     telefono = models.CharField(max_length=15, null=True, blank=True)

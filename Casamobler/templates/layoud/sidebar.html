@@ -1,179 +1,104 @@
 {% load static  %}
 {% block sidebar %}
-<aside class="left-sidebar">
-      <!-- Sidebar scroll-->
-      <div>
-        <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="./index.html" class="text-nowrap logo-img">
-            <img src="assets/img/linda.jpg" alt="" />
-          </a>
-          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-            <i class="ti ti-x fs-6"></i>
-          </div>
-        </div>
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-          <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-              <span class="hide-menu">Inicio</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"    
-                href="{% url 'index' %}" aria-expanded="false" class="has-arrow">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-atom"></i>
-                  </span>
-                  <span class="hide-menu">Inicio</span>
-                </div>
-              </a>
-            </li>
-            <!-- ---------------------------------- -->
-            <!-- Dashboard -->
-            <!-- ---------------------------------- -->
-            <li class="nav-small-cap">
-              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-              <span class="hide-menu">Usuarios</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'crear_usuarios' %}" aria-expanded="false" class="has-arrow">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-aperture"></i>
-                  </span>
-                  <span class="hide-menu">crear_usuario</span>
-                </div>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'lista_usuarios' %} " aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-shopping-cart"></i>
-                  </span>
-                  <span class="hide-menu">lista</span>
-                </div>
-                
-              </a>
-            </li>
-            <li>
-              <span class="sidebar-divider lg"></span>
-            </li>
-            <li class="nav-small-cap">
-              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-              <span class="hide-menu">Cliente</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'crear_cliente' %}" aria-expanded="false" class="has-arrow">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-user-circle"></i>
-                  </span>
-                  <span class="hide-menu">Crear Cliente</span>
-                </div>
-                
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'lista_cliente' %} " aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-mail"></i>
-                  </span>
-                  <span class="hide-menu">Lista Cliente</span>
-                </div>
-                
-              </a>
-            </li>
-
-            <li class="nav-small-cap">
-              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-              <span class="hide-menu">Pedido</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'crear_pedido' %}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-calendar"></i>
-                  </span>
-                  <span class="hide-menu">crear pedido</span>
-                </div>
-                
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'lista_pedido' %}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-layout-kanban"></i>
-                  </span>
-                  <span class="hide-menu">Lista Pedido</span>
-                </div>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-              <span class="hide-menu">Recibo de caja</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'crear_recibo_de_caja' %}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-message-dots"></i>
-                  </span>
-                  <span class="hide-menu">Crear Recibo de caja</span>
-                </div>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'lista_recibo_de_caja' %}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-notes"></i>
-                  </span>
-                  <span class="hide-menu">Lista Recibo de caja</span>
-                </div>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <iconify-icon icon="solar:menu-dots-linear" class="nav-small-cap-icon fs-4"></iconify-icon>
-              <span class="hide-menu">Garantias</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'crear_garantia' %}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-phone"></i>
-                  </span>
-                  <span class="hide-menu">Crear Garantia</span>
-                </div>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link justify-content-between"  
-                href="{% url 'lista_garantia' %}" aria-expanded="false">
-                <div class="d-flex align-items-center gap-3">
-                  <span class="d-flex">
-                    <i class="ti ti-list-details"></i>
-                  </span>
-                  <span class="hide-menu">Lista Garantias</span>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!-- End Sidebar navigation -->
+<style>
+.left-sidebar {
+  background: #f7f7f7;
+}
+</style>
+<aside class="left-sidebar bg-white">
+    <!-- Logo -->
+    <div class="brand-logo d-flex align-items-center justify-content-between p-3 border-bottom">
+      <a href="{% url 'index' %}" class="text-nowrap logo-img">
+        <img src="{% static 'assets/img/linda.jpg' %}" alt="Logo" width="40" class="rounded-circle">
+      </a>
+      <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+        <i class="ti ti-x fs-5 text-danger"></i>
       </div>
-      <!-- End Sidebar scroll-->
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav scroll-sidebar">
+      <ul id="sidebarnav" class="list-unstyled m-0 p-2">
+        
+        <li class="nav-small-cap text-muted text-uppercase px-3 mt-3">Inicio</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'index' %}">
+            <i class="ti ti-atom icon"></i>
+            <span>Inicio</span>
+          </a>
+        </li>
+
+        <li class="nav-small-cap text-muted text-uppercase px-3 mt-3">Usuarios</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'crear_usuarios' %}">
+            <i class="ti ti-aperture icon"></i>
+            <span>Crear Usuario</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'lista_usuarios' %}">
+            <i class="ti ti-shopping-cart icon"></i>
+            <span>Lista Usuarios</span>
+          </a>
+        </li>
+
+        <li class="nav-small-cap text-muted text-uppercase px-3 mt-3">Clientes</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'crear_cliente' %}">
+            <i class="ti ti-user-circle icon"></i>
+            <span>Crear Cliente</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'lista_cliente' %}">
+            <i class="ti ti-mail icon"></i>
+            <span>Lista Clientes</span>
+          </a>
+        </li>
+
+        <li class="nav-small-cap text-muted text-uppercase px-3 mt-3">Pedidos</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'crear_pedido' %}">
+            <i class="ti ti-calendar icon"></i>
+            <span>Crear Pedido</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'lista_pedido' %}">
+            <i class="ti ti-layout-kanban icon"></i>
+            <span>Lista Pedidos</span>
+          </a>
+        </li>
+
+        <li class="nav-small-cap text-muted text-uppercase px-3 mt-3">Recibos</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'crear_recibo_de_caja' %}">
+            <i class="ti ti-message-dots icon"></i>
+            <span>Crear Recibo</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'lista_recibo_de_caja' %}">
+            <i class="ti ti-notes icon"></i>
+            <span>Lista Recibos</span>
+          </a>
+        </li>
+
+        <li class="nav-small-cap text-muted text-uppercase px-3 mt-3">Garantías</li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'crear_garantia' %}">
+            <i class="ti ti-phone icon"></i>
+            <span>Crear Garantía</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'lista_garantia' %}">
+            <i class="ti ti-list-details icon"></i>
+            <span>Lista Garantías</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- End Navigation -->
 </aside>
 {% endblock %}

@@ -1,78 +1,153 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block content %}  
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-                <div class="card-body">
-                  <div class="d-md-flex align-items-center">
-                    <div>
-                      <h4 class="card-title">Garantias</h4>
-                      <p class="card-subtitle">
-                        Panel de Garantias 
-                      </p>
-                    </div>
-                    <div class="ms-auto mt-3 mt-md-0">
-                      <select class="form-select theme-select border-0" aria-label="Default select example">
-                        <option value="1">March 2025</option>
-                        <option value="2">March 2025</option>
-                        <option value="3">March 2025</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="table-responsive mt-4">
-                    <table class="table mb-0 text-nowrap varient-table align-middle fs-3">
-                      <thead>
-                        <tr>
-                          <th scope="col" class="px-0 text-muted">
-                            Nombre del producto
-                          </th>
-                          <th scope="col" class="px-0 text-muted">
-                            Motivo de reclamo
-                          </th>
-                          <th scope="col" class="px-0 text-muted">
-                            Fecha del reclamo
-                          </th>
-                          <th scope="col" class="px-0 text-muted text-end">
-                            Estado del reclamo
-                          </th>
-                          <th scope="col" class="px-0 text-muted text-end">
-                            Observaciones
-                          </th>
-                          <th scope="col" class="px-0 text-muted text-end">
-                            Cliente
-                          </th>
-                          <th scope="col" class="px-0 text-muted text-end">
-                            Pedido
-                          </th>
-                          <th scope="col" class="px-0 text-muted text-end">
-                            Acciones
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for garantia in garantias %}
-                        <tr>
-                            <td class="px-0">{{ garantia.producto }}</td>
-                            <td class="px-0">{{ garantia.motivo_reclamo }}</td>
-                            <td class="px-0">{{ garantia.fecha_reclamo }}</td>
-                            <td class="px-0 text-end">{{ garantia.estado_garantia }}</td>
-                            <td class="px-0 text-end">{{ garantia.observaciones }}</td>
-                            <td class="px-0 text-end">{{ garantia.cliente.nombre_cliente }}</td>
-                            <td class="px-0 text-end">{{ garantia.pedido.producto }}</td>
-                            <td class="px-0 text-end">
-                                <a class="btn btn-primary"  href="{% url 'editar_garantia' garantia.id %}">Editar</a>
-                                <a class="btn btn-danger"  href="{% url 'eliminar_garantia' garantia.id %}">Eliminar</a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-
-                      </tbody>
-                    </table>
-                  </div>
-                  <a class="btn btn-primary"  href="{% url 'crear_garantia' %}">Agregar</a>
+{% block content %}
+<style>
+    .custom-list-card {
+        border: 1.5px solid #8B0000;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(139,0,0,0.08);
+        background: #fff;
+        overflow: hidden;
+        margin-top: 30px;
+    }
+    .custom-list-header {
+        background: #f7f7f7;
+        color: #8B0000;
+        border-radius: 18px 18px 0 0;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 1.25rem;
+        padding: 16px 0 8px 0;
+        border-bottom: 1.5px solid #8B0000;
+        text-align: center;
+    }
+    .custom-list-footer {
+        background: #f7f7f7;
+        color: #333;
+        border-radius: 0 0 18px 18px;
+        border-top: 1.5px solid #8B0000;
+        font-size: 0.95rem;
+        padding: 10px 0 8px 0;
+        text-align: center;
+    }
+    .custom-table th {
+        background: #fff;
+        color: #8B0000;
+        font-weight: bold;
+        border: none;
+        font-size: 1.07rem;
+        letter-spacing: 0.5px;
+        text-align: center;
+        border-bottom: 1.5px solid #8B0000;
+    }
+    .custom-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+    .custom-table tbody tr:hover {
+        background: #ffe5e5;
+    }
+    .custom-table td {
+        border-top: 1px solid #eee;
+        font-size: 1.05rem;
+        color: #222;
+        vertical-align: middle;
+        text-align: center;
+        padding: 12px 8px;
+    }
+    .btn-custom {
+        background: #f7f7f75c;
+        color: #8B0000;
+        border: none;
+        font-weight: bold;
+        font-size: 1.05rem;
+        border-radius: 30px;
+        padding: 8px 20px;
+        margin: 2px;
+        box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+        transition: background 0.2s, color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-custom:hover {
+        background: #000;
+        color: #fff;
+    }
+    .add-btn {
+        font-size: 1.1rem;
+        padding: 10px 28px;
+        margin-top: 10px;
+    }
+    .select-custom {
+        border-radius: 30px;
+        border: 1.5px solid #8B0000;
+        padding: 6px 18px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="custom-list-card">
+            <div class="custom-list-header">
+                <h4 class="mb-0"><i class="bi bi-shield-check"></i> Lista de Garantías</h4>
+                <span class="fs-6">Panel de garantías</span>
+            </div>
+            <div class="card-body p-4">
+                <div class="mb-2 text-end">
+                    <select class="select-custom" aria-label="Filtrar por mes">
+                        <option value="1">Marzo 2025</option>
+                        <option value="2">Abril 2025</option>
+                        <option value="3">Mayo 2025</option>
+                    </select>
                 </div>
+                <div class="table-responsive mt-2">
+                    <table class="table custom-table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Nombre del producto</th>
+                                <th>Motivo de reclamo</th>
+                                <th>Fecha del reclamo</th>
+                                <th>Estado del reclamo</th>
+                                <th>Observaciones</th>
+                                <th>Cliente</th>
+                                <th>Pedido</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for garantia in garantias %}
+                            <tr>
+                                <td>{{ garantia.producto }}</td>
+                                <td>{{ garantia.motivo_reclamo }}</td>
+                                <td>{{ garantia.fecha_reclamo }}</td>
+                                <td>{{ garantia.estado_garantia }}</td>
+                                <td>{{ garantia.observaciones }}</td>
+                                <td>{{ garantia.cliente.p_nombrec }}</td>
+                                <td>{{ garantia.pedido.producto }}</td>
+                                <td>
+                                    <a class="btn btn-custom" href="{% url 'editar_garantia' garantia.id %}">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                                    <a class="btn btn-custom" href="{% url 'eliminar_garantia' garantia.id %}">
+                                        <i class="bi bi-trash3"></i> Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-end mt-3">
+                    <a class="btn btn-custom add-btn" href="{% url 'crear_garantia' %}">
+                        <i class="bi bi-plus-circle-fill"></i> Agregar Garantía
+                    </a>
+                </div>
+            </div>
+            <div class="custom-list-footer">
+                Para editar o eliminar, usa los botones de acción.
+            </div>
         </div>
-      </div>
     </div>
-{% endblock %}    
+</div>
+{% endblock %}
