@@ -1,7 +1,14 @@
-from django.urls import path
-from . import views
+from django.contrib import admin
+from django.urls import path , include
+from Casamobler import views
 
 urlpatterns = [
+
+    path('', views.home, name='home'),  # Página principal
+    path('dashboard/', views.dashboard, name='dashboard'),  # Dashboard
+    path('login/', views.login_view, name='login'),         # Login
+    path('logout/', views.logout_view, name='logout'),      # Logout
+    path('register/', views.register_view, name='register'),      # Registro
     path('', views.index, name='index'),
     path('usuarios/lista/', views.lista_usuarios, name='lista_usuarios'),
     path('usuarios/crear/', views.crear_usuarios, name='crear_usuarios'),

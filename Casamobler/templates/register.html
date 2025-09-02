@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h2>Registrarse</h2>
+{% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+<form method="post" action="{% url 'register' %}">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Usuario" required>
+    <input type="email" name="email" placeholder="Correo" required>
+    <input type="password" name="password" placeholder="Contraseña" required>
+    <button type="submit">Registrarse</button>
+</form>
+<p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+    
+</body>
+</html>
+
