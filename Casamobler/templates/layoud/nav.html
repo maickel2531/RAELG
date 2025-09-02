@@ -64,7 +64,10 @@
               <span>Cerrar sesión</span>
             </a>
             <div class="dropdown-divider"></div>
-            <a href="./authentication-login.html" class="btn btn-outline-danger w-100">Logout</a>
+              <a href="{% url 'logout' %}" class="dropdown-item d-flex align-items-center gap-2 text-dark">
+                <i class="ti ti-list-check text-danger"></i>
+                <span>Cerrar sesión</span>
+              </a>
           </div>
         </li>
       </ul>

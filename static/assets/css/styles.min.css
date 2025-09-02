@@ -16110,3 +16110,365 @@ ul {
 }
 
 /*# sourceMappingURL=styles.min.css.map */
+.body {
+    background: #f7f7f7 !important;
+}
+.form-container,
+.custom-form-container,
+.container.mt-5 {
+    background-color: white;
+    border: 1px solid #8B0000;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #8B0000;
+}
+.form-header,
+.custom-card-header,
+.card-header {
+    background-color: #f7f7f7;
+    color: #8B0000;
+    font-weight: bold;
+    padding: 12px 20px;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+    font-size: 1.2em;
+    width: 100%;
+}
+.form-label,
+label.form-label,
+.mb-0,
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #8B0000;
+    width: 100%;
+}
+.form-input,
+.form-control,
+.form-select,
+.card {
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 1em;
+    color: #333;
+    box-shadow: none;
+}
+.form-control:focus,
+.form-input:focus,
+.form-select:focus,
+.card:focus {
+    border-color: #8B0000;
+    box-shadow: 0 0 0 0.2rem rgba(139,0,0,.1);
+}
+.form-button,
+.btn.btn-custom,
+.btn.btn-success.btn-lg {
+    background-color: #f7f7f7;
+    color: #8B0000;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.form-button:hover,
+.btn.btn-custom:hover {
+    background-color: #700000;
+    color: #fff;
+}
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+.form-col {
+    flex: 1 1 0;
+    min-width: 0;
+}
+.card.custom-card,
+.card-body.p-4 {
+    border: 1px solid #8B0000;
+    border-radius: 8px;
+}
+.card-footer.custom-card-footer {
+    background: #f7f7f7;
+    border-radius: 0 0 8px 8px;
+    color: #8B0000;
+}
+.custom-form-container {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+}
+
+.card.custom-card,
+.card-body.p-4 {
+    background-color: #fff;
+    border: 1px solid #8B0000;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #8B0000;
+    box-shadow: none;
+}
+@media (max-width: 700px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    .custom-form-container,
+    .form-container {
+        padding: 10px;
+    }
+}
+
+    .custom-list-card {
+        border: 1.5px solid #8B0000;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(139,0,0,0.08);
+        background: #fff;
+        overflow: hidden;
+        margin-top: 30px;
+    }
+    .custom-list-header {
+        background: #f7f7f7;
+        color: #8B0000;
+        border-radius: 18px 18px 0 0;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 1.25rem;
+        padding: 16px 0 8px 0;
+        border-bottom: 1.5px solid #8B0000;
+        text-align: center;
+    }
+    .custom-list-footer {
+        background: #f7f7f7;
+        color: #333;
+        border-radius: 0 0 18px 18px;
+        border-top: 1.5px solid #8B0000;
+        font-size: 0.95rem;
+        padding: 10px 0 8px 0;
+        text-align: center;
+    }
+    .custom-table th {
+        background: #fff;
+        color: #8B0000;
+        font-weight: bold;
+        border: none;
+        font-size: 1.07rem;
+        letter-spacing: 0.5px;
+        text-align: center;
+        border-bottom: 1.5px solid #8B0000;
+    }
+    .custom-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+    .custom-table tbody tr:hover {
+        background: #ffe5e5;
+    }
+    .custom-table td {
+        border-top: 1px solid #eee;
+        font-size: 1.05rem;
+        color: #222;
+        vertical-align: middle;
+        text-align: center;
+        padding: 12px 8px;
+    }
+    .user-name {
+        font-weight: bold;
+        color: #333;
+        font-size: 1.08rem;
+    }
+    .btn-custom {
+        background: #f7f7f75c;
+        color: #8B0000;
+        border: none;
+        font-weight: bold;
+        font-size: 1.05rem;
+        border-radius: 30px;
+        padding: 8px 20px;
+        margin: 2px;
+        box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+        transition: 0.2s, color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-custom:hover {
+        background: #000;
+        color: #fff;
+    }
+    .add-btn {
+        font-size: 1.1rem;
+        padding: 10px 28px;
+        margin-top: 10px;
+    }
+
+    /* css cliente  */
+
+        body {
+        background: #f7f7f7; /* crema claro */
+    }
+    .form-container {
+        background-color: white;
+        border: 1px solid #8B0000; /* rojo oscuro */
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 900px; /* más ancho */
+        margin: 0 auto;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #8B0000;
+    }
+    .form-header {
+        background-color: #f7f7f7; 
+        color: #8B0000;
+        font-weight: bold;
+        padding: 12px 20px;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+        font-size: 1.2em;
+    }
+    .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: #8B0000;
+    }
+    .form-input {
+        width: 100%;
+        padding: 8px 12px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        font-size: 1em;
+        color: #333;
+    }
+    .form-button {
+        background-color: #f7f7f7;
+        color: #8B0000;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        display: block;
+        margin: 0 auto;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+    .form-button:hover {
+        background-color: #700000;
+        color: #fff;
+    }
+    .form-row {
+        display: flex;
+        gap: 16px;
+    }
+    .form-col {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    @media (max-width: 700px) {
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+
+
+    /* css cliente lista  */
+        .custom-list-card {
+        border: 1.5px solid #8B0000;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(139,0,0,0.08);
+        background: #fff;
+        overflow: hidden;
+        margin-top: 30px;
+    }
+    .custom-list-header {
+        background: #f7f7f7;
+        color: #8B0000;
+        border-radius: 18px 18px 0 0;
+        font-weight: bold;
+        letter-spacing: 1px;
+        font-size: 1.25rem;
+        padding: 16px 0 8px 0;
+        border-bottom: 1.5px solid #8B0000;
+        text-align: center;
+    }
+    .custom-list-footer {
+        background: #f7f7f7;
+        color: #333;
+        border-radius: 0 0 18px 18px;
+        border-top: 1.5px solid #8B0000;
+        font-size: 0.95rem;
+        padding: 10px 0 8px 0;
+        text-align: center;
+    }
+    .custom-table th {
+        background: #fff;
+        color: #8B0000;
+        font-weight: bold;
+        border: none;
+        font-size: 1.07rem;
+        letter-spacing: 0.5px;
+        text-align: center;
+        border-bottom: 1.5px solid #8B0000;
+    }
+    .custom-table tbody tr:nth-child(even) {
+        background: #f8f8f8;
+    }
+    .custom-table tbody tr:hover {
+        background: #ffe5e5;
+    }
+    .custom-table td {
+        border-top: 1px solid #eee;
+        font-size: 1.05rem;
+        color: #222;
+        vertical-align: middle;
+        text-align: center;
+        padding: 12px 8px;
+    }
+    .client-name {
+        font-weight: bold;
+        color: #333;
+        font-size: 1.08rem;
+    }
+    .btn-custom {
+        background: #f7f7f75c;
+        color: #8B0000;
+        border: none;
+        font-weight: bold;
+        font-size: 1.05rem;
+        border-radius: 30px;
+        padding: 8px 20px;
+        margin: 2px;
+        box-shadow: 0 2px 8px rgba(139,0,0,0.08);
+        transition: background 0.2s, color 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .btn-custom:hover {
+        background: #000;
+        color: #fff;
+    }
+    .add-btn {
+        font-size: 1.1rem;
+        padding: 10px 28px;
+        margin-top: 10px;
+    }

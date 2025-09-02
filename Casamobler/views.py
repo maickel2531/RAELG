@@ -10,7 +10,9 @@ def index(request):
     return render(request, 'index.html')
 def home(request):
     return render(request, 'index.html')
-
+def inicio(request):
+    return render(request, 'inicio.html')
+    
 @login_required
 def dashboard(request):
     return render(request, 'dashboard.html')
@@ -49,55 +51,72 @@ def lista_usuarios(request):
 
 def crear_usuarios(request):
     if request.method == 'POST':
-        nombre = request.POST.get('nombre')
+        primer_nombre = request.POST.get('p_nombre')
+        segundo_nombre = request.POST.get('s_nombre')
+        primer_apellido = request.POST.get('p_apellido')
+        segundo_apellido = request.POST.get('s_apellido')
         correo = request.POST.get('email')
+        telefono = request.POST.get('telefono')
         contraseña = request.POST.get('contraseña')
-        rol_id = request.POST.get('rol')
-
-        rol = Rol.objects.get(id=rol_id)  
-
+        rol = Rol.objects.get(id=request.POST.get('rol'))
         Usuario.objects.create(
-            nombre_usuario=nombre,
+            p_nombre=primer_nombre,
+            s_nombre=segundo_nombre,
+            p_apellido=primer_apellido,
+            s_apellido=segundo_apellido,
             correo=correo,
+            telefono=telefono,
             contraseña=contraseña,  # ⚠ Hashear en producción
             rol=rol
         )
-    
+        return redirect('lista_usuarios')
     return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
+
 
 def eliminar_usuarios(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     usuario.delete()
-    return redirect('usuario/lista_usuarios')
+    return redirect('lista_usuarios')
 
 def editar_usuarios(request, id):
     usuario = get_object_or_404(Usuario, id=id)
     roles = Rol.objects.all()
     if request.method == 'POST':
-        rol=Rol.objects.get(id=request.POST.get('rol'))
-        usuario.nombre_usuario = request.POST.get('nombre')
+        rol = Rol.objects.get(id=request.POST.get('rol'))
+        usuario.p_nombre = request.POST.get('p_nombre')
+        usuario.s_nombre = request.POST.get('s_nombre')
+        usuario.p_apellido = request.POST.get('p_apellido')
+        usuario.s_apellido = request.POST.get('s_apellido')
         usuario.correo = request.POST.get('email')
-        if request.POST.get('contraseña') != '': 
-            usuario.contraseña = request.POST.get('contraseña')  # ⚠ Hashear en producción  # ⚠ Hashear en producción
+        usuario.telefono = request.POST.get('telefono')
+        usuario.contraseña = request.POST.get('contraseña')  # ⚠ Hashear en producción
         usuario.rol = rol
         usuario.save()
-        return redirect('usuario/lista_usuarios')
+        return redirect('lista_usuarios')
     return render(request, 'usuario/editar_usuarios.html', {'usuario': usuario, 'roles': roles})
+
 
 def crear_cliente(request):
     if request.method == 'POST':
-        nombre_cliente = request.POST.get('nombre_cliente')
+        primer_nombre = request.POST.get('p_nombrec')
+        segundo_nombre = request.POST.get('s_nombrec')
+        primer_apellido = request.POST.get('p_apellidoc')
+        segundo_apellido = request.POST.get('s_apellido')
         documento_id = request.POST.get('documento_id')
         direccion = request.POST.get('direccion')
-        telefono = request.POST.get('telefono')
+        telefono = request.POST.get('telefono') if request.POST.get('telefono') else None
         correo_electronico = request.POST.get('correo_electronico')
         Cliente.objects.create(
-            nombre_cliente=nombre_cliente,
+            p_nombrec=primer_nombre,
+            s_nombrec=segundo_nombre,
+            p_apellidoc=primer_apellido,
+            s_apellidoc=segundo_apellido,
             documento_id=documento_id,
             direccion=direccion,
             telefono=telefono,
             correo_electronico=correo_electronico
         )
+        return redirect('lista_cliente')
     return render(request, 'cliente/crear_cliente.html')
 
 def lista_cliente(request):
@@ -107,19 +126,25 @@ def lista_cliente(request):
 def editar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
     if request.method == 'POST':
-        nombre_cliente = request.POST.get('nombre_cliente')
-        documento_id = request.POST.get('documento_id')
-        direccion = request.POST.get('direccion')
-        telefono = request.POST.get('telefono')
-        correo_electronico = request.POST.get('correo_electronico')
-        cliente.nombre_cliente = nombre_cliente
+        primer_nombre = request.POST.get('p_nombrec')
+        segundo_nombre = request.POST.get('s_nombrec')
+        primer_apellido = request.POST.get('p_apellidoc')
+        segundo_apellido = request.POST.get('s_apellidoc')
+        documento_id = request.POST.get('documento_id') if request.POST.get('documento_id') else None
+        direccion = request.POST.get('direccion') if request.POST.get('direccion') else None
+        telefono = request.POST.get('telefono') if request.POST.get('telefono') else None
+        correo_electronico = request.POST.get('correo_electronico') if request.POST.get('correo_electronico') else None
+        cliente.p_nombrec = primer_nombre
+        cliente.s_nombrec = segundo_nombre
+        cliente.p_apellidoc = primer_apellido
+        cliente.s_apellidoc = segundo_apellido
         cliente.documento_id = documento_id
         cliente.direccion = direccion
         cliente.telefono = telefono
         cliente.correo_electronico = correo_electronico
         cliente.save()
-        return redirect('cliente/lista_cliente')
-    return render(request, 'cliente/editar_cliente.html', {'cliente': cliente})
+        return redirect('lista_cliente')
+    return render(request, 'cliente/editar_cliente.html', {'cliente': cliente}) 
 
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)

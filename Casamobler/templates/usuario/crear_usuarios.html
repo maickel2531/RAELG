@@ -1,128 +1,75 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<style>
-    body {
-        background: #fff;
-    }
-    .custom-form-container {
-        margin-top: 10px; /* Más arriba */
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 60vh;
-    }
-    .custom-card {
-        border: 2px solid #8B0000; /* Rojo Torino */
-        border-radius: 22px;
-        box-shadow: 0 6px 32px rgba(0,0,0,0.13);
-        background: #fff;
-        overflow: hidden;
-    }
-    .custom-card-header {
-        background: #8B0000; /* Rojo Torino */
-        color: #fff;
-        border-radius: 22px 22px 0 0;
-        font-weight: bold;
-        letter-spacing: 1.5px;
-        font-size: 1.3rem;
-        padding: 18px 0 10px 0;
-        border-bottom: 2px solid #000;
-    }
-    .custom-card-footer {
-        background: #000;
-        color: #fff;
-        border-radius: 0 0 22px 22px;
-        border-top: 2px solid #8B0000;
-        font-size: 0.95rem;
-        padding: 10px 0 8px 0;
-    }
-    .form-label {
-        color: #8B0000;
-        font-weight: bold;
-        letter-spacing: 0.5px;
-    }
-    .form-control, .form-select {
-        border: 1.5px solid #000;
-        border-radius: 10px;
-        background: #fff;
-        color: #000;
-        font-size: 1.05rem;
-        padding: 10px 12px;
-        margin-bottom: 2px;
-        transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .form-control:focus, .form-select:focus {
-        border-color: #8B0000;
-        box-shadow: 0 0 0 2px rgba(139,0,0,0.13);
-    }
-    .btn-custom {
-        background: #8B0000;
-        color: #fff;
-        border: none;
-        font-weight: bold;
-        font-size: 1.1rem;
-        letter-spacing: 1px;
-        transition: background 0.2s, color 0.2s;
-        border-radius: 30px;
-        padding: 12px 0;
-        margin-top: 10px;
-        box-shadow: 0 2px 8px rgba(139,0,0,0.08);
-    }
-    .btn-custom:hover {
-        background: #000;
-        color: #fff;
-    }
-    .card-body {
-        padding: 2.2rem 2.2rem 1.2rem 2.2rem !important;
-        background: linear-gradient(120deg, #fff 80%, #8B000010 100%);
-    }
-</style>
-<div class="custom-form-container">
-    <div class="col-md-5">
-        <div class="card custom-card">
-            <div class="card-header custom-card-header text-center">
-                <h4 class="mb-0">Crear Usuario</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST" action="{% url 'crear_usuarios' %}">
-                    {% csrf_token %}
-                    
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" required>
-                    </div>
+<div class="form-center-container">
+    <div class="card custom-card">
+        <div class="card-header custom-card-header text-center">
+            <h4 class="mb-0">Crear Usuario</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{% url 'crear_usuarios' %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
 
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="usuario@correo.com" required>
-                    </div>
+                        <div class="mb-3">
+                            <label for="p_nombre" class="form-label">Primer nombre</label>
+                            <input type="text" class="form-control" id="p_nombre" name="p_nombre" placeholder="Ingrese el primer nombre" required>
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="contraseña" placeholder="Ingrese una contraseña" required>
-                    </div>
+                        <div class="mb-3">
+                            <label for="s_nombre" class="form-label">Segundo nombre</label>
+                            <input type="text" class="form-control" id="s_nombre" name="s_nombre" placeholder="Ingrese el segundo nombre">
+                        </div>
 
-                    <div class="mb-3">
-                        <label for="rol" class="form-label">Rol</label>
-                        <select id="rol" name="rol" class="form-select" required>
-                            <option value="">Seleccione un rol</option>
-                            {% for rol in roles %}
-                            <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
-                            {% endfor %} 
-                        </select>
-                    </div>
+                        <div class="mb-3">
+                            <label for="p_apellido" class="form-label">Primer apellido</label>
+                            <input type="text" class="form-control" id="p_apellido" name="p_apellido" placeholder="Ingrese el primer apellido" required>
+                        </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-custom btn-lg rounded-pill shadow-sm">
-                            <i class="bi bi-person-plus-fill"></i> Crear Usuario
-                        </button>
+                        <div class="mb-3">
+                            <label for="s_apellido" class="form-label">Segundo apellido</label>
+                            <input type="text" class="form-control" id="s_apellido" name="s_apellido" placeholder="Ingrese el segundo apellido">
+                        </div>
+
                     </div>
-                </form>
-            </div>
-            <div class="card-footer custom-card-footer text-center text-muted small">
-                Todos los campos son obligatorios
-            </div>
+                    <div class="col-md-6">
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="usuario@correo.com" required>
+                        </div>
+
+                        <div class="mb-3">  
+                            <label for="telefono" class="form-label">Telefono</label>
+                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese el telefono">
+                        </div>
+
+                        <div class="mb-3"> 
+                            <label for="rol" class="form-label">Rol</label>
+                            <select id="rol" name="rol" class="form-select" required>
+                                <option value="">Seleccione un rol</option>
+                                {% for rol in roles %}
+                                <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
+                                {% endfor %} 
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" name="contraseña" placeholder="Ingrese una contraseña" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-custom btn-lg rounded-pill shadow-sm">
+                        <i class="bi bi-person-plus-fill"></i> Crear Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer custom-card-footer text-center text-muted small">
+            Todos los campos son obligatorios
         </div>
     </div>
 </div>

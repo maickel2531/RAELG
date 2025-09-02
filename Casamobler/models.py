@@ -8,9 +8,9 @@ class Cliente(models.Model):
     s_nombrec = models.CharField(max_length=100, null=True, blank=True)
     p_apellidoc = models.CharField(max_length=100, null=True, blank=True)
     s_apellidoc = models.CharField(max_length=100, null=True, blank=True)
-    documento_id = models.CharField(max_length=15, null=True, blank=True)
-    direccion = models.CharField(max_length=150, null=True, blank=True)
-    telefono = models.CharField(max_length=15, null=True, blank=True)
+    documento_id = models.DecimalField(max_digits=11, decimal_places=0, null=True, blank=True)
+    direccion = models.TextField(null=True, blank=True)
+    telefono = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
     correo_electronico = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
@@ -74,7 +74,11 @@ class Rol(models.Model):
 
 
 class Usuario(models.Model):
-    nombre_usuario = models.CharField(max_length=100, null=True, blank=True)
+    p_nombre = models.CharField(max_length=100, null=True, blank=True)
+    s_nombre = models.CharField(max_length=100, null=True, blank=True)
+    p_apellido = models.CharField(max_length=100, null=True, blank=True)
+    s_apellido = models.CharField(max_length=100, null=True, blank=True)
+    telefono = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
     correo = models.EmailField(unique=True, null=True, blank=True)
     contraseña = models.CharField(max_length=255, null=True, blank=True)
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
