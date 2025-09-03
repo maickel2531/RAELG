@@ -206,6 +206,7 @@ def lista_recibo_de_caja(request):
     return render(request, 'recibo/lista_recibo_de_caja.html', {'recibos': ReciboCaja.objects.all()})
 
 def crear_recibo_de_caja(request):
+    clientes = Cliente.objects.all()
     if request.method == "POST":
         pedido = Pedido.objects.get(id=request.POST.get("descripcion_producto"))
         fecha_recibo = request.POST.get("fecha_recibo")
@@ -225,7 +226,8 @@ def crear_recibo_de_caja(request):
         )
         return redirect("lista_recibo_de_caja")
     return render(request, "recibo/crear_recibo_de_caja.html", {
-        "pedidos": Pedido.objects.all()
+        "pedidos": Pedido.objects.all(),
+        'clientes': clientes
     })
 
 def editar_recibo_de_caja(request, id):
@@ -322,5 +324,5 @@ def eliminar_garantia(request, id):
     garantia = get_object_or_404(Garantia, id=id)
     garantia.delete()
     return redirect('garantia/lista_garantia')
-    
+
 
