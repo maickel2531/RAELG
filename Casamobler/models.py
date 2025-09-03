@@ -24,12 +24,22 @@ class Pedido(models.Model):
     fecha_entrega = models.DateField(null=True, blank=True, verbose_name="Fecha_Entrega")
     descripcion_producto = models.CharField(max_length=200, null=True, blank=True, verbose_name="Descripción_Producto")
     cantidad = models.IntegerField(null=True, blank=True, verbose_name="Cantidad")
-    valor_unitario = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Valor_Unitario")
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Valor_Total")
+    valor_unitario = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, verbose_name="Valor_Unitario")
+    valor_total = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, verbose_name="Valor_Total")
     responsable = models.ForeignKey('Usuario', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Responsable")
 
+    def saldo_pendiente(self):
+        total_pagado = sum(
+            recibo.valor_abonado or 0
+            for recibo in self.recibocaja_set.all()
+        )
+        if self.valor_total:
+            return self.valor_total - total_pagado
+        return None
+        
     def __str__(self):
         return f"Pedido {self.id}"
+
 
 
 class Factura(models.Model):
@@ -59,9 +69,21 @@ class Garantia(models.Model):
 class ReciboCaja(models.Model):
     pedido = models.ForeignKey(Pedido, on_delete=models.SET_NULL, null=True, blank=True)
     fecha_recibo = models.DateField(null=True, blank=True)
-    valor_abonado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    forma_pago = models.CharField(max_length=30, null=True, blank=True)
-    observaciones = models.TextField(null=True, blank=True)
+    valor_abonado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Valor_Abonado")
+    forma_pago = models.CharField(max_length=30, null=True, blank=True, verbose_name="Forma_Pago")
+    cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cliente")
+    direccion = models.TextField(null=True, blank=True, verbose_name="Dirección")
+    concepto = models.CharField(max_length=200, null=True, blank=True, verbose_name="Concepto")
+
+    def saldo_pendiente(self):
+        if self.pedido and self.pedido.valor_total and self.valor_abonado:
+            # Suma todos los pagos de recibos asociados a este pedido
+            total_pagado = sum(
+                recibo.valor_abonado or 0
+                for recibo in ReciboCaja.objects.filter(pedido=self.pedido)
+            )
+            return self.pedido.valor_total - total_pagado
+        return None
 
     def __str__(self):
         return f"Recibo {self.id}"

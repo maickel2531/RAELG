@@ -20,6 +20,7 @@
                                 <th>Cantidad</th>
                                 <th>Valor Unitario</th>
                                 <th>Valor Total</th>
+                                <th>Saldo Pendiente</th> <!-- NUEVA COLUMNA -->
                                 <th>Responsable</th>
                                 <th>Acciones</th>
                             </tr>
@@ -34,6 +35,13 @@
                                 <td>{{ pedido.cantidad }}</td>
                                 <td>{{ pedido.valor_unitario }}</td>
                                 <td>{{ pedido.valor_total }}</td>
+                                <td>
+                                    {% if pedido.saldo_pendiente %}
+                                        ${{ pedido.saldo_pendiente|floatformat:2 }}
+                                    {% else %}
+                                        $0.00
+                                    {% endif %}
+                                </td>
                                 <td>{{ pedido.responsable.p_nombre }}</td>
                                 <td>
                                     <a class="btn btn-custom" href="{% url 'editar_pedido' pedido.id %}">

@@ -1,65 +1,79 @@
-
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-primary text-white text-center rounded-top-4">
-                    <h4 class="mb-0">Crear Recibo de Caja</h4>
-                </div>
-                <div class="card-body p-4">
-                    <form method="POST" action="{% url 'crear_recibo_de_caja' %}">
-                        {% csrf_token %}
-                        
-                        <div class="mb-3">
-                            <label for="fecha_recibo" class="form-label fw-bold">Fecha de Recibo</label>
-                            <input type="date" class="form-control" id="fecha_recibo" name="fecha_recibo" placeholder="Ingrese la fecha" required>
-                        </div>
+<div class="form-container">
+    <div class="form-header">
+        Crear Recibo de Caja
+    </div>
+    <form method="POST" action="{% url 'crear_pedido' %}">
+        {% csrf_token %}
+        <div class="form-row">
 
-                        <div class="mb-3">
-                            <label for="valor_abonado" class="form-label fw-bold">Valor Abonado</label>
-                            <input type="number" class="form-control" id="valor_abonado" name="valor_abonado" placeholder="Ingrese el valor abonado" required>
-                        </div>
-
-                        <div class="mb-3"> 
-                            <label for="forma_pago" class="form-label fw-bold">Forma de Pago</label>
-                            <select id="forma_pago" name="forma_pago" class="form-control" required>
-                                <option value="">Seleccione una forma de pago</option>
-                                <option value="Efectivo">Efectivo</option>
-                                <option value="Pago en efectivo">Pago en efectivo</option>
-                                <option value="Tarjeta de crédito">Tarjeta de crédito</option>
-                                <option value="Transferencia bancaria">Transferencia bancaria</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="observaciones" class="form-label fw-bold">Observaciones</label>
-                            <textarea class="form-control" id="observaciones" name="observaciones" placeholder="Ingrese las observaciones" rows="3"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="pedido" class="form-label fw-bold">Pedido</label>
-                            <select id="pedido" name="pedido" class="form-select" required>
-                                <option value="">Seleccione un pedido</option>
-                                {% for pedido in pedidos %}
-                                    <option value="{{ pedido.id }}">{{ pedido.producto }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
-                                <i class="bi bi-person-plus-fill"></i> Crear Recibo de caja 
-                            </button>
-                        </div>   
-                    </form>
-                </div>
-                <div class="card-footer text-center text-muted small">
-                    Todos los campos son obligatorios
-                </div>
+            <div class="form-col">
+                <label for="pedido" class="form-label">Pedido</label>
+                <select class="form-input" id="pedido" name="descripcion_producto" required>
+                    <option value="">Seleccione un pedido</option>
+                    {% for pedido in pedidos %}
+                    <option value="{{ pedido.id }}">{{ pedido.descripcion_producto }}</option>
+                    {% endfor %}
+                </select>
             </div>
+
+            <div class="form-col">
+                <label for="fecha_recibo" class="form-label">Fecha de Recibo</label>
+                <input type="date" class="form-input" id="fecha_recibo" name="fecha_recibo" placeholder="Ingrese la fecha" required>
+            </div>
+
         </div>
+
+        <div class="form-row">
+
+            <div class="form-col">
+                <label for="valor_abonado" class="form-label">Valor de Abonado</label>
+                <input type="number" class="form-input" id="valor_abonado" name="valor_abonado" placeholder="Ingrese el valor de abonado" required>
+            </div>
+
+            <div class="form-col">
+                <label for="forma_pago" class="form-label">Forma de Pago</label>
+                <input type="text" class="form-input" id="forma_pago" name="forma_pago" placeholder="Ingrese la forma de pago" required>
+            </div>
+
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <label for="cliente_id" class="form-label">Nombre Cliente</label>
+                <select class="form-input" id="cliente_id" name="cliente_id" required>
+                    <option value="">Seleccione un cliente</option>
+                    {% for cliente in clientes %}
+                    <option value="{{ cliente.id }}">{{ cliente.p_nombrec }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-col">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" class="form-input" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
+            </div>
+            
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <label for="concepto" class="form-label">Concepto</label>
+                <input type="text" class="form-input" id="concepto" name="concepto" placeholder="Ingrese el concepto" required>
+            </div>
+                 
+        </div>
+
+        <button type="submit" class="form-button">
+            Crear Recibo de Caja
+        </button>
+        
+    </form>
+
+    <div class="text-center text-muted small" style="margin-top:10px;">
+        Todos los campos son obligatorios
     </div>
 </div>
 {% endblock %}

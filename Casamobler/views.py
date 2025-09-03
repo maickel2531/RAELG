@@ -207,53 +207,65 @@ def lista_recibo_de_caja(request):
 
 def crear_recibo_de_caja(request):
     if request.method == "POST":
-        pedido_id = request.POST.get("pedido")
-        fecha = request.POST.get("fecha_recibo")
-        valor = request.POST.get("valor_abonado")
+        pedido = Pedido.objects.get(id=request.POST.get("descripcion_producto"))
+        fecha_recibo = request.POST.get("fecha_recibo")
+        valor_abonado = request.POST.get("valor_abonado")
         forma_pago = request.POST.get("forma_pago")
-        observaciones = request.POST.get("observaciones")
-
-        pedido = Pedido.objects.get(id=pedido_id)
-
+        cliente = Cliente.objects.get(id=request.POST.get("p_nombrec"))
+        direccion = request.POST.get("direccion")
+        concepto = request.POST.get("concepto")
         ReciboCaja.objects.create(
             pedido=pedido,
-            fecha_recibo=fecha,
-            valor_abonado=valor,
+            fecha_recibo=fecha_recibo,
+            valor_abonado=valor_abonado,
             forma_pago=forma_pago,
-            observaciones=observaciones
+            cliente=cliente,
+            direccion=direccion,
+            concepto=concepto
         )
-
-        return redirect("recibo/lista_recibo_de_caja")
-
+        return redirect("lista_recibo_de_caja")
     return render(request, "recibo/crear_recibo_de_caja.html", {
-        "pedidos": Pedido.objects.all()})
+        "pedidos": Pedido.objects.all()
+    })
 
 def editar_recibo_de_caja(request, id):
     recibo = ReciboCaja.objects.get(id=id)
-
     if request.method == "POST":
+        recibo.pedido = Pedido.objects.get(id=request.POST.get("descripcion_producto"))
         recibo.fecha_recibo = request.POST.get("fecha_recibo")
         recibo.valor_abonado = request.POST.get("valor_abonado")
         recibo.forma_pago = request.POST.get("forma_pago")
-        recibo.observaciones = request.POST.get("observaciones")
-
-        pedido_id = request.POST.get("pedido")
-        recibo.pedido = Pedido.objects.get(id=pedido_id)
-
+        recibo.cliente = Cliente.objects.get(id=request.POST.get("p_nombrec"))
+        recibo.direccion = request.POST.get("direccion")
+        recibo.concepto = request.POST.get("concepto")
         recibo.save()
-        return redirect("recibo/lista_recibo_de_caja")
-
+        return redirect("lista_recibo_de_caja")
     return render(request, "recibo/editar_recibo_de_caja.html", {
         "recibo": recibo,
-        "pedidos": Pedido.objects.all()})
+        "pedidos": Pedido.objects.all()
+    })
 
 def eliminar_recibo_de_caja(request, id):
     recibo = get_object_or_404(ReciboCaja, id=id)
     recibo.delete()
-    return redirect('recibo/lista_recibo_de_caja')
+    return redirect('lista_recibo_de_caja')
 
 def lista_garantia(request):
     return render(request, 'garantia/lista_garantia.html', {'garantias': Garantia.objects.all()})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def crear_garantia(request):
     if request.method == 'POST':

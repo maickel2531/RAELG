@@ -5,7 +5,7 @@
     <div class="form-header">
         Crear Pedido
     </div>
-    <form method="POST" action="{% url 'crear_pedido' %}">
+    <form method="POST" action="{% url 'editar_pedido'  pedido.id %}">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-col">
@@ -70,9 +70,8 @@
             </div>
 
         </div>
-
         <button type="submit" class="form-button">
-            Crear Pedido
+            Editar Pedido
         </button>
         
     </form>

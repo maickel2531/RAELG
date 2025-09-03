@@ -1,65 +1,79 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header bg-primary text-white text-center rounded-top-4">
-                    <h4 class="mb-0">Editar Recibo de Caja</h4>
-                </div>
-                <div class="card-body p-4">
-                    <form method="POST" action="{% url 'editar_recibo_de_caja' recibo.id %}">
-                        {% csrf_token %}
-                        
-                        <div class="mb-3">
-                            <label for="fecha_recibo" class="form-label fw-bold">Fecha de Recibo</label>
-                            <input value="{{ recibo.fecha_recibo|date:'Y-m-d' }}" type="date" class="form-control" id="fecha_recibo" name="fecha_recibo" required>
-                        </div>
+<div class="form-container">
+    <div class="form-header">
+        Crear Recibo de Caja
+    </div>
+    <form method="POST" action="{% url 'editar_recibo_de_caja'  recibo.id %}">
+        {% csrf_token %}
+        <div class="form-row">
 
-                        <div class="mb-3">
-                            <label for="valor_abonado" class="form-label fw-bold">Valor Abonado</label>
-                            <input value="{{ recibo.valor_abonado }}" type="number" class="form-control" id="valor_abonado" name="valor_abonado" required>
-                        </div>
-
-                        <div class="mb-3"> 
-                            <label for="forma_pago" class="form-label fw-bold">Forma de Pago</label>
-                            <select id="forma_pago" name="forma_pago" class="form-control" required>
-                                <option value="Efectivo" {% if recibo.forma_pago == "Efectivo" %}selected{% endif %}>Efectivo</option>
-                                <option value="Pago en efectivo" {% if recibo.forma_pago == "Pago en efectivo" %}selected{% endif %}>Pago en efectivo</option>
-                                <option value="Tarjeta de crédito" {% if recibo.forma_pago == "Tarjeta de crédito" %}selected{% endif %}>Tarjeta de crédito</option>
-                                <option value="Transferencia bancaria" {% if recibo.forma_pago == "Transferencia bancaria" %}selected{% endif %}>Transferencia bancaria</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="observaciones" class="form-label fw-bold">Observaciones</label>
-                            <textarea class="form-control" id="observaciones" name="observaciones" rows="3">{{ recibo.observaciones }}</textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="pedido" class="form-label fw-bold">Pedido</label>
-                            <select id="pedido" name="pedido" class="form-select" required>
-                                {% for pedido in pedidos %}
-                                    <option value="{{ pedido.id }}" {% if pedido.id == recibo.pedido.id %}selected{% endif %}>
-                                        {{ pedido.producto }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-success btn-lg rounded-pill shadow-sm">
-                                <i class="bi bi-pencil-fill"></i> Guardar cambios
-                            </button>
-                        </div>   
-                    </form>
-                </div>
-                <div class="card-footer text-center text-muted small">
-                    Todos los campos son obligatorios
-                </div>
+            <div class="form-col">
+                <label for="pedido" class="form-label">Pedido</label>
+                <select class="form-input"  value = "{{ recibo.pedido.id }}" id="pedido" name="descripcion_producto" required>
+                    <option value="">Seleccione un pedido</option>
+                    {% for pedido in pedidos %}
+                    <option value="{{ pedido.id }}">{{ pedido.descripcion_producto }}</option>
+                    {% endfor %}
+                </select>
             </div>
+
+            <div class="form-col">
+                <label for="fecha_recibo" class="form-label">Fecha de Recibo</label>
+                <input type="date" value="{{ recibo.fecha_recibo }}" class="form-input" id="fecha_recibo" name="fecha_recibo" placeholder="Ingrese la fecha" required>
+            </div>
+
         </div>
+
+        <div class="form-row">
+
+            <div class="form-col">
+                <label for="valor_abonado" class="form-label">Valor de Abonado</label>
+                <input type="number"value="{{ recibo.valor_abonado }}" class="form-input" id="valor_abonado" name="valor_abonado" placeholder="Ingrese el valor de abonado" required>
+            </div>
+
+            <div class="form-col">
+                <label for="forma_pago" class="form-label">Forma de Pago</label>
+                <input type="text"  value="{{ recibo.forma_pago }}" class="form-input" id="forma_pago" name="forma_pago" placeholder="Ingrese la forma de pago" required>
+            </div>
+
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <label for="p_nombrec" class="form-label">Nombre Cliente</label>
+                <select class="form-input" value="{{ recibo.p_nombrec }}" id="p_nombrec" name="p_nombrec" required>
+                    <option value="">Seleccione un cliente</option>
+                    {% for cliente in clientes %}
+                    <option value="{{ cliente.id }}">{{ cliente.p_nombrec }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-col">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" value = "{{ recibo.direccion }}" class="form-input" id="direccion" name="direccion" placeholder="Ingrese la dirección" required>
+            </div>
+            
+        </div>
+
+        <div class="form-row">
+            <div class="form-col">
+                <label for="concepto" class="form-label">Concepto</label>
+                <input type="text" value = "{{ recibo.concepto }}" class="form-input" id="concepto" name="concepto" placeholder="Ingrese el concepto" required>
+            </div>
+                 
+        </div>
+
+        <button type="submit" class="form-button">
+            Editar Recibo de Caja
+        </button>
+        
+    </form>
+
+    <div class="text-center text-muted small" style="margin-top:10px;">
+        Todos los campos son obligatorios
     </div>
 </div>
 {% endblock %}
