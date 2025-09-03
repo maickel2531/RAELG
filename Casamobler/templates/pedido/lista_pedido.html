@@ -13,26 +13,28 @@
                     <table class="table custom-table align-middle">
                         <thead>
                             <tr>
+                                <th>Cliente</th>
                                 <th>Fecha de Pedido</th>
-                                <th>Producto</th>
+                                <th>Fecha de Entrega</th>
+                                <th>Descripción del Producto</th>
                                 <th>Cantidad</th>
                                 <th>Valor Unitario</th>
-                                <th>Total</th>
-                                <th>Estado Pedido</th>
-                                <th>Cliente</th>
+                                <th>Valor Total</th>
+                                <th>Responsable</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for pedido in pedidos %}
                             <tr>
+                                <td>{{ pedido.cliente.p_nombrec }}</td>
                                 <td>{{ pedido.fecha_pedido }}</td>
-                                <td>{{ pedido.producto }}</td>
+                                <td>{{ pedido.fecha_entrega }}</td>
+                                <td>{{ pedido.descripcion_producto }}</td>
                                 <td>{{ pedido.cantidad }}</td>
                                 <td>{{ pedido.valor_unitario }}</td>
                                 <td>{{ pedido.valor_total }}</td>
-                                <td>{{ pedido.estado_pedido }}</td>
-                                <td>{{ pedido.cliente.p_nombrec }}</td>
+                                <td>{{ pedido.responsable.p_nombre }}</td>
                                 <td>
                                     <a class="btn btn-custom" href="{% url 'editar_pedido' pedido.id %}">
                                         <i class="bi bi-pencil-square"></i> Editar

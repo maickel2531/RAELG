@@ -157,49 +157,50 @@ def lista_pedido(request):
 def crear_pedido(request):
     if request.method == 'POST':
         fecha_pedido = request.POST.get('fecha_pedido')
-        producto = request.POST.get('producto')
+        fecha_entrega = request.POST.get('fecha_entrega')
+        descripcion_producto = request.POST.get('descripcion_producto')
         cantidad = request.POST.get('cantidad')
         valor_unitario = request.POST.get('valor_unitario')
         valor_total = request.POST.get('valor_total')
-        estado_pedido = request.POST.get('estado_pedido')
-        cliente = Cliente.objects.get(id=request.POST.get('cliente'))
-        pedido = Pedido.objects.create(
+        cliente = Cliente.objects.get(id=request.POST.get('p_nombrec'))
+        responsable_id = request.POST.get('responsable')
+        responsable = Usuario.objects.get(id=responsable_id)
+        Pedido.objects.create(
             fecha_pedido=fecha_pedido,
-            producto=producto,
+            fecha_entrega=fecha_entrega,
+            descripcion_producto=descripcion_producto,
             cantidad=cantidad,
             valor_unitario=valor_unitario,
             valor_total=valor_total,
-            estado_pedido=estado_pedido,
-            cliente=cliente
+            cliente=cliente,
+            responsable=responsable
         )
-        return redirect('pedido/lista_pedido')
-    return render(request, 'pedido/crear_pedido.html', {'clientes': Cliente.objects.all()})
+        return redirect('lista_pedido')
+    return render(request, 'pedido/crear_pedido.html', {'clientes': Cliente.objects.all(), 'usuarios': Usuario.objects.all()})
 
+        
 def editar_pedido(request, id):
     pedido = get_object_or_404(Pedido, id=id)
     if request.method == 'POST':
-        fecha_pedido = request.POST.get('fecha_pedido')
-        producto = request.POST.get('producto')
-        cantidad = request.POST.get('cantidad')
-        valor_unitario = request.POST.get('valor_unitario')
-        valor_total = request.POST.get('valor_total')
-        estado_pedido = request.POST.get('estado_pedido')
-        cliente = Cliente.objects.get(id=request.POST.get('cliente'))
-        pedido.fecha_pedido = fecha_pedido
-        pedido.producto = producto
-        pedido.cantidad = cantidad
-        pedido.valor_unitario = valor_unitario
-        pedido.valor_total = valor_total
-        pedido.estado_pedido = estado_pedido
+        cliente = Cliente.objects.get(id=request.POST.get('p_nombrec'))
+        responsable = Usuario.objects.get(id=request.POST.get('p_nombre'))
+        pedido.fecha_pedido = request.POST.get('fecha_pedido')
+        pedido.fecha_entrega = request.POST.get('fecha_entrega')
+        pedido.descripcion_producto = request.POST.get('descripcion_producto')
+        pedido.cantidad = request.POST.get('cantidad')
+        pedido.valor_unitario = request.POST.get('valor_unitario')
+        pedido.valor_total = request.POST.get('valor_total')
         pedido.cliente = cliente
+        pedido.responsable = responsable
         pedido.save()
-        return redirect('pedido/lista_pedido')
-    return render(request, 'pedido/editar_pedido.html', {'pedido': pedido, 'clientes': Cliente.objects.all()})
+        return redirect('lista_pedido')
+    return render(request, 'pedido/editar_pedido.html', {'pedido': pedido, 'clientes': Cliente.objects.all(), 'usuarios': Usuario.objects.all()})
+
 
 def eliminar_pedido(request, id):
     pedido = get_object_or_404(Pedido, id=id)
     pedido.delete()
-    return redirect('pedido/lista_pedido')
+    return redirect('lista_pedido')
 
 def lista_recibo_de_caja(request):
     return render(request, 'recibo/lista_recibo_de_caja.html', {'recibos': ReciboCaja.objects.all()})

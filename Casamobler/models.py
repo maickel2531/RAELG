@@ -14,18 +14,19 @@ class Cliente(models.Model):
     correo_electronico = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return self.nombre_cliente or f"Cliente {self.id}"
+        return f"Cliente {self.id}"
     
 
 
 class Pedido(models.Model):
-    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, blank=True)
-    fecha_pedido = models.DateField(null=True, blank=True)
-    producto = models.CharField(max_length=100, null=True, blank=True)
-    cantidad = models.IntegerField(null=True, blank=True)
-    valor_unitario = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    estado_pedido = models.CharField(max_length=30, null=True, blank=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE, null=True, blank=True, verbose_name="ID_Cliente")
+    fecha_pedido = models.DateField(null=True, blank=True, verbose_name="Fecha_Pedido")
+    fecha_entrega = models.DateField(null=True, blank=True, verbose_name="Fecha_Entrega")
+    descripcion_producto = models.CharField(max_length=200, null=True, blank=True, verbose_name="Descripción_Producto")
+    cantidad = models.IntegerField(null=True, blank=True, verbose_name="Cantidad")
+    valor_unitario = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Valor_Unitario")
+    valor_total = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Valor_Total")
+    responsable = models.ForeignKey('Usuario', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Responsable")
 
     def __str__(self):
         return f"Pedido {self.id}"
@@ -84,4 +85,4 @@ class Usuario(models.Model):
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return self.nombre_usuario or self.correo or f"Usuario {self.id}"
+        return self.p_nombre or f"Usuario {self.id}"
