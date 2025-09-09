@@ -149,7 +149,7 @@ def editar_cliente(request, id):
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
     cliente.delete()
-    return redirect('cliente/lista_cliente')
+    return redirect('lista_cliente')
 
 def lista_pedido(request):
     return render(request, 'pedido/lista_pedido.html', {'pedidos': Pedido.objects.all()})
@@ -206,6 +206,7 @@ def lista_recibo_de_caja(request):
     return render(request, 'recibo/lista_recibo_de_caja.html', {'recibos': ReciboCaja.objects.all()})
 
 def crear_recibo_de_caja(request):
+    clientes = Cliente.objects.all()
     if request.method == "POST":
         pedido = Pedido.objects.get(id=request.POST.get("descripcion_producto"))
         fecha_recibo = request.POST.get("fecha_recibo")
@@ -225,7 +226,8 @@ def crear_recibo_de_caja(request):
         )
         return redirect("lista_recibo_de_caja")
     return render(request, "recibo/crear_recibo_de_caja.html", {
-        "pedidos": Pedido.objects.all()
+        "pedidos": Pedido.objects.all(),
+        'clientes': clientes
     })
 
 def editar_recibo_de_caja(request, id):
@@ -254,31 +256,19 @@ def lista_garantia(request):
     return render(request, 'garantia/lista_garantia.html', {'garantias': Garantia.objects.all()})
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 def crear_garantia(request):
+    clientes = Cliente.objects.all()
+    pedidos = Pedido.objects.all()
     if request.method == 'POST':
-        producto           = request.POST.get('producto')
-        motivo_reclamo     = request.POST.get('motivo_reclamo')
-        fecha_reclamo      = request.POST.get('fecha_reclamo')
-        estado_garantia    = request.POST.get('estado_garantia')
-        observaciones      = request.POST.get('observaciones')
-        cliente_id         = request.POST.get('cliente')
-        pedido_id          = request.POST.get('pedido')  
-        cliente            = Cliente.objects.get(id=cliente_id) if cliente_id else None
-        pedido             = Pedido.objects.get(id=pedido_id) if pedido_id else None
-        
+        producto = request.POST.get('producto')
+        motivo_reclamo = request.POST.get('motivo_reclamo')
+        fecha_reclamo = request.POST.get('fecha_reclamo')
+        estado_garantia = request.POST.get('estado_garantia')
+        observaciones = request.POST.get('observaciones')
+        cliente_id = request.POST.get('p_nombrec')
+        pedido_id = request.POST.get('descripcion_producto')
+        cliente = Cliente.objects.get(id=cliente_id) if cliente_id else None
+        pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
         Garantia.objects.create(
             producto=producto,
             motivo_reclamo=motivo_reclamo,
@@ -288,39 +278,38 @@ def crear_garantia(request):
             cliente=cliente,
             pedido=pedido
         )
-    return render(request, 'garantia/crear_garantia.html', {'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
+        return redirect('lista_garantia')
+    return render(request, 'garantia/crear_garantia.html', {'clientes': clientes, 'pedidos': pedidos})
+
 
 
 
 def editar_garantia(request, id):
     garantia = get_object_or_404(Garantia, id=id)
     if request.method == 'POST':
-        prducto            = request.POST.get('producto')
-        motivo_reclamo     = request.POST.get('motivo_reclamo')
-        fecha_reclamo      = request.POST.get('fecha_reclamo')
-        estado_garantia    = request.POST.get('estado_garantia')
-        observaciones      = request.POST.get('observaciones')
-        cliente_id         = request.POST.get('cliente')
-        pedido_id          = request.POST.get('pedido')
-        cliente            = Cliente.objects.get(id=cliente_id) if cliente_id else None
-        pedido             = Pedido.objects.get(id=pedido_id) if pedido_id else None
-
-        
-        garantia.producto           = producto
-        garantia.motivo_reclamo     = motivo_reclamo
-        garantia.fecha_reclamo      = fecha_reclamo
-        garantia.estado_garantia    = estado_garantia
-        garantia.observaciones      = observaciones
-        garantia.cliente            = cliente
-        garantia.pedido             = pedido
+        producto = request.POST.get('producto')
+        motivo_reclamo = request.POST.get('motivo_reclamo')
+        fecha_reclamo = request.POST.get('fecha_reclamo')
+        estado_garantia = request.POST.get('estado_garantia')
+        observaciones = request.POST.get('observaciones')
+        cliente_id = request.POST.get('cliente')
+        pedido_id = request.POST.get('pedido')
+        cliente = Cliente.objects.get(id=cliente_id) if cliente_id else None
+        pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
+        garantia.producto = producto
+        garantia.motivo_reclamo = motivo_reclamo
+        garantia.fecha_reclamo = fecha_reclamo
+        garantia.estado_garantia = estado_garantia
+        garantia.observaciones = observaciones
+        garantia.cliente = cliente
+        garantia.pedido = pedido
         garantia.save()
-        return redirect('garantia/lista_garantia')
-    return render(request, 'garantia/editar_garantia.html', {'garantia': garantia, 'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
-
+        return redirect('lista_garantia')
+    return render(request, 'garantia/editar_garantia.html', {'garantia': garantia, 'clientes': clientes, 'pedidos': pedidos})
 
 def eliminar_garantia(request, id):
     garantia = get_object_or_404(Garantia, id=id)
     garantia.delete()
-    return redirect('garantia/lista_garantia')
+    return redirect('lista_garantia')
     
 
