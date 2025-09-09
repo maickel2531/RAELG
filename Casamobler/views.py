@@ -312,4 +312,3 @@ def eliminar_garantia(request, id):
     garantia.delete()
     return redirect('lista_garantia')
     
-
