@@ -1,9 +1,10 @@
+import re
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Usuario, Rol, Cliente, Pedido ,ReciboCaja , Garantia
+from .models import Usuario, Rol, Cliente, Pedido ,ReciboCaja , Garantia , Perfil
 
 # Create your views here.
 def index(request):
@@ -17,30 +18,78 @@ def inicio(request):
 def dashboard(request):
     return render(request, 'dashboard.html')
 
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+
+
+        # Verificar si el usuario existe
+        if not User.objects.filter(username=username).exists():
+            return render(request, 'login.html', {
+                'error_username': 'El usuario no existe',
+                'username': username  # Para que no se borre lo que escribió
+            })
+
+        # Autenticar usuario
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
             return redirect('dashboard')
         else:
-            return render(request, 'login.html', {'error': 'Usuario o contraseña incorrectos'})
+            return render(request, 'login.html', {
+                'error_password': 'La contraseña es incorrecta',
+                'username': username
+            })
+
     return render(request, 'login.html')
 
+
+# Función para validar contraseña
+def validar_contraseña(password):
+    patron = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
+    return re.match(patron, password) 
+
+
+from .models import Rol, Perfil
+
 def register_view(request):
+    roles = Rol.objects.all()  # cargar roles
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         email = request.POST.get('email')
         rol_id = request.POST.get('rol')
+
+        # Verificar si el usuario ya existe
         if User.objects.filter(username=username).exists():
-            return render(request, 'register.html', {'error': 'El usuario ya existe'})
-        user = User.objects.create_user(username=username, password=password)
+            return render(request, 'register.html', {
+                'error': 'El usuario ya existe',
+                'roles': roles
+            })
+
+        # Validar contraseña
+        if not validar_contraseña(password):
+            return render(request, 'register.html', {
+                'error': 'La contraseña debe tener al menos una minúscula, una mayúscula, un número, un carácter especial y mínimo 8 caracteres.',
+                'roles': roles
+            })
+
+        # Crear usuario
+        user = User.objects.create_user(username=username, password=password, email=email)
+
+        # Crear perfil con rol
+        rol = Rol.objects.get(id=rol_id)
+        Perfil.objects.create(user=user, rol=rol)
+
         login(request, user)
         return redirect('dashboard')
-    return render(request, 'register.html')
+
+    return render(request, 'register.html', {'roles': roles})
+
+
 
 def logout_view(request):
     logout(request)
@@ -50,27 +99,20 @@ def lista_usuarios(request):
     return render(request, 'usuario/lista_usuarios.html', {'usuarios': Usuario.objects.all()})
 
 def crear_usuarios(request):
-    if request.method == 'POST':
-        primer_nombre = request.POST.get('p_nombre')
-        segundo_nombre = request.POST.get('s_nombre')
-        primer_apellido = request.POST.get('p_apellido')
-        segundo_apellido = request.POST.get('s_apellido')
-        correo = request.POST.get('email')
+    roles = Rol.objects.all()  # cargar roles
+    if request.method == 'POST':  # Verificar si el usuario ya existe
+        p_nombre = request.POST.get('p_nombre')
+        s_nombre = request.POST.get('s_nombre')
+        p_apellido = request.POST.get('p_apellido')
+        s_apellido = request.POST.get('s_apellido')
+        correo = request.POST.get('correo')
         telefono = request.POST.get('telefono')
-        contraseña = request.POST.get('contraseña')
         rol = Rol.objects.get(id=request.POST.get('rol'))
-        Usuario.objects.create(
-            p_nombre=primer_nombre,
-            s_nombre=segundo_nombre,
-            p_apellido=primer_apellido,
-            s_apellido=segundo_apellido,
-            correo=correo,
-            telefono=telefono,
-            contraseña=contraseña,  # ⚠ Hashear en producción
-            rol=rol
-        )
-        return redirect('lista_usuarios')
-    return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
+        contraseña = request.POST.get('contraseña')
+         # Crear usuario    
+        Usuario.objects.create(p_nombre=p_nombre, s_nombre=s_nombre, p_apellido=p_apellido, s_apellido=s_apellido, correo=correo, telefono=telefono, contraseña=contraseña, rol=rol)
+        return redirect('lista_usuarios')  # Redireccionar al usuario creado
+    return render(request, 'usuario/crear_usuarios.html', {'roles': roles})  # Mostrar el formulario de creación de usuario
 
 
 def eliminar_usuarios(request, id):

@@ -42,8 +42,14 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">Casamobler</span>
-                            <small class="text-muted">Admin</small>
+                            <span class="fw-semibold d-block">{{request.user.username}}</span>
+                            <small class="text-muted">
+                              {% if request.user.perfil.rol %}
+                                {{ request.user.perfil.rol.nombre_rol }}
+                              {% else %}
+                                Sin rol
+                              {% endif %}
+                            </small>
                           </div>
                         </div>
                       </a>

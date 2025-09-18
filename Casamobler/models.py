@@ -1,7 +1,7 @@
 
-
 # Create your models here.
 from django.db import models
+from django.contrib.auth.models import User
 
 class Cliente(models.Model):
     p_nombrec = models.CharField(max_length=100, null=True, blank=True)
@@ -94,6 +94,13 @@ class Rol(models.Model):
 
     def __str__(self):
         return self.nombre_rol
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.rol.nombre_rol if self.rol else 'Sin rol'}"
 
 
 class Usuario(models.Model):

@@ -93,6 +93,15 @@
                     <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                   </div>
                 </div>
+                <div class="mb-3">
+                  <label for="Rol" class="form-label">Rol</label>
+                  <select class="form-select" id="rol" name="rol" required>
+                    <option value="" selected disabled>Seleccione un rol</option>
+                    {% for rol in roles %}
+                    <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
+                    {% endfor %}
+                  </select>   
+                </div>
 
                 <button class="btn btn-primary d-grid w-100">Registrarse</button>
               </form>
