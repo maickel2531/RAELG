@@ -1,32 +1,59 @@
 {% extends 'layoud/head.html' %}
 {% load static %}
-
 {% block base %}
-<body>
-  <div class="page-wrapper" id="main-wrapper"  data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        {% include 'layoud/sidebar.html' %}
+        <!-- / Menu -->
 
-    <!--  no tocar -->
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+          {% include 'layoud/nav.html' %}
 
+          <!-- / Navbar -->
 
-    {% include 'layoud/sidebar.html' %}
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              {% block content %}
+              {% endblock %}
+            <!-- / Content -->
 
-    <div class="body-wrapper">
-      <div class="body-wrapper-inner">
-        {% include 'layoud/nav.html' %}
-          <div class="container-fluid">
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <center>
+                  <div class="mb-2 mb-md-0">
+                    ©
+                    <script>
+                      document.write(new Date().getFullYear());
+                    </script>
+                    , Todos los derechos reservados.
+                    <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">Casamobler</a>
+                </div>
+                </center>
 
-          {% block content %}
-          {% endblock %}
+              </div>
+            </footer>
+            <!-- / Footer -->
 
-          <div class="py-6 px-6 text-center">
-            <p>Casamobler</p>
+            <div class="content-backdrop fade"></div>
           </div>
+          <!-- Content wrapper -->
         </div>
+        <!-- / Layout page -->
       </div>
-    </div>
-  </div>
 
-  {% include 'layoud/footer.html' %}
-</body>
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    {% include 'layoud/footer.html' %}
+  </body>
 {% endblock %}

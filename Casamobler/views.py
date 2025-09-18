@@ -44,7 +44,7 @@ def register_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('index')
 
 def lista_usuarios(request):
     return render(request, 'usuario/lista_usuarios.html', {'usuarios': Usuario.objects.all()})
@@ -292,8 +292,8 @@ def editar_garantia(request, id):
         fecha_reclamo = request.POST.get('fecha_reclamo')
         estado_garantia = request.POST.get('estado_garantia')
         observaciones = request.POST.get('observaciones')
-        cliente_id = request.POST.get('cliente')
-        pedido_id = request.POST.get('pedido')
+        cliente_id = request.POST.get('p_nombrec')
+        pedido_id = request.POST.get('descripcion_producto')
         cliente = Cliente.objects.get(id=cliente_id) if cliente_id else None
         pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
         garantia.producto = producto
@@ -305,7 +305,7 @@ def editar_garantia(request, id):
         garantia.pedido = pedido
         garantia.save()
         return redirect('lista_garantia')
-    return render(request, 'garantia/editar_garantia.html', {'garantia': garantia, 'clientes': clientes, 'pedidos': pedidos})
+    return render(request, 'garantia/editar_garantia.html', {'garantia': garantia, 'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
 
 def eliminar_garantia(request, id):
     garantia = get_object_or_404(Garantia, id=id)

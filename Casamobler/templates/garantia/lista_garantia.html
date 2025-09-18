@@ -30,18 +30,8 @@
                                 <td>{{ garantia.fecha_reclamo }}</td>
                                 <td>{{ garantia.estado_garantia }}</td>
                                 <td>{{ garantia.observaciones }}</td>
-                                <td>
-                                    {% if garantia.cliente %}
-                                        {{ garantia.cliente.p_nombrec }}
-                                    {% else %}
-                                    {% endif %}
-                                </td>
-                                <td> 
-                                    {% if garantia.pedido %}
-                                        {{ garantia.pedido.descripcion_producto }}
-                                    {% else %}
-                                    {% endif %}
-                                </td> 
+                                <td>{{ garantia.cliente.p_nombrec }}</td>
+                                <td>{{ garantia.pedido.descripcion_producto }}</td>
                                 <td>{{ garantia.motivo_reclamo }}</td>
                                 <td>
                                     <a class="btn btn-custom" href="{% url 'editar_garantia' garantia.id %}">

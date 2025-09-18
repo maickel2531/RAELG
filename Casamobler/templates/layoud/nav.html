@@ -1,77 +1,91 @@
 {% load static %}
 {% block nav %}
-<style>
-.app-header,
-.navbar {
-  background: #f7f7f7 !important;
-  width: 100%;
-  min-height: 70px;
-  padding-top: 0 !important;
-}
-.casamobler-title {
-  font-weight: bold;
-  color: #8B0000;
-  font-size: 1.3em;
-  margin-right: 30px;
-}
-</style>
-<header class="app-header">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white px-5">
-    <span class="casamobler-title d-none d-lg-block">Casamobler</span>
-    <ul class="navbar-nav">
-      <!-- Botón menú lateral (solo en pantallas pequeñas) -->
-      <li class="nav-item d-block d-xl-none">
-        <a class="nav-link sidebartoggler text-danger" id="headerCollapse" href="javascript:void(0)">
-          <i class="ti ti-menu-2 fs-4"></i>
-        </a>
-      </li>
+          <!-- Navbar -->
 
-      <!-- Notificaciones -->
-      <li class="nav-item dropdown ms-3">
-        <a class="nav-link position-relative text-dark" href="javascript:void(0)" id="drop1" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="ti ti-bell fs-5"></i>
-          <span class="notification-badge bg-danger"></span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-animate-up p-2 shadow-sm border-0" aria-labelledby="drop1">
-          <h6 class="dropdown-header text-secondary">Notificaciones</h6>
-          <div class="dropdown-divider"></div>
-          <a href="javascript:void(0)" class="dropdown-item text-dark">📌 Item 1</a>
-          <a href="javascript:void(0)" class="dropdown-item text-dark">⚡ Item 2</a>
-        </div>
-      </li>
-    </ul>
-
-    <!-- Menú de usuario -->
-    <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-      <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-        <li class="nav-item dropdown">
-          <a class="nav-link text-dark" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle fs-3"></i>
-          </a>
-          <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up p-2 shadow-sm border-0" aria-labelledby="drop2">
-            <h6 class="dropdown-header text-secondary">Mi cuenta</h6>
-            <div class="dropdown-divider"></div>
-            <a href="javascript:void(0)" class="dropdown-item d-flex align-items-center gap-2 text-dark">
-              <i class="ti ti-user text-danger"></i>
-              <span>Mi Perfil</span>
-            </a>
-            <a href="javascript:void(0)" class="dropdown-item d-flex align-items-center gap-2 text-dark">
-              <i class="ti ti-mail text-danger"></i>
-              <span>Mi sistema</span>
-            </a>
-            <a href="javascript:void(0)" class="dropdown-item d-flex align-items-center gap-2 text-dark">
-              <i class="ti ti-list-check text-danger"></i>
-              <span>Cerrar sesión</span>
-            </a>
-            <div class="dropdown-divider"></div>
-              <a href="{% url 'logout' %}" class="dropdown-item d-flex align-items-center gap-2 text-dark">
-                <i class="ti ti-list-check text-danger"></i>
-                <span>Cerrar sesión</span>
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar" >
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="bx bx-menu bx-sm"></i>
               </a>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </nav>
-</header>
+            </div>
+
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <!-- Search -->
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item d-flex align-items-center">
+                  <i class="bx bx-search fs-4 lh-0"></i>
+                  <input
+                    type="text"
+                    class="form-control border-0 shadow-none"
+                    placeholder="Search..."
+                    aria-label="Search..."
+                  />
+                </div>
+              </div>
+              <!-- /Search -->
+
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">Casamobler</span>
+                            <small class="text-muted">Admin</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">My Profile</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">Settings</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <span class="d-flex align-items-center align-middle">
+                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                          <span class="flex-grow-1 align-middle">Billing</span>
+                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'logout' %}">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">Cerrar Sesión</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
+              </ul>
+            </div>
+          </nav>
 {% endblock %}
+          <!-- / Navbar -->
