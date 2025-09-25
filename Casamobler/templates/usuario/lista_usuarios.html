@@ -1,61 +1,51 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-10">
-        <div class="custom-list-card">
-            <div class="custom-list-header">
-                <h4 class="mb-0"><i class="bi bi-people-fill"></i> Lista de Usuarios</h4>
-                <span class="fs-6">Panel de usuarios</span>
-            </div>
-            <div class="card-body p-4">
-                <div class="table-responsive mt-2">
-                    <table class="table custom-table align-middle">
-                        <thead>
-                            <tr>
-                                <th>primer nombre</th>
-                                <th>segundo nombre</th>
-                                <th>primer apellido</th>
-                                <th>segundo apellido</th>
-                                <th>Correo</th>
-                                <th>Telefono</th>   
-                                <th>Rol</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for usuario in usuarios %}
-                            <tr>
-                                <td>{{ usuario.p_nombre }}</td>
-                                <td>{{ usuario.s_nombre }}</td>
-                                <td>{{ usuario.p_apellido }}</td>
-                                <td>{{ usuario.s_apellido }}</td>
-                                <td>{{ usuario.correo }}</td>
-                                <td>{{ usuario.telefono }}</td>
-                                <td>{{ usuario.rol.nombre_rol }}</td>
-                                <td>
-                                    <a class="btn btn-custom" href="{% url 'editar_usuarios' usuario.id %}">
-                                        <i class="bi bi-pencil-square"></i> Editar
-                                    </a>
-                                    <a class="btn btn-custom" href="{% url 'eliminar_usuarios' usuario.id %}">
-                                        <i class="bi bi-trash3"></i> Eliminar
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Usuario /</span> Lista de Usuarios</h4>
+              <div class="card">
+                <h5 class="card-header">Lista de usuarios</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Primer Nombre</th>
+                        <th>Segundo Nombre</th>
+                        <th>Primer Apellido</th>
+                        <th>Segundo Apellido</th>
+                        <th>Correo</th>
+                        <th>Telefono</th>   
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% for usuario in usuarios %}
+                      <tr>
+                        <td>{{ usuario.p_nombre }}</td>
+                        <td>{{ usuario.s_nombre }}</td>
+                        <td>{{ usuario.p_apellido }}</td>
+                        <td>{{ usuario.s_apellido }}</td>
+                        <td>{{ usuario.correo }}</td>
+                        <td>{{ usuario.telefono }}</td>
+                        <td>{{ usuario.rol.nombre_rol }}</td>
+                        <td>
+                          <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="{% url 'editar_usuarios' usuario.id %}">
+                                ><i class="bx bx-edit-alt me-1"></i> Editar</a>
+                                <a class="dropdown-item" href="{% url 'eliminar_usuarios' usuario.id %}" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                                    <i class="bx bx-trash me-1"></i> Eliminar
+                                </a>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                        {% endfor %} 
+                    </tbody>
+                  </table>
                 </div>
-                <div class="text-end mt-3">
-                    <a class="btn btn-custom add-btn" href="{% url 'crear_usuarios' %}">
-                        <i class="bi bi-person-plus-fill"></i> Agregar Usuario
-                    </a>
-                </div>
-            </div>
-            <div class="custom-list-footer">
-                Para editar o eliminar, usa los botones de acción.
-            </div>
-        </div>
-    </div>
-</div>
+              </div>
 {% endblock %}
