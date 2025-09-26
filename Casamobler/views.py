@@ -1,10 +1,12 @@
 import re
+from django.contrib import messages
+from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Usuario, Rol, Cliente, Pedido ,ReciboCaja , Garantia , Perfil
+from .models import Rol, Perfil, Usuario, Cliente, Producto, Pedido, Pago, Garantia
 
 # Create your views here.
 def index(request):
@@ -95,262 +97,465 @@ def logout_view(request):
     logout(request)
     return redirect('index')
 
+@login_required
 def lista_usuarios(request):
-    return render(request, 'usuario/lista_usuarios.html', {'usuarios': Usuario.objects.all()})
+    usuarios = Usuario.objects.select_related('Rol').all()
+    paginator = Paginator(usuarios, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'usuarios/lista.html', {'page_obj': page_obj})
 
-def crear_usuarios(request):
-    roles = Rol.objects.all()  # cargar roles
-    if request.method == 'POST':  # Verificar si el usuario ya existe
-        p_nombre = request.POST.get('p_nombre')
-        s_nombre = request.POST.get('s_nombre')
-        p_apellido = request.POST.get('p_apellido')
-        s_apellido = request.POST.get('s_apellido')
-        correo = request.POST.get('correo')
-        telefono = request.POST.get('telefono')
-        rol = Rol.objects.get(id=request.POST.get('rol'))
-        contraseña = request.POST.get('contraseña')
-         # Crear usuario    
-        Usuario.objects.create(p_nombre=p_nombre, s_nombre=s_nombre, p_apellido=p_apellido, s_apellido=s_apellido, correo=correo, telefono=telefono, contraseña=contraseña, rol=rol)
-        return redirect('lista_usuarios')  # Redireccionar al usuario creado
-    return render(request, 'usuario/crear_usuarios.html', {'roles': roles})  # Mostrar el formulario de creación de usuario
-
-
-def eliminar_usuarios(request, id):
-    usuario = get_object_or_404(Usuario, id=id)
-    usuario.delete()
-    return redirect('lista_usuarios')
-
-def editar_usuarios(request, id):
-    usuario = get_object_or_404(Usuario, id=id)
-    roles = Rol.objects.all()
+@login_required
+def crear_usuario(request):
     if request.method == 'POST':
-        rol = Rol.objects.get(id=request.POST.get('rol'))
-        usuario.p_nombre = request.POST.get('p_nombre')
-        usuario.s_nombre = request.POST.get('s_nombre')
-        usuario.p_apellido = request.POST.get('p_apellido')
-        usuario.s_apellido = request.POST.get('s_apellido')
-        usuario.correo = request.POST.get('email')
+        # Obtener datos del formulario
+        primer_nombre = request.POST.get('primer_nombre_usuario')
+        segundo_nombre = request.POST.get('segundo_nombre_usuario', '')
+        primer_apellido = request.POST.get('primer_apellido_usuario')
+        segundo_apellido = request.POST.get('segundo_apellido_usuario', '')
+        telefono = request.POST.get('telefono')
+        correo = request.POST.get('correo')
+        contraseña = request.POST.get('contraseña') # En un sistema real, no se debería guardar en texto plano
+        rol_id = request.POST.get('Rol')
+
+        rol = Rol.objects.get(id=rol_id) if rol_id else None
+
+        # Validaciones simples
+        if not correo or not contraseña:
+            messages.error(request, 'Correo y contraseña son obligatorios.')
+        else:
+            # Crear el usuario personalizado
+            Usuario.objects.create(
+                primer_nombre_usuario=primer_nombre,
+                segundo_nombre_usuario=segundo_nombre,
+                primer_apellido_usuario=primer_apellido,
+                segundo_apellido_usuario=segundo_apellido,
+                telefono=telefono,
+                correo=correo,
+                contraseña=contraseña, # ¡OJO! En un sistema real, usar hash
+                Rol=rol
+            )
+            messages.success(request, f'Usuario "{primer_nombre}" creado exitosamente.')
+            return redirect('lista_usuarios')
+
+    roles = Rol.objects.all()
+    return render(request, 'usuarios/crear.html', {'roles': roles})
+
+@login_required
+def editar_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    if request.method == 'POST':
+        # Obtener datos del formulario
+        usuario.primer_nombre_usuario = request.POST.get('primer_nombre_usuario')
+        usuario.segundo_nombre_usuario = request.POST.get('segundo_nombre_usuario', '')
+        usuario.primer_apellido_usuario = request.POST.get('primer_apellido_usuario')
+        usuario.segundo_apellido_usuario = request.POST.get('segundo_apellido_usuario', '')
         usuario.telefono = request.POST.get('telefono')
-        usuario.contraseña = request.POST.get('contraseña')  # ⚠ Hashear en producción
-        usuario.rol = rol
+        usuario.correo = request.POST.get('correo')
+        # No se actualiza la contraseña aquí por simplicidad
+        rol_id = request.POST.get('Rol')
+        usuario.Rol = Rol.objects.get(id=rol_id) if rol_id else None
+
         usuario.save()
+        messages.success(request, f'Usuario "{usuario.primer_nombre_usuario}" actualizado exitosamente.')
         return redirect('lista_usuarios')
-    return render(request, 'usuario/editar_usuarios.html', {'usuario': usuario, 'roles': roles})
 
+    roles = Rol.objects.all()
+    return render(request, 'usuarios/editar.html', {'usuario': usuario, 'roles': roles})
 
+@login_required
+def eliminar_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    if request.method == 'POST':
+        nombre_usuario = f"{usuario.primer_nombre_usuario} {usuario.primer_apellido_usuario}".strip()
+        usuario.delete()
+        messages.success(request, f'Usuario "{nombre_usuario}" eliminado exitosamente.')
+        return redirect('lista_usuarios')
+    return render(request, 'usuarios/eliminar.html', {'usuario': usuario})
+
+# --- VISTAS PARA CLIENTE ---
+
+@login_required
+def lista_clientes(request):
+    clientes = Cliente.objects.all()
+    paginator = Paginator(clientes, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'clientes/lista.html', {'page_obj': page_obj})
+
+@login_required
 def crear_cliente(request):
     if request.method == 'POST':
-        primer_nombre = request.POST.get('p_nombrec')
-        segundo_nombre = request.POST.get('s_nombrec')
-        primer_apellido = request.POST.get('p_apellidoc')
-        segundo_apellido = request.POST.get('s_apellido')
+        primer_nombre = request.POST.get('primer_nombre_cliente')
+        segundo_nombre = request.POST.get('segundo_nombre_cliente', '')
+        primer_apellido = request.POST.get('primer_apellido_cliente')
+        segundo_apellido = request.POST.get('segundo_apellido_cliente', '')
         documento_id = request.POST.get('documento_id')
-        direccion = request.POST.get('direccion')
-        telefono = request.POST.get('telefono') if request.POST.get('telefono') else None
-        correo_electronico = request.POST.get('correo_electronico')
+        direccion = request.POST.get('direccion', '')
+        telefono = request.POST.get('telefono')
+        correo_electronico = request.POST.get('correo_electronico', '')
+
         Cliente.objects.create(
-            p_nombrec=primer_nombre,
-            s_nombrec=segundo_nombre,
-            p_apellidoc=primer_apellido,
-            s_apellidoc=segundo_apellido,
+            primer_nombre_cliente=primer_nombre,
+            segundo_nombre_cliente=segundo_nombre,
+            primer_apellido_cliente=primer_apellido,
+            segundo_apellido_cliente=segundo_apellido,
             documento_id=documento_id,
             direccion=direccion,
             telefono=telefono,
             correo_electronico=correo_electronico
         )
-        return redirect('lista_cliente')
-    return render(request, 'cliente/crear_cliente.html')
+        messages.success(request, f'Cliente "{primer_nombre} {primer_apellido}" creado exitosamente.')
+        return redirect('lista_clientes')
 
-def lista_cliente(request):
-    return render(request, 'cliente/lista_cliente.html', {'clientes': Cliente.objects.all()})
+    return render(request, 'clientes/crear.html')
 
-
-def editar_cliente(request, id):
-    cliente = get_object_or_404(Cliente, id=id)
+@login_required
+def editar_cliente(request, cliente_id):
+    cliente = get_object_or_404(Cliente, id=cliente_id)
     if request.method == 'POST':
-        primer_nombre = request.POST.get('p_nombrec')
-        segundo_nombre = request.POST.get('s_nombrec')
-        primer_apellido = request.POST.get('p_apellidoc')
-        segundo_apellido = request.POST.get('s_apellidoc')
-        documento_id = request.POST.get('documento_id') if request.POST.get('documento_id') else None
-        direccion = request.POST.get('direccion') if request.POST.get('direccion') else None
-        telefono = request.POST.get('telefono') if request.POST.get('telefono') else None
-        correo_electronico = request.POST.get('correo_electronico') if request.POST.get('correo_electronico') else None
-        cliente.p_nombrec = primer_nombre
-        cliente.s_nombrec = segundo_nombre
-        cliente.p_apellidoc = primer_apellido
-        cliente.s_apellidoc = segundo_apellido
-        cliente.documento_id = documento_id
-        cliente.direccion = direccion
-        cliente.telefono = telefono
-        cliente.correo_electronico = correo_electronico
+        cliente.primer_nombre_cliente = request.POST.get('primer_nombre_cliente')
+        cliente.segundo_nombre_cliente = request.POST.get('segundo_nombre_cliente', '')
+        cliente.primer_apellido_cliente = request.POST.get('primer_apellido_cliente')
+        cliente.segundo_apellido_cliente = request.POST.get('segundo_apellido_cliente', '')
+        cliente.documento_id = request.POST.get('documento_id')
+        cliente.direccion = request.POST.get('direccion', '')
+        cliente.telefono = request.POST.get('telefono')
+        cliente.correo_electronico = request.POST.get('correo_electronico', '')
+
         cliente.save()
-        return redirect('lista_cliente')
-    return render(request, 'cliente/editar_cliente.html', {'cliente': cliente}) 
+        messages.success(request, f'Cliente "{cliente.primer_nombre_cliente} {cliente.primer_apellido_cliente}" actualizado exitosamente.')
+        return redirect('lista_clientes')
 
-def eliminar_cliente(request, id):
-    cliente = get_object_or_404(Cliente, id=id)
-    cliente.delete()
-    return redirect('lista_cliente')
+    return render(request, 'clientes/editar.html', {'cliente': cliente})
 
-def lista_pedido(request):
-    return render(request, 'pedido/lista_pedido.html', {'pedidos': Pedido.objects.all()})
+@login_required
+def eliminar_cliente(request, cliente_id):
+    cliente = get_object_or_404(Cliente, id=cliente_id)
+    if request.method == 'POST':
+        nombre_cliente = f"{cliente.primer_nombre_cliente} {cliente.primer_apellido_cliente}".strip()
+        cliente.delete()
+        messages.success(request, f'Cliente "{nombre_cliente}" eliminado exitosamente.')
+        return redirect('lista_clientes')
+    return render(request, 'clientes/eliminar.html', {'cliente': cliente})
 
+# --- VISTAS PARA PRODUCTO ---
+
+@login_required
+def lista_productos(request):
+    productos = Producto.objects.all()
+    paginator = Paginator(productos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'productos/lista.html', {'page_obj': page_obj})
+
+@login_required
+def crear_producto(request):
+    if request.method == 'POST':
+        nombre_producto = request.POST.get('nombre_producto')
+        descripcion_producto = request.POST.get('descripcion_producto', '')
+        precio_venta = request.POST.get('precio_venta')
+        costo_unitario = request.POST.get('costo_unitario')
+
+        try:
+            Producto.objects.create(
+                nombre_producto=nombre_producto,
+                descripcion_producto=descripcion_producto,
+                precio_venta=precio_venta,
+                costo_unitario=costo_unitario
+            )
+            messages.success(request, f'Producto "{nombre_producto}" creado exitosamente.')
+            return redirect('lista_productos')
+        except ValueError:
+            messages.error(request, 'Error al crear el producto. Asegúrese de ingresar valores numéricos válidos para precio y costo.')
+
+    return render(request, 'productos/crear.html')
+
+@login_required
+def editar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+    if request.method == 'POST':
+        producto.nombre_producto = request.POST.get('nombre_producto')
+        producto.descripcion_producto = request.POST.get('descripcion_producto', '')
+        precio_venta_str = request.POST.get('precio_venta')
+        costo_unitario_str = request.POST.get('costo_unitario')
+
+        try:
+            producto.precio_venta = precio_venta_str
+            producto.costo_unitario = costo_unitario_str
+            producto.save()
+            messages.success(request, f'Producto "{producto.nombre_producto}" actualizado exitosamente.')
+            return redirect('lista_productos')
+        except ValueError:
+            messages.error(request, 'Error al actualizar el producto. Asegúrese de ingresar valores numéricos válidos para precio y costo.')
+
+    return render(request, 'productos/editar.html', {'producto': producto})
+
+@login_required
+def eliminar_producto(request, producto_id):
+    producto = get_object_or_404(Producto, id=producto_id)
+    if request.method == 'POST':
+        producto_nombre = producto.nombre_producto
+        producto.delete()
+        messages.success(request, f'Producto "{producto_nombre}" eliminado exitosamente.')
+        return redirect('lista_productos')
+    return render(request, 'productos/eliminar.html', {'producto': producto})
+
+# --- VISTAS PARA PEDIDO ---
+
+@login_required
+def lista_pedidos(request):
+    pedidos = Pedido.objects.select_related('cliente', 'producto', 'responsable__user').all()
+    paginator = Paginator(pedidos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'pedidos/lista.html', {'page_obj': page_obj})
+
+@login_required
 def crear_pedido(request):
     if request.method == 'POST':
+        pedido_numero = request.POST.get('pedido')
+        producto_id = request.POST.get('producto')
+        cliente_id = request.POST.get('cliente')
         fecha_pedido = request.POST.get('fecha_pedido')
         fecha_entrega = request.POST.get('fecha_entrega')
-        descripcion_producto = request.POST.get('descripcion_producto')
         cantidad = request.POST.get('cantidad')
-        valor_unitario = request.POST.get('valor_unitario')
         valor_total = request.POST.get('valor_total')
-        cliente = Cliente.objects.get(id=request.POST.get('p_nombrec'))
         responsable_id = request.POST.get('responsable')
-        responsable = Usuario.objects.get(id=responsable_id)
-        Pedido.objects.create(
-            fecha_pedido=fecha_pedido,
-            fecha_entrega=fecha_entrega,
-            descripcion_producto=descripcion_producto,
-            cantidad=cantidad,
-            valor_unitario=valor_unitario,
-            valor_total=valor_total,
-            cliente=cliente,
-            responsable=responsable
-        )
-        return redirect('lista_pedido')
-    return render(request, 'pedido/crear_pedido.html', {'clientes': Cliente.objects.all(), 'usuarios': Usuario.objects.all()})
 
-        
-def editar_pedido(request, id):
-    pedido = get_object_or_404(Pedido, id=id)
+        try:
+            producto = Producto.objects.get(id=producto_id) if producto_id else None
+            cliente = Cliente.objects.get(id=cliente_id)
+            responsable = Usuario.objects.get(id=responsable_id) if responsable_id else None
+
+            Pedido.objects.create(
+                pedido=pedido_numero,
+                producto=producto,
+                cliente=cliente,
+                fecha_pedido=fecha_pedido,
+                fecha_entrega=fecha_entrega,
+                cantidad=cantidad,
+                valor_total=valor_total,
+                responsable=responsable
+            )
+            messages.success(request, f'Pedido "{pedido_numero}" creado exitosamente.')
+            return redirect('lista_pedidos')
+        except (Producto.DoesNotExist, Cliente.DoesNotExist, Usuario.DoesNotExist):
+            messages.error(request, 'Producto, Cliente o Responsable no encontrado.')
+
+    clientes = Cliente.objects.all()
+    productos = Producto.objects.all()
+    usuarios = Usuario.objects.all()
+    return render(request, 'pedidos/crear.html', {
+        'clientes': clientes,
+        'productos': productos,
+        'usuarios': usuarios
+    })
+
+@login_required
+def editar_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
     if request.method == 'POST':
-        cliente = Cliente.objects.get(id=request.POST.get('p_nombrec'))
-        responsable = Usuario.objects.get(id=request.POST.get('p_nombre'))
+        pedido.pedido = request.POST.get('pedido')
+        producto_id = request.POST.get('producto')
+        cliente_id = request.POST.get('cliente')
+        responsable_id = request.POST.get('responsable')
+
+        pedido.producto = Producto.objects.get(id=producto_id) if producto_id else None
+        pedido.cliente = Cliente.objects.get(id=cliente_id)
         pedido.fecha_pedido = request.POST.get('fecha_pedido')
         pedido.fecha_entrega = request.POST.get('fecha_entrega')
-        pedido.descripcion_producto = request.POST.get('descripcion_producto')
         pedido.cantidad = request.POST.get('cantidad')
-        pedido.valor_unitario = request.POST.get('valor_unitario')
         pedido.valor_total = request.POST.get('valor_total')
-        pedido.cliente = cliente
-        pedido.responsable = responsable
-        pedido.save()
-        return redirect('lista_pedido')
-    return render(request, 'pedido/editar_pedido.html', {'pedido': pedido, 'clientes': Cliente.objects.all(), 'usuarios': Usuario.objects.all()})
+        pedido.responsable = Usuario.objects.get(id=responsable_id) if responsable_id else None
 
+        try:
+            pedido.save()
+            messages.success(request, f'Pedido "{pedido.pedido}" actualizado exitosamente.')
+            return redirect('lista_pedidos')
+        except (Producto.DoesNotExist, Cliente.DoesNotExist, Usuario.DoesNotExist):
+            messages.error(request, 'Producto, Cliente o Responsable no encontrado.')
 
-def eliminar_pedido(request, id):
-    pedido = get_object_or_404(Pedido, id=id)
-    pedido.delete()
-    return redirect('lista_pedido')
-
-def lista_recibo_de_caja(request):
-    return render(request, 'recibo/lista_recibo_de_caja.html', {'recibos': ReciboCaja.objects.all()})
-
-def crear_recibo_de_caja(request):
     clientes = Cliente.objects.all()
-    if request.method == "POST":
-        pedido = Pedido.objects.get(id=request.POST.get("descripcion_producto"))
-        fecha_recibo = request.POST.get("fecha_recibo")
-        valor_abonado = request.POST.get("valor_abonado")
-        forma_pago = request.POST.get("forma_pago")
-        cliente = Cliente.objects.get(id=request.POST.get("p_nombrec"))
-        direccion = request.POST.get("direccion")
-        concepto = request.POST.get("concepto")
-        ReciboCaja.objects.create(
-            pedido=pedido,
-            fecha_recibo=fecha_recibo,
-            valor_abonado=valor_abonado,
-            forma_pago=forma_pago,
-            cliente=cliente,
-            direccion=direccion,
-            concepto=concepto
-        )
-        return redirect("lista_recibo_de_caja")
-    return render(request, "recibo/crear_recibo_de_caja.html", {
-        "pedidos": Pedido.objects.all(),
+    productos = Producto.objects.all()
+    usuarios = Usuario.objects.all()
+    return render(request, 'pedidos/editar.html', {
+        'pedido': pedido,
+        'clientes': clientes,
+        'productos': productos,
+        'usuarios': usuarios
+    })
+
+@login_required
+def eliminar_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    if request.method == 'POST':
+        pedido_numero = pedido.pedido
+        pedido.delete()
+        messages.success(request, f'Pedido "{pedido_numero}" eliminado exitosamente.')
+        return redirect('lista_pedidos')
+    return render(request, 'pedidos/eliminar.html', {'pedido': pedido})
+
+# --- VISTAS PARA PAGO ---
+
+@login_required
+def lista_pagos(request):
+    pagos = Pago.objects.select_related('pedido', 'cliente').all()
+    paginator = Paginator(pagos, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'pagos/lista.html', {'page_obj': page_obj})
+
+@login_required
+def crear_pago(request):
+    if request.method == 'POST':
+        pedido_id = request.POST.get('pedido')
+        cliente_id = request.POST.get('cliente')
+        fecha_pago = request.POST.get('fecha_pago')
+        monto_pago = request.POST.get('monto_pago')
+        observaciones = request.POST.get('observaciones', '')
+
+        try:
+            pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
+            cliente = Cliente.objects.get(id=cliente_id)
+
+            Pago.objects.create(
+                pedido=pedido,
+                cliente=cliente,
+                fecha_pago=fecha_pago,
+                monto_pago=monto_pago,
+                observaciones=observaciones
+            )
+            messages.success(request, f'Pago de ${monto_pago} registrado exitosamente.')
+            return redirect('lista_pagos')
+        except (Pedido.DoesNotExist, Cliente.DoesNotExist):
+            messages.error(request, 'Pedido o Cliente no encontrado.')
+
+    pedidos = Pedido.objects.all()
+    clientes = Cliente.objects.all()
+    return render(request, 'pagos/crear.html', {
+        'pedidos': pedidos,
         'clientes': clientes
     })
 
-def editar_recibo_de_caja(request, id):
-    recibo = ReciboCaja.objects.get(id=id)
-    if request.method == "POST":
-        recibo.pedido = Pedido.objects.get(id=request.POST.get("descripcion_producto"))
-        recibo.fecha_recibo = request.POST.get("fecha_recibo")
-        recibo.valor_abonado = request.POST.get("valor_abonado")
-        recibo.forma_pago = request.POST.get("forma_pago")
-        recibo.cliente = Cliente.objects.get(id=request.POST.get("p_nombrec"))
-        recibo.direccion = request.POST.get("direccion")
-        recibo.concepto = request.POST.get("concepto")
-        recibo.save()
-        return redirect("lista_recibo_de_caja")
-    return render(request, "recibo/editar_recibo_de_caja.html", {
-        "recibo": recibo,
-        "pedidos": Pedido.objects.all()
+@login_required
+def editar_pago(request, pago_id):
+    pago = get_object_or_404(Pago, id=pago_id)
+    if request.method == 'POST':
+        pedido_id = request.POST.get('pedido')
+        cliente_id = request.POST.get('cliente')
+        pago.fecha_pago = request.POST.get('fecha_pago')
+        pago.monto_pago = request.POST.get('monto_pago')
+        pago.observaciones = request.POST.get('observaciones', '')
+
+        try:
+            pago.pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
+            pago.cliente = Cliente.objects.get(id=cliente_id)
+            pago.save()
+            messages.success(request, f'Pago de ${pago.monto_pago} actualizado exitosamente.')
+            return redirect('lista_pagos')
+        except (Pedido.DoesNotExist, Cliente.DoesNotExist):
+            messages.error(request, 'Pedido o Cliente no encontrado.')
+
+    pedidos = Pedido.objects.all()
+    clientes = Cliente.objects.all()
+    return render(request, 'pagos/editar.html', {
+        'pago': pago,
+        'pedidos': pedidos,
+        'clientes': clientes
     })
 
-def eliminar_recibo_de_caja(request, id):
-    recibo = get_object_or_404(ReciboCaja, id=id)
-    recibo.delete()
-    return redirect('lista_recibo_de_caja')
+@login_required
+def eliminar_pago(request, pago_id):
+    pago = get_object_or_404(Pago, id=pago_id)
+    if request.method == 'POST':
+        pago_monto = pago.monto_pago
+        pago.delete()
+        messages.success(request, f'Pago de ${pago_monto} eliminado exitosamente.')
+        return redirect('lista_pagos')
+    return render(request, 'pagos/eliminar.html', {'pago': pago})
 
-def lista_garantia(request):
-    return render(request, 'garantia/lista_garantia.html', {'garantias': Garantia.objects.all()})
+# --- VISTAS PARA GARANTIA ---
 
+@login_required
+def lista_garantias(request):
+    garantias = Garantia.objects.select_related('cliente', 'producto', 'pedido').all()
+    paginator = Paginator(garantias, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'garantias/lista.html', {'page_obj': page_obj})
 
+@login_required
 def crear_garantia(request):
+    if request.method == 'POST':
+        cliente_id = request.POST.get('cliente')
+        producto_id = request.POST.get('producto')
+        pedido_id = request.POST.get('pedido')
+        motivo_reclamo = request.POST.get('motivo_reclamo')
+        fecha_reclamo = request.POST.get('fecha_reclamo')
+
+        try:
+            cliente = Cliente.objects.get(id=cliente_id)
+            producto = Producto.objects.get(id=producto_id) if producto_id else None
+            pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
+
+            Garantia.objects.create(
+                cliente=cliente,
+                producto=producto,
+                pedido=pedido,
+                motivo_reclamo=motivo_reclamo,
+                fecha_reclamo=fecha_reclamo
+            )
+            messages.success(request, f'Garantía registrada exitosamente para el cliente y producto.')
+            return redirect('lista_garantias')
+        except (Cliente.DoesNotExist, Producto.DoesNotExist, Pedido.DoesNotExist):
+            messages.error(request, 'Cliente, Producto o Pedido no encontrado.')
+
     clientes = Cliente.objects.all()
+    productos = Producto.objects.all()
     pedidos = Pedido.objects.all()
+    return render(request, 'garantias/crear.html', {
+        'clientes': clientes,
+        'productos': productos,
+        'pedidos': pedidos
+    })
+
+@login_required
+def editar_garantia(request, garantia_id):
+    garantia = get_object_or_404(Garantia, id=garantia_id)
     if request.method == 'POST':
-        producto = request.POST.get('producto')
-        motivo_reclamo = request.POST.get('motivo_reclamo')
-        fecha_reclamo = request.POST.get('fecha_reclamo')
-        estado_garantia = request.POST.get('estado_garantia')
-        observaciones = request.POST.get('observaciones')
-        cliente_id = request.POST.get('p_nombrec')
-        pedido_id = request.POST.get('descripcion_producto')
-        cliente = Cliente.objects.get(id=cliente_id) if cliente_id else None
-        pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
-        Garantia.objects.create(
-            producto=producto,
-            motivo_reclamo=motivo_reclamo,
-            fecha_reclamo=fecha_reclamo,
-            estado_garantia=estado_garantia,
-            observaciones=observaciones,
-            cliente=cliente,
-            pedido=pedido
-        )
-        return redirect('lista_garantia')
-    return render(request, 'garantia/crear_garantia.html', {'clientes': clientes, 'pedidos': pedidos})
+        cliente_id = request.POST.get('cliente')
+        producto_id = request.POST.get('producto')
+        pedido_id = request.POST.get('pedido')
+        garantia.motivo_reclamo = request.POST.get('motivo_reclamo')
+        garantia.fecha_reclamo = request.POST.get('fecha_reclamo')
 
+        try:
+            garantia.cliente = Cliente.objects.get(id=cliente_id)
+            garantia.producto = Producto.objects.get(id=producto_id) if producto_id else None
+            garantia.pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
+            garantia.save()
+            messages.success(request, f'Garantía actualizada exitosamente.')
+            return redirect('lista_garantias')
+        except (Cliente.DoesNotExist, Producto.DoesNotExist, Pedido.DoesNotExist):
+            messages.error(request, 'Cliente, Producto o Pedido no encontrado.')
 
+    clientes = Cliente.objects.all()
+    productos = Producto.objects.all()
+    pedidos = Pedido.objects.all()
+    return render(request, 'garantias/editar.html', {
+        'garantia': garantia,
+        'clientes': clientes,
+        'productos': productos,
+        'pedidos': pedidos
+    })
 
-
-def editar_garantia(request, id):
-    garantia = get_object_or_404(Garantia, id=id)
+@login_required
+def eliminar_garantia(request, garantia_id):
+    garantia = get_object_or_404(Garantia, id=garantia_id)
     if request.method == 'POST':
-        producto = request.POST.get('producto')
-        motivo_reclamo = request.POST.get('motivo_reclamo')
-        fecha_reclamo = request.POST.get('fecha_reclamo')
-        estado_garantia = request.POST.get('estado_garantia')
-        observaciones = request.POST.get('observaciones')
-        cliente_id = request.POST.get('p_nombrec')
-        pedido_id = request.POST.get('descripcion_producto')
-        cliente = Cliente.objects.get(id=cliente_id) if cliente_id else None
-        pedido = Pedido.objects.get(id=pedido_id) if pedido_id else None
-        garantia.producto = producto
-        garantia.motivo_reclamo = motivo_reclamo
-        garantia.fecha_reclamo = fecha_reclamo
-        garantia.estado_garantia = estado_garantia
-        garantia.observaciones = observaciones
-        garantia.cliente = cliente
-        garantia.pedido = pedido
-        garantia.save()
-        return redirect('lista_garantia')
-    return render(request, 'garantia/editar_garantia.html', {'garantia': garantia, 'clientes': Cliente.objects.all(), 'pedidos': Pedido.objects.all()})
-
-def eliminar_garantia(request, id):
-    garantia = get_object_or_404(Garantia, id=id)
-    garantia.delete()
-    return redirect('lista_garantia')
-    
+        garantia.delete()
+        messages.success(request, f'Garantía eliminada exitosamente.')
+        return redirect('lista_garantias')
+    return render(request, 'garantias/eliminar.html', {'garantia': garantia})
+# --- FIN DE VISTAS PARA GARANTIA ---

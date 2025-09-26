@@ -10,24 +10,42 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),      # Registro    
     path('inicio/', views.inicio, name='inicio'),      # Inicio
     path('', views.index, name='index'),
-    path('usuarios/lista/', views.lista_usuarios, name='lista_usuarios'),
-    path('usuarios/crear/', views.crear_usuarios, name='crear_usuarios'),
-    path('usuarios/editar/<int:id>/', views.editar_usuarios, name='editar_usuarios'),
-    path('usuarios/eliminar/<int:id>/', views.eliminar_usuarios, name='eliminar_usuarios'),
-    path('clientes/lista/', views.lista_cliente, name='lista_cliente'),
+        # USUARIO (Modelo Personalizado)
+    path('usuarios/', views.lista_usuarios, name='lista_usuarios'),
+    path('usuarios/crear/', views.crear_usuario, name='crear_usuario'),
+    path('usuarios/<int:usuario_id>/editar/', views.editar_usuario, name='editar_usuario'),
+    path('usuarios/<int:usuario_id>/eliminar/', views.eliminar_usuario, name='eliminar_usuario'),
+
+    # CLIENTE
+    path('clientes/', views.lista_clientes, name='lista_clientes'),
     path('clientes/crear/', views.crear_cliente, name='crear_cliente'),
-    path('clientes/editar/<int:id>/', views.editar_cliente, name='editar_cliente'),
-    path('clientes/eliminar/<int:id>/', views.eliminar_cliente, name='eliminar_cliente'),
-    path('pedidos/lista/', views.lista_pedido, name='lista_pedido'),
+    path('clientes/<int:cliente_id>/editar/', views.editar_cliente, name='editar_cliente'),
+    path('clientes/<int:cliente_id>/eliminar/', views.eliminar_cliente, name='eliminar_cliente'),
+
+    # PRODUCTO
+    path('productos/', views.lista_productos, name='lista_productos'),
+    path('productos/crear/', views.crear_producto, name='crear_producto'),
+    path('productos/<int:producto_id>/editar/', views.editar_producto, name='editar_producto'),
+    path('productos/<int:producto_id>/eliminar/', views.eliminar_producto, name='eliminar_producto'),
+
+    # PEDIDO
+    path('pedidos/', views.lista_pedidos, name='lista_pedidos'),
     path('pedidos/crear/', views.crear_pedido, name='crear_pedido'),
-    path('pedidos/editar/<int:id>/', views.editar_pedido, name='editar_pedido'),
-    path('pedidos/eliminar/<int:id>/', views.eliminar_pedido, name='eliminar_pedido'),
-    path('recibos/lista/', views.lista_recibo_de_caja, name='lista_recibo_de_caja'),
-    path('recibos/crear/', views.crear_recibo_de_caja, name='crear_recibo_de_caja'),
-    path('recibos/editar/<int:id>/', views.editar_recibo_de_caja, name='editar_recibo_de_caja'),
-    path('recibos/eliminar/<int:id>/', views.eliminar_recibo_de_caja, name='eliminar_recibo_de_caja'),
-    path('garantias/lista/', views.lista_garantia, name='lista_garantia'),
+    path('pedidos/<int:pedido_id>/editar/', views.editar_pedido, name='editar_pedido'),
+    path('pedidos/<int:pedido_id>/eliminar/', views.eliminar_pedido, name='eliminar_pedido'),
+
+    # PAGO
+    path('pagos/', views.lista_pagos, name='lista_pagos'),
+    path('pagos/crear/', views.crear_pago, name='crear_pago'),
+    path('pagos/<int:pago_id>/editar/', views.editar_pago, name='editar_pago'),
+    path('pagos/<int:pago_id>/eliminar/', views.eliminar_pago, name='eliminar_pago'),
+
+    # GARANTIA
+    path('garantias/', views.lista_garantias, name='lista_garantias'),
     path('garantias/crear/', views.crear_garantia, name='crear_garantia'),
-    path('garantias/editar/<int:id>/', views.editar_garantia, name='editar_garantia'),
-    path('garantias/eliminar/<int:id>/', views.eliminar_garantia, name='eliminar_garantia'),
+    path('garantias/<int:garantia_id>/editar/', views.editar_garantia, name='editar_garantia'),
+    path('garantias/<int:garantia_id>/eliminar/', views.eliminar_garantia, name='eliminar_garantia'),
+  
     ]
+    # myapp/urls.py (añadir después de tus URLs existentes)
+

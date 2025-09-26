@@ -1,76 +1,57 @@
 {% extends 'base.html' %}
-{% load static %}
 {% block content %}
-<div class="form-center-container">
-    <div class="card custom-card">
-        <div class="card-header custom-card-header text-center">
-            <h4 class="mb-0">Editar Usuario</h4>
-        </div>
-        <div class="card-body">
-            <form method="POST" action="{% url 'editar_usuarios' usuario.id %}">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6">
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Usuario /</span> Editar Usuario</h4>
 
-                        <div class="mb-3">
-                            <label for="p_nombre" class="form-label">Primer nombre</label>
-                            <input type="text" value = "{{ usuario.p_nombre }}" type="text" class="form-control" id="p_nombre" name="p_nombre" placeholder="Ingrese el primer nombre" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="s_nombre" class="form-label">Segundo nombre</label>
-                            <input type="text" value="{{ usuario.s_nombre }}" type="text" class="form-control" id="s_nombre" name="s_nombre" placeholder="Ingrese el segundo nombre">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="p_apellido" class="form-label">Primer apellido</label>
-                            <input type="text" value="{{ usuario.p_apellido }}" type="text" class="form-control" id="p_apellido" name="p_apellido" placeholder="Ingrese el primer apellido" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="s_apellido" class="form-label">Segundo apellido</label>
-                            <input type="text" value="{{ usuario.s_apellido }}" type="text" class="form-control" id="s_apellido" name="s_apellido" placeholder="Ingrese el segundo apellido">
-                        </div>
-
-                    </div>
-                    <div class="col-md-6">
-
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo electrónico</label>
-                            <input type="email" value="{{ usuario.correo }}" type="email" class="form-control" id="email" name="email" placeholder="usuario@correo.com" required>
-                        </div>
-
-                        <div class="mb-3">  
+              <div class="row">
+                <div class="col-md-12">
+                  <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Usuario</a>
+                    </li>
+                  </ul>
+                  <div class="card mb-4">
+                    <h5 class="card-header">Datos de Usuario</h5>
+                    <hr class="my-0" />
+                    <div class="card-body">
+                      <form  method="POST" action="{% url 'editar_usuarios' usuario.id %}">
+                        {% csrf_token %}
+                        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+                        <div class="row">
+                          <div class="mb-3 col-md-6">
+                            <label for="p_nombre" class="form-label">Nombre</label>
+                            <input class="form-control"  value = "{{ usuario.p_nombre }}" type="text" name="p_nombre"  required/>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="s_nombre" class="form-label">Segundo Nombre</label>
+                            <input class="form-control"  value="{{ usuario.s_nombre }}" type="text" name="s_nombre"  required/>
+                          </div>
+                          <div class="mb-3 col-md-6">  
+                            <label for="p_apellido" class="form-label">Apellido</label>
+                            <input class="form-control"  value="{{ usuario.p_apellido }}" type="text" name="p_apellido"    required/>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="s_apellido" class="form-label">Segundo Apellido</label>
+                            <input class="form-control"  value="{{ usuario.s_apellido }}" type="text" name="s_apellido"   required/>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="correo" class="form-label">Correo</label>
+                            <input class="form-control"  value="{{ usuario.correo }}" type="text" name="correo"  required/>
+                          </div>
+                          <div class="mb-3 col-md-6">   
                             <label for="telefono" class="form-label">Telefono</label>
-                            <input type="text"  value = "{{ usuario.telefono }}" type="text" class="form-control" id="telefono" name="telefono" placeholder="Ingrese el telefono">
+                            <input class="form-control"  value = "{{ usuario.telefono }}" type="number" name="telefono"   required/>
+                          </div>
                         </div>
-
-                        <div class="mb-3"> 
-                            <label for="rol" class="form-label">Rol</label>
-                            <select id="rol"  value = "{{ usuario.rol.id }}" name="rol" class="form-select" required>
-                                <option value="">Seleccione un rol</option>
-                                {% for rol in roles %}
-                                <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
-                                {% endfor %} 
-                            </select>
+                        <div class="mt-2">
+                          <button type="submit" class="btn btn-primary me-2">Editar Usuario</button>
+                          
+                          <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password"   class="form-control" id="password" name="contraseña" placeholder="Ingrese una contraseña" required>
-                        </div>
+                      </form>
                     </div>
+                    <!-- /Account -->
+                  </div>
                 </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-custom btn-lg rounded-pill shadow-sm">
-                        <i class="bi bi-person-plus-fill"></i> Editar Usuario
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="card-footer custom-card-footer text-center text-muted small">
-            Todos los campos son obligatorios
-        </div>
-    </div>
-</div>
+              </div>
+            </div>
 {% endblock %}
