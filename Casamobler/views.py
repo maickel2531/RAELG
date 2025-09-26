@@ -54,7 +54,6 @@ def validar_contraseña(password):
     return re.match(patron, password) 
 
 
-from .models import Rol, Perfil
 
 def register_view(request):
     roles = Rol.objects.all()  # cargar roles
@@ -103,7 +102,7 @@ def lista_usuarios(request):
     paginator = Paginator(usuarios, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'usuarios/lista.html', {'page_obj': page_obj})
+    return render(request, 'usuario/lista_usuarios.html', {'page_obj': page_obj})
 
 @login_required
 def crear_usuario(request):
@@ -120,10 +119,17 @@ def crear_usuario(request):
 
         rol = Rol.objects.get(id=rol_id) if rol_id else None
 
+        # Validar si el correo ya existe
+        if Usuario.objects.filter(correo=correo).exists():
+            messages.error(request, 'El correo ya está registrado.')
+            return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
+            
         # Validaciones simples
         if not correo or not contraseña:
             messages.error(request, 'Correo y contraseña son obligatorios.')
         else:
+    
+
             # Crear el usuario personalizado
             Usuario.objects.create(
                 primer_nombre_usuario=primer_nombre,
@@ -139,7 +145,7 @@ def crear_usuario(request):
             return redirect('lista_usuarios')
 
     roles = Rol.objects.all()
-    return render(request, 'usuarios/crear.html', {'roles': roles})
+    return render(request, 'usuario/crear_usuarios.html', {'roles': roles})
 
 @login_required
 def editar_usuario(request, usuario_id):
@@ -161,7 +167,7 @@ def editar_usuario(request, usuario_id):
         return redirect('lista_usuarios')
 
     roles = Rol.objects.all()
-    return render(request, 'usuarios/editar.html', {'usuario': usuario, 'roles': roles})
+    return render(request, 'usuario/editar_usuarios.html', {'usuario': usuario, 'roles': roles})
 
 @login_required
 def eliminar_usuario(request, usuario_id):
@@ -171,7 +177,7 @@ def eliminar_usuario(request, usuario_id):
         usuario.delete()
         messages.success(request, f'Usuario "{nombre_usuario}" eliminado exitosamente.')
         return redirect('lista_usuarios')
-    return render(request, 'usuarios/eliminar.html', {'usuario': usuario})
+    return render(request, 'usuario/eliminar_usuarios.html', {'usuario': usuario})
 
 # --- VISTAS PARA CLIENTE ---
 

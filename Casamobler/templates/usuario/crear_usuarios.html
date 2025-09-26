@@ -50,42 +50,45 @@
                         {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
                         <div class="row">
                           <div class="mb-3 col-md-6">
-                            <label for="p_nombre" class="form-label">Nombre</label>
-                            <input class="form-control" type="text" name="p_nombre"  required/>
+                            <label for="primer_nombre_usuario" class="form-label">Primer Nombre</label>
+                            <input class="form-control" type="text" name="primer_nombre_usuario"  required/>
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label for="s_nombre" class="form-label">Segundo Nombre</label>
-                            <input class="form-control" type="text" name="s_nombre"  required/>
+                            <label for="segundo_nombre_usuario" class="form-label">Segundo Nombre</label>
+                            <input class="form-control" type="text" name="segundo_nombre_usuario" />
                           </div>
                           <div class="mb-3 col-md-6">  
-                            <label for="p_apellido" class="form-label">Apellido</label>
-                            <input class="form-control" type="text" name="p_apellido"    required/>
+                            <label for="primer_apellido_usuario" class="form-label">Primer Apellido</label>
+                            <input class="form-control" type="text" name="primer_apellido_usuario"    required/>
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label for="s_apellido" class="form-label">Segundo Apellido</label>
-                            <input class="form-control" type="text" name="s_apellido"   required/>
+                            <label for="segundo_apellido_usuario" class="form-label">Segundo Apellido</label>
+                            <input class="form-control" type="text" name="segundo_apellido_usuario"  required/>
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="correo" class="form-label">Correo</label>
-                            <input class="form-control" type="text" name="correo"  required/>
+                            <input class="form-control" type="email" name="correo"   required/>
                           </div>
                           <div class="mb-3 col-md-6">   
                             <label for="telefono" class="form-label">Telefono</label>
-                            <input class="form-control" type="number" name="telefono"   required/>
+                            <input class="form-control" type="text" name="telefono" pattern="[0-9]{10}" title="El teléfono debe contener exactamente 10 dígitos" required/>
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="rol" class="form-label">Rol</label>
                             <select class="form-select" name="rol" required>
-                              <option value="">Seleccione un rol</option>
+                              <option value="" disabled selected>Seleccione un rol</option>
                               {% for rol in roles %}
-                              <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
+                                <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
                               {% endfor %}
                             </select>
                           </div>
 
                           <div class="mb-3 col-md-6">
-                            <label for="contraseña" class="form-label">Contraseña</label>
+                            <label for="contraseña" class="form-label">Contraseña (mínimo 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial)</label>
                             <input class="form-control" type="password" name="contraseña"  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial." required/>
+                            <div class="form-text">
+                              <p>La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial.</p>
+                            </div>
                           </div>
                         </div>
                         <div class="mt-2">

@@ -32,7 +32,7 @@
             <!-- Usuarios -->
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
+                <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Layouts">Usuarios</div>
               </a>
 
@@ -55,18 +55,39 @@
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <i class=' menu-icon tf-icons bx bx-box'></i>
                 <div data-i18n="Account Settings">Clientes</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'crear_cliente'%}" class="menu-link">
+                  <a href="{% url 'crear_clientes'%}" class="menu-link">
                     <div data-i18n="Account">Crear Cliente</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'lista_cliente' %}" class="menu-link">
+                  <a href="{% url 'lista_clientes' %}" class="menu-link">
                     <div data-i18n="Notifications">Lista de Clientes</div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Productos</span>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-menu"></i>
+                <div data-i18n="Authentications">Productos</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'crear_productos' %}" class="menu-link">
+                    <div data-i18n="Basic">Crear Producto</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'lista_productos' %}" class="menu-link">
+                    <div data-i18n="Basic">Lista de pedidos</div>
                   </a>
                 </li>
               </ul>
@@ -76,59 +97,60 @@
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                <i class="menu-icon tf-icons bx bx-chevron-left"></i>
                 <div data-i18n="Authentications">Pedidos</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'crear_pedido' %}" class="menu-link" target="_blank">
+                  <a href="{% url 'crear_pedidos' %}" class="menu-link" target="_blank">
                     <div data-i18n="Basic">Crear Pedido</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'lista_pedido' %}" class="menu-link" target="_blank">
+                  <a href="{% url 'lista_pedidos' %}" class="menu-link" target="_blank">
                     <div data-i18n="Basic">Lista de pedidos</div>
                   </a>
                 </li>
               </ul>
             </li>
             <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Recibos</span>
+              <span class="menu-header-text">Pagos</span>
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-                <div data-i18n="Misc">Recibos de caja</div>
+                <i class="menu-icon tf-icons bx bx-paper-plane"></i>
+                <div data-i18n="Authentications">Pagos</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'crear_recibo_de_caja' %}" class="menu-link">
-                    <div data-i18n="Error">Crear recibo</div>
+                  <a href="{% url 'crear_pagos' %}" class="menu-link">
+                    <div data-i18n="Basic">Crear Pago</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'lista_recibo_de_caja' %}" class="menu-link">
-                    <div data-i18n="Under Maintenance">Lista de recibos</div>
+                  <a href="{% url 'lista_pagos' %}" class="menu-link">
+                    <div data-i18n="Basic">Lista de pagos</div>
                   </a>
                 </li>
               </ul>
+            </li>
             </li>
             <!-- Garantias -->
             <li class="menu-header small text-uppercase"><span class="menu-header-text">Garantias</span></li>
             <!-- User interface -->
             <li class="menu-item">
               <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-box"></i>
+                <i class="menu-icon tf-icons bx bx-wallet"></i>
                 <div data-i18n="User interface">Garantias</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="{% url 'crear_garantia' %}" class="menu-link">
+                  <a href="{% url 'crear_garantias' %}" class="menu-link">
                     <div data-i18n="Accordion">Crear Garantia</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="{% url 'lista_garantia' %}" class="menu-link">
+                  <a href="{% url 'lista_garantias' %}" class="menu-link">
                     <div data-i18n="Alerts">Lista de Garantias</div>
                   </a>
                 </li>

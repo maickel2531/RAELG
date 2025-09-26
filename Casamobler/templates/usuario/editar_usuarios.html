@@ -18,20 +18,20 @@
                         {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
                         <div class="row">
                           <div class="mb-3 col-md-6">
-                            <label for="p_nombre" class="form-label">Nombre</label>
-                            <input class="form-control"  value = "{{ usuario.p_nombre }}" type="text" name="p_nombre"  required/>
+                            <label for="primer_nombre_usuario" class="form-label">Primer Nombre</label>
+                            <input class="form-control"  value = "{{ usuario.primer_nombre_usuario }}" type="text" name="primer_nombre_usuario"  required/>
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label for="s_nombre" class="form-label">Segundo Nombre</label>
-                            <input class="form-control"  value="{{ usuario.s_nombre }}" type="text" name="s_nombre"  required/>
+                            <label for="segundo_nombre_usuario" class="form-label">Segundo Nombre</label>
+                            <input class="form-control"  value = "{{ usuario.segundo_nombre_usuario }}" type="text" name="segundo_nombre_usuario"   />
                           </div>
                           <div class="mb-3 col-md-6">  
-                            <label for="p_apellido" class="form-label">Apellido</label>
-                            <input class="form-control"  value="{{ usuario.p_apellido }}" type="text" name="p_apellido"    required/>
+                            <label for="primer_apellido_usuario" class="form-label">Primer Apellido</label>
+                            <input class="form-control"  value="{{ usuario.primer_apellido_usuario }}" type="text" name="primer_apellido_usuario"    required/>
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label for="s_apellido" class="form-label">Segundo Apellido</label>
-                            <input class="form-control"  value="{{ usuario.s_apellido }}" type="text" name="s_apellido"   required/>
+                            <label for="segundo_apellido_usuario" class="form-label">Segundo Apellido</label>
+                            <input class="form-control"  value="{{ usuario.segundo_apellido_usuario }}" type="text" name="segundo_apellido_usuario"   required/>
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="correo" class="form-label">Correo</label>
