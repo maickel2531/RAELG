@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Pago /</span> Lista de Pago</h4>
+              <div class="card">
+                <h5 class="card-header">Lista de pago</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Pago</th>
+                        <th>Pedido</th>
+                        <th>Cliente</th>
+                        <th>Fecha de Pago</th>
+                        <th>Monto de Pago</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>  
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% for pago in page_obj %}
+                      <tr>
+                        <td>{{ pago.id }}</td>
+                        <td>{{ pago.pedido.pedido }}</td>
+                        <td>{{ pago.cliente.primer_nombre_cliente }}</td>
+                        <td>{{ pago.fecha_pago }}</td>
+                        <td>{{ pago.monto_pago }}</td>
+                        <td>{{ pago.observaciones }}</td>
+
+
+                        <td>
+                          <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="{% url 'editar_pagos' pago.id %}">
+                                <i class="bx bx-edit-alt me-1"></i> Editar</a>
+                            <!-- Botón de Eliminar con confirmación y envío POST -->
+                              <form method="post" style="display:inline;" action="{% url 'eliminar_pagos' pago.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar al pago &quot;{{ pago.id }}&quot;?');">
+                                    <i class="bx bx-trash me-1"></i> Eliminar
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %} 
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="mt-2">
+                <a  class="btn btn-primary" href="{% url 'crear_pagos' %}">
+                  <i class="bx bx-plus"></i> Agregar Pago
+                </a>
+              </div>
+{% endblock %}

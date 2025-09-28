@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Usuario /</span> Lista de Usuarios</h4>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Cliente /</span> Lista de Clientes</h4>
               <div class="card">
-                <h5 class="card-header">Lista de usuarios</h5>
+                <h5 class="card-header">Lista de clientes</h5>
                 <div class="table-responsive text-nowrap">
                   <table class="table table-hover">
                     <thead>
@@ -12,35 +12,38 @@
                         <th>Segundo Nombre</th>
                         <th>Primer Apellido</th>
                         <th>Segundo Apellido</th>
-                        <th>Correo</th>
-                        <th>Telefono</th>   
-                        <th>Rol</th>
-                        <th>Acciones</th>
+                        <th>Documento</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Correo Electrónico</th>
+                        <th>Acciones</th>  
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                      {% for usuario in page_obj %}
+                      {% for cliente in page_obj %}
                       <tr>
-                        <td>{{ usuario.primer_nombre_usuario }}</td>
-                        <td>{{ usuario.segundo_nombre_usuario }}</td>
-                        <td>{{ usuario.primer_apellido_usuario }}</td>
-                        <td>{{ usuario.segundo_apellido_usuario }}</td>
-                        <td>{{ usuario.correo }}</td>
-                        <td>{{ usuario.telefono }}</td>
-                        <td>{{ usuario.Rol.nombre_rol }}</td>
+                        <td>{{ cliente.primer_nombre_cliente }}</td>
+                        <td>{{ cliente.segundo_nombre_cliente }}</td>
+                        <td>{{ cliente.primer_apellido_cliente }}</td>
+                        <td>{{ cliente.segundo_apellido_cliente }}</td>
+                        <td>{{ cliente.documento_id }}</td>
+                        <td>{{ cliente.direccion }}</td>
+                        <td>{{ cliente.telefono }}</td>
+                        <td>{{ cliente.correo_electronico }}</td>
+
                         <td>
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="{% url 'editar_usuarios' usuario.id %}">
+                              <a class="dropdown-item" href="{% url 'editar_clientes' cliente.id %}">
                                 <i class="bx bx-edit-alt me-1"></i> Editar</a>
                             <!-- Botón de Eliminar con confirmación y envío POST -->
-                              <form method="post" style="display:inline;" action="{% url 'eliminar_usuarios' usuario.id %}">
+                              <form method="post" style="display:inline;" action="{% url 'eliminar_clientes' cliente.id %}">
                                   {% csrf_token %}
                                   <button type="submit" class="dropdown-item"
-                                          onclick="return confirm('¿Estás seguro de que deseas eliminar al usuario &quot;{{ usuario.primer_nombre_usuario }} {{ usuario.primer_apellido_usuario }}&quot;?');">
+                                          onclick="return confirm('¿Estás seguro de que deseas eliminar al cliente &quot;{{ cliente.primer_nombre_cliente }} {{ cliente.primer_apellido_cliente }}&quot;?');">
                                       <i class="bx bx-trash me-1"></i> Eliminar
                                   </button>
                               </form>
@@ -54,8 +57,8 @@
                 </div>
               </div>
               <div class="mt-2">
-                <a  class="btn btn-primary" href="{% url 'crear_usuarios' %}">
-                  <i class="bx bx-plus"></i> Agregar Usuario
+                <a  class="btn btn-primary" href="{% url 'crear_clientes' %}">
+                  <i class="bx bx-plus"></i> Agregar Cliente
                 </a>
               </div>
 {% endblock %}

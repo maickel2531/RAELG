@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Garantias /</span> Crear Garantia</h4>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Garantia</a>
+                    </li>
+                  </ul>
+                  <div class="card mb-4">
+                    <h5 class="card-header">Datos de Garantia</h5>
+                    <!-- Account -->
+                    <hr class="my-0" />
+                    <div class="card-body">
+                      <form  method="POST" action="{% url 'crear_garantias' %}">
+                        {% csrf_token %}
+                        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+                        <div class="row">
+                          <div class="mb-3 col-md-6">
+                            <label for="nombre_cliente" class="form-label">Nombre del Cliente</label>
+                            <select class="form-select" name="cliente" required>
+                              <option value="" disabled selected>Seleccione un cliente</option>
+                              {% for cliente in clientes %}
+                                <option value="{{ cliente.id }}">{{ cliente.primer_nombre_cliente }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="pedido" class="form-label">Pedido</label>
+                            <select class="form-select" name="pedido" required>
+                              <option value="" disabled selected>Seleccione un pedido</option>
+                              {% for pedido in pedidos %}
+                                <option value="{{ pedido.id }}">{{ pedido.pedido }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="mb-3 col-md-6">  
+                            <label for="producto" class="form-label">Producto</label>
+                            <select class="form-select" name="producto" required>
+                              <option value="" disabled selected>Seleccione un producto</option>
+                              {% for producto in productos %}
+                                <option value="{{ producto.id }}">{{ producto.nombre_producto }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="motivo_reclamo" class="form-label">Motivo de Reclamo</label>
+                            <input class="form-control" type="text" name="motivo_reclamo"  required/>
+
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="fecha_reclamo" class="form-label">Fecha de Reclamo</label>
+                            <input class="form-control" type="date" name="fecha_reclamo"  required/>
+
+                          </div>
+                        </div>
+
+                        <div class="mt-2">
+                          <button type="submit" class="btn btn-primary me-2">Crear Garantia</button>
+                          <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- /Account -->
+                  </div>
+                </div>
+              </div>
+            </div>
+{% endblock %}

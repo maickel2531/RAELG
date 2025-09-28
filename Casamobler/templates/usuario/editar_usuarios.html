@@ -17,36 +17,46 @@
                         {% csrf_token %}
                         {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
                         <div class="row">
+
                           <div class="mb-3 col-md-6">
                             <label for="primer_nombre_usuario" class="form-label">Primer Nombre</label>
                             <input class="form-control"  value = "{{ usuario.primer_nombre_usuario }}" type="text" name="primer_nombre_usuario"  required/>
                           </div>
+
                           <div class="mb-3 col-md-6">
                             <label for="segundo_nombre_usuario" class="form-label">Segundo Nombre</label>
                             <input class="form-control"  value = "{{ usuario.segundo_nombre_usuario }}" type="text" name="segundo_nombre_usuario"   />
                           </div>
+
                           <div class="mb-3 col-md-6">  
                             <label for="primer_apellido_usuario" class="form-label">Primer Apellido</label>
                             <input class="form-control"  value="{{ usuario.primer_apellido_usuario }}" type="text" name="primer_apellido_usuario"    required/>
                           </div>
+
                           <div class="mb-3 col-md-6">
                             <label for="segundo_apellido_usuario" class="form-label">Segundo Apellido</label>
                             <input class="form-control"  value="{{ usuario.segundo_apellido_usuario }}" type="text" name="segundo_apellido_usuario"   required/>
                           </div>
+
                           <div class="mb-3 col-md-6">
                             <label for="correo" class="form-label">Correo</label>
                             <input class="form-control"  value="{{ usuario.correo }}" type="text" name="correo"  required/>
                           </div>
+
                           <div class="mb-3 col-md-6">   
                             <label for="telefono" class="form-label">Telefono</label>
                             <input class="form-control"  value = "{{ usuario.telefono }}" type="number" name="telefono"   required/>
                           </div>
+
                         </div>
+
                         <div class="mt-2">
+
                           <button type="submit" class="btn btn-primary me-2">Editar Usuario</button>
                           
                           <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
                         </div>
+                        
                       </form>
                     </div>
                     <!-- /Account -->

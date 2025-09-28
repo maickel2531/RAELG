@@ -60,11 +60,21 @@ class Pedido(models.Model):
     fecha_pedido = models.DateField(null=True, blank=True, verbose_name="Fecha_Pedido")
     fecha_entrega = models.DateField(null=True, blank=True, verbose_name="Fecha_Entrega")
     cantidad = models.IntegerField(null=True, blank=True, verbose_name="Cantidad")
-    valor_total = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True, verbose_name="Valor_Total")
     responsable = models.ForeignKey('Usuario', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Responsable")
         
     def __str__(self):
-        return f"Pedido {self.id}"
+        return f"Pedido {self.id} - Cliente: {self.cliente}"
+
+    # Método para calcular el valor total dinámicamente
+    def calcular_valor_total(self):
+        if self.producto and self.cantidad:
+            return self.producto.precio_venta * self.cantidad
+        return 0 # O manejar el caso donde producto o cantidad sean None
+
+    # Opcional: Puedes usar una propiedad para acceder fácilmente al total calculado
+    @property
+    def valor_total(self):
+        return self.calcular_valor_total()
 
 class Pago(models.Model):  
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, null=True, blank=True)

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Garantia /</span> Lista de Garantia</h4>
+              <div class="card">
+                <h5 class="card-header">Lista de garantias</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>Nombre Cliente</th>
+                        <th>Pedido</th>
+                        <th>Producto</th>
+                        <th>Motivo de Reclamo</th>
+                        <th>Fecha de Reclamo</th>
+                        <th>Acciones</th>  
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% for garantia in page_obj %}
+                      <tr>
+                        <td>{{ garantia.cliente.primer_nombre_cliente }}</td>
+                        <td>{{ garantia.pedido.pedido }}</td>
+                        <td>{{ garantia.producto }}</td>
+                        <td>{{ garantia.motivo_reclamo }}</td>
+                        <td>{{ garantia.fecha_reclamo }}</td>
+
+                        <td>
+                          <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="{% url 'editar_garantias' garantia.id %}">
+                                <i class="bx bx-edit-alt me-1"></i> Editar</a>
+                            <!-- Botón de Eliminar con confirmación y envío POST -->
+                              <form method="post" style="display:inline;" action="{% url 'eliminar_garantias' garantia.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar a garantia &quot;{{ garantia.producto }}&quot;?');">
+                                        <i class="bx bx-trash me-1"></i> Eliminar
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %} 
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="mt-2">
+                <a  class="btn btn-primary" href="{% url 'crear_garantias' %}">
+                  <i class="bx bx-plus"></i> Agregar Garantia
+                </a>
+              </div>
+{% endblock %}

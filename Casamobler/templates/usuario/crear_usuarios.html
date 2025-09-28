@@ -49,30 +49,37 @@
                         {% csrf_token %}
                         {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
                         <div class="row">
+                          
                           <div class="mb-3 col-md-6">
                             <label for="primer_nombre_usuario" class="form-label">Primer Nombre</label>
                             <input class="form-control" type="text" name="primer_nombre_usuario"  required/>
                           </div>
+                          
                           <div class="mb-3 col-md-6">
                             <label for="segundo_nombre_usuario" class="form-label">Segundo Nombre</label>
                             <input class="form-control" type="text" name="segundo_nombre_usuario" />
                           </div>
+
                           <div class="mb-3 col-md-6">  
                             <label for="primer_apellido_usuario" class="form-label">Primer Apellido</label>
                             <input class="form-control" type="text" name="primer_apellido_usuario"    required/>
                           </div>
+
                           <div class="mb-3 col-md-6">
                             <label for="segundo_apellido_usuario" class="form-label">Segundo Apellido</label>
                             <input class="form-control" type="text" name="segundo_apellido_usuario"  required/>
                           </div>
+
                           <div class="mb-3 col-md-6">
                             <label for="correo" class="form-label">Correo</label>
                             <input class="form-control" type="email" name="correo"   required/>
                           </div>
+
                           <div class="mb-3 col-md-6">   
                             <label for="telefono" class="form-label">Telefono</label>
                             <input class="form-control" type="text" name="telefono" pattern="[0-9]{10}" title="El teléfono debe contener exactamente 10 dígitos" required/>
                           </div>
+
                           <div class="mb-3 col-md-6">
                             <label for="rol" class="form-label">Rol</label>
                             <select class="form-select" name="rol" required>
@@ -90,11 +97,14 @@
                               <p>La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial.</p>
                             </div>
                           </div>
+
                         </div>
+
                         <div class="mt-2">
                           <button type="submit" class="btn btn-primary me-2">Crear Usuario</button>
                           <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
                         </div>
+                        
                       </form>
                     </div>
                     <!-- /Account -->
