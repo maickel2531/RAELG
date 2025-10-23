@@ -1,212 +1,105 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="utf-8">
-    <title>Casamobler</title>
-    <meta name="format-detection" content="telephone=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" href="{% static 'assets/img/fondoi.jpg' %}" type="image/x-icon">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,500,700,800|Poppins:300,400,700">
-    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/fonts.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
-    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
-    <style>
-        .ie-panel {
-            display: none;
-            background: #212121;
-            padding: 10px 0;
-            box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3);
-            clear: both;
-            text-align:center;
-            position: relative;
-            z-index: 1;
-        }
-        html.ie-10 .ie-panel, html.lt-ie-10 .ie-panel {
-            display: block;
-        }
-    </style>
-
-</head>
-<body>
-    <div class="preloader">
-        <div class="preloader-logo">
-            <img src="{% static 'assets/img/logo.jpeg' %}" alt="" width="151" height="44" srcset="{% static 'assets/img/logo.jpeg' %} 2x"/>
-        </div>
-        <div class="preloader-body">
-            <div id="loadingProgressG">
-                <div class="loadingProgressG" id="loadingProgressG_1"></div>
-            </div>
-        </div>
-    </div>
-    <div class="page">
-        <header class="section novi-background page-header">
-            <div class="rd-navbar-wrap">
-                <nav class="rd-navbar rd-navbar-corporate" data-layout="rd-navbar-fixed">
-                    <div class="rd-navbar-aside-outer">
-                        <div class="rd-navbar-aside">
-                            <div class="rd-navbar-panel">
-                                <button class="rd-navbar-toggle" data-rd-navbar-toggle="#rd-navbar-nav-wrap-1"><span></span></button>
-                                <a class="rd-navbar-brand" href="/"><img src="{% static 'assets/img/logo.jpeg' %}" alt="Logo" width="151" height="44" srcset="{% static 'assets/img/logo.jpeg' %} 2x"/></a>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="Casamobler - Gestión inmobiliaria" />
+        <meta name="author" content="CasaMobler" />
+        <title>Casamobler</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="{% static 'assets/img/fondoi.jpg' %}" />
+        <!-- Custom Google font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'assets/css/index.css' %}" rel="stylesheet" />
+    </head>
+    <body class="d-flex flex-column h-100">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="/"><span class="fw-bolder text-primary">CasaMobler</span></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+                            <li class="nav-item"><a class="nav-link" href="/"></a></li>
+                            <li class="nav-item"><a class="nav-link" href="/about/"></a></li>
+                            <li class="nav-item"><a class="nav-link" href="/contact/"></a></li>
+                            
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!-- Header-->
+            <header class="py-5">
+                <div class="container px-5 pb-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-xxl-5">
+                            <!-- Header text content-->
+                            <div class="text-center text-xxl-start">
+                                <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase"> &middot;  &middot; </div></div>
+                                <div class="fs-3 fw-light text-muted">Te ayudamos a formar tu hogar ideal</div>
+                                <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Vive el espacio que mereces, inspírate y hazlo tuyo</span></h1>
+                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
+                                    <a class="btn btn-dark btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"  href="{% url 'login' %}">Iniciar sesión</a>  
+                                </div>
                             </div>
-                            <div class="rd-navbar-collapse">
-                                <button class="rd-navbar-collapse-toggle rd-navbar-fixed-element-1" data-rd-navbar-toggle="#rd-navbar-collapse-content-1"><span></span></button>
-                                <div class="rd-navbar-collapse-content" id="rd-navbar-collapse-content-1">
-                                    <article class="unit align-items-center">
-                                        <div class="unit-left"><span class="icon novi-icon icon-md icon-modern mdi mdi-phone"></span></div>
-                                        <div class="unit-body">
-                                            <ul class="list-0">
-                                                <li><a class="link-default" href="tel:#">+57 324-4990791</a></li>
-                                            </ul>
-                                        </div>
-                                    </article>
-                                    <article class="unit align-items-center">
-                                        <div class="unit-left"><span class="icon novi-icon icon-md icon-modern mdi mdi-map-marker"></span></div>
-                                        <div class="unit-body"><a class="link-default" href="#">Carrera 81 # 37 - 05, Medellín, Antioquia</a></div>
-                                    </article>
-                                    <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                                        <a class="button button-primary button-winona" href="{% url 'login' %}">Iniciar sesión</a>
-                                        <a class="button button-gray-bordered button-winona" href="{% url 'register' %}">Registrarse</a>
-                                    </div>
+                        </div>
+                        <div class="col-xxl-7">
+                            <!-- Header profile picture-->
+                            <div class="d-flex justify-content-center mt-5 mt-xxl-0">
+                                <div class="profile bg-gradient-primary-to-secondary">
+                                    <img class="profile-img"  src="{% static 'assets/img/casa_mobler.jpeg' %}" alt="..." />
+                                    <!-- Puedes agregar los SVG dots si los necesitas -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="rd-navbar-main-outer">
-                        <div class="rd-navbar-main">
-                            <div class="rd-navbar-nav-wrap" id="rd-navbar-nav-wrap-1">
-                                <ul class="rd-navbar-nav">
-                                    <li class="rd-nav-item active"><a class="rd-nav-link" href="/">Inicio</a></li>
-                                    <li class="rd-nav-item"><a class="rd-nav-link" href="/about/">Nosotros</a></li>
-                                    <li class="rd-nav-item"><a class="rd-nav-link" href="/contact/">Contactanos</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-        </header>
-        <section class="section swiper-container swiper-slider swiper-slider-minimal" data-loop="true" data-slide-effect="fade" data-autoplay="4759" data-simulate-touch="true">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide swiper-slide_video" data-slide-bg="{% static 'assets/img/Image_20240826_104324_853.jpeg' %}">
-                    <div class="container">
-                        <div class="jumbotron-classic-content">
-                            <div class="wow-outer">
-                                <div class="title-docor-text font-weight-bold title-decorated text-uppercase wow slideInLeft text-white">Diversos diseños</div>
-                            </div>
-                            <h1 class="text-uppercase text-white font-weight-bold wow-outer"><span class="wow slideInDown" data-wow-delay=".2s">Inspirate</span></h1>
-                            <p class="text-white wow-outer"><span class="wow slideInDown" data-wow-delay=".35s">Casamobler te ofrece muchas propiedades para que elijas tu hogar ideal.</span></p>
-                            <div class="wow-outer button-outer"><a class="button button-md button-primary button-winona wow slideInDown" href="#" data-wow-delay=".4s">Ver propiedades</a></div>
-                        </div>
-                    </div>
                 </div>
-                <div class="swiper-slide swiper-slide_video" data-slide-bg="{% static 'assets/img/Image_20240826_104325_425.jpeg' %}">
-                    <div class="container">
-                        <div class="jumbotron-classic-content">
-                            <div class="wow-outer">
-                                <div class="title-docor-text font-weight-bold title-decorated text-uppercase wow slideInLeft text-white">Diversos diseños</div>
-                            </div>
-                            <h1 class="text-uppercase text-white font-weight-bold wow-outer"><span class="wow slideInDown" data-wow-delay=".2s">Inspirate</span></h1>
-                            <p class="text-white wow-outer"><span class="wow slideInDown" data-wow-delay=".35s">Casamobler te ofrece muchas propiedades para que elijas tu hogar ideal.</span></p>
-                            <div class="wow-outer button-outer"><a class="button button-md button-primary button-winona wow slideInDown" href="#" data-wow-delay=".4s">Ver propiedades</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide swiper-slide_video" data-slide-bg="{% static 'assets/img/Image_20240826_104326_570.jpeg' %}">
-                    <div class="container">
-                        <div class="jumbotron-classic-content">
-                            <div class="wow-outer">
-                                <div class="title-docor-text font-weight-bold title-decorated text-uppercase wow slideInLeft text-white">Diversos diseños</div>
-                            </div>
-                            <h1 class="text-uppercase text-white font-weight-bold wow-outer"><span class="wow slideInDown" data-wow-delay=".2s">Inspirate</span></h1>
-                            <p class="text-white wow-outer"><span class="wow slideInDown" data-wow-delay=".35s">Casamobler te ofrece muchas propiedades para que elijas tu hogar ideal.</span></p>
-                            <div class="wow-outer button-outer"><a class="button button-md button-primary button-winona wow slideInDown" href="#" data-wow-delay=".4s">Ver propiedades</a></div>
-                        </div>
-                    </div>
-                </div>
-               
-                
-                <!-- Puedes agregar más slides aquí -->
-            </div>
-            <div class="swiper-pagination-outer container">
-                <div class="swiper-pagination swiper-pagination-modern swiper-pagination-marked" data-index-bullet="true"></div>
-            </div>
-        </section>
-        <section class="section novi-background section-md text-center">
-            <div class="container">
-                <h1 class="mb-4">Bienvenido a Casamobler</h1>
-
-            </div>
-        </section>
-        <footer class="section novi-background footer-advanced bg-gray-700">
-            <div class="footer-advanced-main">
-                <div class="container">
-                    <div class="row row-50">
-                        <div class="col-lg-4">
-                            <h5 class="font-weight-bold text-uppercase text-white">Sobre nosotros</h5>
-                            <p class="footer-advanced-text">Casamobler es la mayor empresa de gestión inmobiliaria y bienes raíces. Ofrecemos experiencia en la venta y marketing de una amplia gama de propiedades.</p>
-                        </div>
-                        <div class="col-sm-7 col-md-5 col-lg-4">
-                            <h5 class="font-weight-bold text-uppercase text-white">Blog reciente</h5>
-                            <article class="post-inline">
-                                <p class="post-inline-title"><a href="#">Guía inmobiliaria: 7 consejos para comprar casa</a></p>
-                                <ul class="post-inline-meta">
-                                    <li>por Mike Barnes</li>
-                                    <li><a href="#">2 días atrás</a></li>
-                                </ul>
-                            </article>
-                        </div>
-                        <div class="col-sm-5 col-md-7 col-lg-4">
-                            <h5 class="font-weight-bold text-uppercase text-white">Galería</h5>
-                            <div class="row row-x-10" data-lightgallery="group">
-                                <div class="col-3 col-sm-4 col-md-3"><a class="thumbnail-minimal" href="#"><img class="thumbnail-minimal-image" src="{% static 'assets/img/footer-gallery-1-85x85.jpg' %}" alt=""/></a></div>
-                                <!-- Puedes agregar más imágenes aquí -->
+            </header>
+            <!-- About Section-->
+            <section class="bg-light py-5">
+                <div class="container px-5">
+                    <div class="row gx-5 justify-content-center">
+                        <div class="col-xxl-8">
+                            <div class="text-center my-5">
+                                <h2 class="display-5 fw-bolder"><span class="text-gradient d-inline">Sobre nosotros</span></h2>
+                                <p class="lead fw-light mb-4">Somos CasaMobler y ayudamos a las familias a formar su hogar.</p>
+                                <p class="text-muted">Casamobler es la mayor empresa de gestión inmobiliaria en el mundo. Con nuestra experiencia y conocimientos, nos ayudamos a crear un hogar que sea único y atractivo para las familias.</p>
+                                <div class="d-flex justify-content-center fs-2 gap-4">
+                                    <a class="text-gradient" href="#"><i class="bi bi-twitter"></i></a>
+                                    <a class="text-gradient" href="#"><i class="bi bi-linkedin"></i></a>
+                                    <a class="text-gradient" href="#"><i class="bi bi-github"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="footer-advanced-aside">
-                <div class="container">
-                    <div class="footer-advanced-layout">
-                        <div>
-                            <ul class="list-nav">
-                                <li><a href="/">Inicio</a></li>
-                                <li><a href="/about/">Nosotros</a></li>
-                                <li><a href="#">Propiedades</a></li>
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="/contact/">Contactos</a></li>
-                            </ul>
-                        </div>
-                        <div>
-                            <ul class="foter-social-links list-inline list-inline-md">
-                                <li><a class="icon novi-icon icon-sm link-default mdi mdi-facebook" href="#"></a></li>
-                                <li><a class="icon novi-icon icon-sm link-default mdi mdi-twitter" href="#"></a></li>
-                                <li><a class="icon novi-icon icon-sm link-default mdi mdi-instagram" href="#"></a></li>
-                                <li><a class="icon novi-icon icon-sm link-default mdi mdi-google" href="#"></a></li>
-                                <li><a class="icon novi-icon icon-sm link-default mdi mdi-linkedin" href="#"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <hr/>
-            </div>
-            <div class="footer-advanced-aside">
-                <div class="container">
-                    <div class="footer-advanced-layout">
-                        <a class="brand" href="/"><img src="{% static 'assets/img/Image_20240826_104325_425' %}" alt="" width="115" height="34" srcset="/static/assets/img/logo-light-115x34.png 2x"/></a>
-                        <p class="rights"><span>&copy;&nbsp;</span><span class="copyright-year"></span>. Todos los derechos reservados. Diseño por CasaMobler </p>
+            </section>
+        </main>
+        <!-- Footer-->
+        <footer class="bg-white py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0">&copy; CasaMobler {{ now|date:"Y" }}</div></div>
+                    <div class="col-auto">
+                        <a class="small" href="#"></a>
+                        <span class="mx-1">&middot;</span>
+                        <a class="small" href="#"></a>
+                        <span class="mx-1">&middot;</span>
+                        <a class="small" href="/contact/"></a>
                     </div>
                 </div>
             </div>
         </footer>
-    </div>
-    <div class="snackbars" id="form-output-global"></div>
-    <script src="{% static 'assets/js/core.min.js' %}"></script>
-    <script src="{% static 'assets/js/script.js' %}"></script>
-</body>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'assets/js/scripts.js' %}"></script>
+    </body>
 </html>

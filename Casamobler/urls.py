@@ -45,7 +45,13 @@ urlpatterns = [
     path('garantias/crear/', views.crear_garantia, name='crear_garantias'),
     path('garantias/<int:garantia_id>/editar/', views.editar_garantia, name='editar_garantias'),
     path('garantias/<int:garantia_id>/eliminar/', views.eliminar_garantia, name='eliminar_garantias'),
-  
+
+    # REMISIONES
+    path('remisiones/', views.lista_remisiones, name='lista_remisiones'),
+    path('remisiones/<int:remision_id>/', views.detalle_remision, name='detalle_remision'),
+    path('remision/<int:remision_id>/pdf/', views.remision_pdf, name='remision_pdf'),
+    path('remisiones/crear/', views.crear_remision, name='crear_remision'),
+
     ]
     # myapp/urls.py (añadir después de tus URLs existentes)
 

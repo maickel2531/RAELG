@@ -104,3 +104,25 @@ class Garantia(models.Model):
 
     def __str__(self):
         return f"Garantía {self.id}"
+
+class Remision(models.Model):
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    fecha_emision = models.DateField(auto_now_add=True)
+    fecha_entrega_estimada = models.DateField(null=True, blank=True)
+    observaciones = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Remisión #{self.id} - {self.cliente}"
+
+class DetalleRemision(models.Model):
+    remision = models.ForeignKey(Remision, related_name='detalles', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+
+    @property
+    def valor_unitario(self):
+        return self.producto.precio_venta if self.producto else 0
+
+    @property
+    def valor_total(self):
+        return self.valor_unitario * self.cantidad

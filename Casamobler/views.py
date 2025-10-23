@@ -6,7 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Rol, Perfil, Usuario, Cliente, Producto, Pedido, Pago, Garantia
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_RIGHT
+from reportlab.lib import colors
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+from .models import Rol, Perfil, Usuario, Cliente, Producto, Pedido, Pago, Garantia, Remision, DetalleRemision
+
 
 # Create your views here.
 def index(request):
@@ -115,7 +123,7 @@ def crear_usuario(request):
         telefono = request.POST.get('telefono')
         correo = request.POST.get('correo')
         contraseña = request.POST.get('contraseña') # En un sistema real, no se debería guardar en texto plano
-        rol_id = request.POST.get('Rol')
+        rol_id = request.POST.get('rol')
 
         rol = Rol.objects.get(id=rol_id) if rol_id else None
 
@@ -608,3 +616,148 @@ def eliminar_garantia(request, garantia_id):
             messages.error(request, f'Error al eliminar el garantía: {str(e)}')
     return redirect('lista_garantias')
 # --- FIN DE VISTAS PARA GARANTIA ---
+# --- VISTAS PARA REMISIONES ---
+@login_required
+def remision_pdf(request, remision_id):
+    remision = get_object_or_404(Remision, id=remision_id)
+    
+    # Calcular total general
+    total_general = sum(item.valor_total for item in remision.detalles.all())
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'inline; filename="remision_{remision.id}.pdf"'  # usa 'attachment' si quieres forzar descarga
+
+    doc = SimpleDocTemplate(response, pagesize=letter, topMargin=30, bottomMargin=30)
+    elements = []
+    styles = getSampleStyleSheet()
+
+    # Estilos personalizados
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=20,
+        alignment=TA_CENTER,
+        spaceAfter=20,
+        textColor=colors.HexColor("#2c3e50")
+    )
+    normal = styles["Normal"]
+    right_align = ParagraphStyle('Right', parent=normal, alignment=TA_RIGHT)
+
+    # Encabezado
+    elements.append(Paragraph("CASA MOBLER", title_style))
+    elements.append(Paragraph("REMISIÓN DE ENTREGA", styles['Heading2']))
+    elements.append(Paragraph(f"Número: {remision.id} &nbsp; | &nbsp; Fecha: {remision.fecha_emision}", normal))
+    elements.append(Spacer(1, 20))
+
+    # Datos del cliente
+    cliente = remision.cliente
+    nombre_completo = " ".join(filter(None, [
+        cliente.primer_nombre_cliente,
+        cliente.segundo_nombre_cliente,
+        cliente.primer_apellido_cliente,
+        cliente.segundo_apellido_cliente
+    ]))
+    elements.append(Paragraph("<b>Datos del Cliente</b>", styles['Heading3']))
+    elements.append(Paragraph(f"Nombre: {nombre_completo}", normal))
+    elements.append(Paragraph(f"Documento ID: {cliente.documento_id}", normal))
+    elements.append(Paragraph(f"Teléfono: {cliente.telefono}", normal))
+    elements.append(Paragraph(f"Dirección: {cliente.direccion}", normal))
+    if remision.fecha_entrega_estimada:
+        elements.append(Paragraph(f"Fecha de entrega estimada: {remision.fecha_entrega_estimada}", normal))
+    elements.append(Spacer(1, 15))
+
+    # Tabla de productos
+    data = [["Producto", "Cantidad", "Valor Unitario", "Valor Total"]]
+    for item in remision.detalles.all():
+        data.append([
+            item.producto.nombre_producto,
+            str(item.cantidad),
+            f"${item.valor_unitario:,.0f}",
+            f"${item.valor_total:,.0f}"
+        ])
+
+    table = Table(data, colWidths=[200, 60, 80, 80])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#2c3e50")),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('FONTSIZE', (0, 1), (-1, -1), 9),
+    ]))
+    elements.append(table)
+    elements.append(Spacer(1, 15))
+
+    # Total
+    elements.append(Paragraph(f"<b>Total a entregar: ${total_general:,.0f}</b>", right_align))
+    elements.append(Spacer(1, 15))
+
+    # Observaciones
+    if remision.observaciones:
+        elements.append(Paragraph("<b>Observaciones:</b>", styles['Heading4']))
+        elements.append(Paragraph(remision.observaciones.replace('\n', '<br/>'), normal))
+
+    doc.build(elements)
+    return response
+
+@login_required
+@login_required
+def detalle_remision(request, remision_id):
+    remision = get_object_or_404(Remision, id=remision_id)
+    total_general = sum(item.valor_total for item in remision.detalles.all())
+    return render(request, 'remisiones/detalle_remision.html', {
+        'remision': remision,
+        'total_general': total_general
+    })
+
+@login_required
+def lista_remisiones(request):
+    remisiones = Remision.objects.select_related('cliente').prefetch_related('detalles__producto').all()
+    paginator = Paginator(remisiones, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'remisiones/lista_remisiones.html', {'page_obj': page_obj})
+
+@login_required
+def crear_remision(request):
+    if request.method == 'POST':
+        cliente_id = request.POST.get('cliente')
+        fecha_entrega = request.POST.get('fecha_entrega_estimada')
+        observaciones = request.POST.get('observaciones', '')
+        producto_ids = request.POST.getlist('producto_id')
+        cantidades = request.POST.getlist('cantidad')
+
+        try:
+            cliente = Cliente.objects.get(id=cliente_id)
+            # Crear la remisión
+            remision = Remision.objects.create(
+                cliente=cliente,
+                fecha_entrega_estimada=fecha_entrega,
+                observaciones=observaciones
+            )
+
+            # Crear los detalles
+            for prod_id, cant in zip(producto_ids, cantidades):
+                if prod_id and cant and int(cant) > 0:
+                    producto = Producto.objects.get(id=prod_id)
+                    DetalleRemision.objects.create(
+                        remision=remision,
+                        producto=producto,
+                        cantidad=int(cant)
+                    )
+
+            messages.success(request, f'Remisión #{remision.id} creada exitosamente.')
+            return redirect('lista_remisiones')
+
+        except Exception as e:
+            messages.error(request, f'Error al crear la remisión: {str(e)}')
+
+    # Cargar datos para el formulario
+    clientes = Cliente.objects.all()
+    productos = Producto.objects.all()
+    return render(request, 'remisiones/crear_remision.html', {
+        'clientes': clientes,
+        'productos': productos
+    })

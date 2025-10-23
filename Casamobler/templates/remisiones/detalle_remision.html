@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+<!-- templates/remisiones/detalle_remision.html -->
+  
+{% block content %} 
+
+<h2>Detalle de Remisión #{{ remision.id }}</h2>
+<div class="card">
+    <div class="card-body">
+            <h5 class="card-title">Datos de la Remisión</h5>
+            <p class="card-text">
+                <strong>Cliente:</strong> {{ remision.cliente.primer_nombre_cliente }} {{ remision.cliente.primer_apellido_cliente }}<br>
+                <strong>Fecha de Emisión:</strong> {{ remision.fecha_emision }}<br>
+                <strong>Fecha de Entrega Estimada:</strong> {{ remision.fecha_entrega_estimada }}<br>
+                <strong>Observaciones:</strong> {{ remision.observaciones }}<br>
+            </p>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title">Detalle de Remisión</h5>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Valor Unitario</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for detalle in remision.detalles.all %}
+                <tr>
+                    <td>{{ detalle.producto.nombre_producto }}</td>
+                    <td>{{ detalle.cantidad }}</td>
+                    <td>${{ detalle.valor_unitario }}</td>
+                    <td>${{ detalle.valor_total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="mt-3">
+            <strong>Total a entregar:</strong> ${{ total_general }}
+        </div>
+        <div class="mt-3">
+            <a href="{% url 'lista_remisiones' %}" class="btn btn-secondary">Volver</a>
+            <a href="{% url 'crear_remision' %}" class="btn btn-primary">Crear Remisión</a>
+            <a href="{% url 'lista_remisiones' %}" class="btn btn-primary">Volver a Lista</a>
+            <a href="{% url 'remision_pdf' remision.id %}" target="_blank" class="btn btn-success">Imprimir</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

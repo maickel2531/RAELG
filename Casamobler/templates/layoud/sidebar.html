@@ -27,7 +27,7 @@
 
             <!-- Usuarios -->
             <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Usuarios</span>
+              <span class="menu-header-text">Servicios</span>
             </li>
             <!-- Usuarios -->
             <li class="menu-item">
@@ -50,9 +50,6 @@
               </ul>
             </li>
             <!-- Clientes -->
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Clientes</span>
-            </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class=' menu-icon tf-icons bx bx-box'></i>
@@ -70,9 +67,6 @@
                   </a>
                 </li>
               </ul>
-            </li>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Productos</span>
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -92,9 +86,6 @@
                 </li>
               </ul>
             </li>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Pedidos</span>
-            </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-chevron-left"></i>
@@ -112,9 +103,6 @@
                   </a>
                 </li>
               </ul>
-            </li>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Pagos</span>
             </li>
             <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
@@ -136,7 +124,6 @@
             </li>
             </li>
             <!-- Garantias -->
-            <li class="menu-header small text-uppercase"><span class="menu-header-text">Garantias</span></li>
             <!-- User interface -->
             <li class="menu-item">
               <a href="javascript:void(0)" class="menu-link menu-toggle">
@@ -154,6 +141,25 @@
                     <div data-i18n="Alerts">Lista de Garantias</div>
                   </a>
                 </li>
+              </ul>
+            </li>
+            <li class="menu-item">
+              <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-file"></i>
+                <div>Remisiones</div>
+              </a>
+              <ul class="menu-sub">
+                <li class="menu-item">
+                  <a href="{% url 'crear_remision' %}" class="menu-link">
+                    <div data-i18n="Crear Remision">Crear Remision</div>
+                  </a>
+                </li>
+                <li class="menu-item">
+                  <a href="{% url 'lista_remisiones' %}" class="menu-link">
+                    <div>Lista de Remisiones</div>
+                  </a>
+                </li>
+                <!-- Si más adelante creas 'crear_remision', añádelo aquí -->
               </ul>
             </li>
         </aside>
