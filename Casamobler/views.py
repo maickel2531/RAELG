@@ -14,6 +14,7 @@ from reportlab.lib import colors
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from .models import Rol, Perfil, Usuario, Cliente, Producto, Pedido, Pago, Garantia, Remision, DetalleRemision
+from .decoradores import rol_requerido
 
 
 # Create your views here.
@@ -105,6 +106,7 @@ def logout_view(request):
     return redirect('index')
 
 @login_required
+@rol_requerido('admin')
 def lista_usuarios(request):
     usuarios = Usuario.objects.all()
     paginator = Paginator(usuarios, 10)
@@ -113,6 +115,7 @@ def lista_usuarios(request):
     return render(request, 'usuario/lista_usuarios.html', {'page_obj': page_obj})
 
 @login_required
+@rol_requerido('admin')
 def crear_usuario(request):
     if request.method == 'POST':
         # Obtener datos del formulario
