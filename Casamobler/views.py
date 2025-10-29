@@ -22,10 +22,7 @@ from django.contrib.auth.hashers import make_password
 from .models import Rol, Perfil, Cliente, Producto, Pedido, Pago, Garantia, Remision, DetalleRemision
 from .forms import ProductoForm  
 from django.shortcuts import render, redirect
-from django.contrib import messages
-
-
-
+from django.contrib import messages     
 
 
 # Create your views here.
@@ -62,6 +59,7 @@ def logout_view(request):
     return redirect('index')
 
 @login_required
+@rol_requerido('admin')
 def lista_usuarios(request):
     query = request.GET.get('q')
     if query:
@@ -80,6 +78,7 @@ def lista_usuarios(request):
     return render(request, 'usuario/lista_usuarios.html', {'page_obj': page_obj})
 
 @login_required
+@rol_requerido('admin')
 def crear_usuario(request):
     if request.method == 'POST':
         username = request.POST.get('username')
