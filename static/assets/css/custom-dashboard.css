@@ -1,0 +1,258 @@
+/* ===== DASHBOARD PREMIUM CASAMOBLER ===== */
+
+/* ===== FORZAR MODO OSCURO TOTAL ===== */
+:root,
+[data-theme="theme-default"] {
+  --bs-body-bg: #0A0A0A !important;
+  --body-bg: #0A0A0A !important;
+  --menu-bg: #0A0A0A !important;
+  --navbar-bg: #0A0A0A !important;
+  --footer-bg: #0A0A0A !important;
+  --bs-body-color: #E0E0E0 !important;
+}
+
+body {
+  background-color: #0A0A0A  !important;
+  color: #E0E0E0 !important;
+}
+
+.content-wrapper {
+  background-color: #000000  !important;
+}
+
+.layout-wrapper {
+  background-color: #000000  !important;
+}
+
+.bg-menu-theme {
+  background: #3b3838 !important;
+}
+
+.bg-navbar-theme {
+  background: #3b3838 !important;
+}
+
+.bg-footer-theme {
+  background: #3b3838 !important;
+}
+
+/* Fon
+/* Títulos principales */
+h4.fw-bold.py-3.mb-4 {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-weight: 600 !important;
+  font-size: 1.8rem !important;
+  color: var(--text-primary) !important;
+  letter-spacing: -0.5px;
+  margin-bottom: 2rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 2px solid rgba(198, 40, 40, 0.1);
+}
+
+h4 .text-muted {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 1.2rem !important;
+  color: var(--text-muted) !important;
+}
+
+/* Tarjetas */
+.card {
+  background: var(--card-bg) !important;
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+  margin-bottom: 2rem !important;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
+}
+
+.card-header {
+  background: white !important;
+  padding: 1.25rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 1.25rem !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid #eee !important;
+}
+
+/* Formularios */
+.form-label {
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 0.5rem !important;
+  
+}
+
+.form-control, .form-select {
+  padding: 0.65rem 1rem !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  font-size: 0.95rem !important;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--casamobler-red) !important;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15) !important;
+  color : #ffffff !important;
+}
+
+/* Botones */
+.btn-dark {
+  background: var(--casamobler-red) !important;
+  border: none !important;
+  padding: 0.65rem 1.5rem !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  background: #B71C1C !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(198, 40, 40, 0.3) !important;
+}
+
+.btn-outline-secondary {
+  border-color: #ddd !important;
+  color: white !important;
+  border-radius: 10px !important;
+}
+
+/* Pestañas (nav-pills) */
+.nav-pills .nav-link {
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  padding: 0.6rem 1.2rem !important;
+}
+
+.nav-pills .nav-link.active {
+  background: var(--casamobler-red) !important;
+  color: white !important;
+}
+
+/* Avatar upload */
+.button-wrapper .btn {
+  border-radius: 8px !important;
+}
+
+/* Footer */
+.footer {
+  background: rgb(0, 0, 0) !important;
+  border-top: 1px solid #000000 !important;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container-p-y {
+    padding: 1.5rem !important;
+  }
+  h4.fw-bold.py-3.mb-4 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ===== TARJETAS CON FONDO CLARO SOBRE FONDO OSCURO ===== */
+.card {
+  background-color: #323232 !important; /* Fondo blanco puro */
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.card-header {
+  background-color: #646464 !important;
+  border-bottom: 1px solid #646464 !important;
+  padding: 1.25rem 1.5rem !important;
+  font-weight: 600;
+  color: #ffffff !important;
+}
+
+.card-body {
+  color: #323232 !important;
+}
+
+/* Etiquetas y texto dentro de formularios */
+/* Etiquetas y texto dentro de formularios */
+.form-label {
+  color: #ffffff !important; /* ✅ Etiqueta visible */
+  font-weight: 600 !important;
+}
+
+.form-control, .form-select {
+  background-color: #323232 !important;
+  border: 1px solid #555 !important; /* ✅ Borde más visible */
+  color: #ffffff !important; /* ✅ Texto del usuario visible */
+  caret-color: #C62828; /* ✅ Cursor rojo para mejor experiencia */
+}
+
+/* Para los placeholders (texto de ayuda) */
+.form-control::placeholder,
+.form-select::placeholder {
+  color: #999 !important; /* ✅ Placeholder en gris claro */
+  opacity: 1;
+}
+
+/* Foco en los campos */
+.form-control:focus, .form-select:focus {
+  border-color: #C62828 !important;
+  box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.15) !important;
+  color: #ffffff !important; /* ✅ Asegura que el texto sea blanco al hacer foco */
+}
+
+/* Botones */
+.btn-dark {
+  background-color: #C62828 !important;
+  border-color: #C62828 !important;
+  color: #ffffff !important;
+}
+
+.btn-dark:hover {
+  background-color: #B71C1C !important;
+  border-color: #B71C1C !important;
+}
+
+.btn-outline-secondary {
+  color: #fff4f4 !important;
+  border-color: #cccccc !important;
+}
+
+/* Texto secundario */
+.text-muted {
+  color: #ffffff !important;
+}
+
+/* Pestañas (nav-pills) */
+.nav-pills .nav-link.active {
+  background-color: #C62828 !important;
+  color: white !important;
+}
+
+.nav-pills .nav-link {
+  color: #444444 !important;
+}
+
+.mt-3 {
+  color: white !important;
+}
+
+.table thead th {
+  color: white !important;
+}
+
+.card-text {
+  color: white !important;
+}
+
+.card-title {
+  color: white !important;
+}

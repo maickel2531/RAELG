@@ -1,14 +1,20 @@
 FROM python:3.11-slim
 
-# Establece el directorio de trabajo
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8
+
 WORKDIR /app
 
-# Instala las dependencias
+# Instalar dependencias de Python
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-RUN apt-get update && apt-get install -y binutils libproj-dev gdal-bin
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
+# Copiar el proyecto
 COPY . .
 
-# Comando por defecto para ejecutar el servidor
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8001"]
+EXPOSE 8001
+
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8001"]

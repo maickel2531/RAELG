@@ -1,54 +1,73 @@
 {% extends 'base.html' %}
 {% load static %}
+<!-- templates/usuario/lista_usuarios.html -->
+
 {% block content %}
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Usuario /</span> Lista de Usuarios</h4>
+
+<!-- Formulario de búsqueda -->
+<form method="get" class="mb-3">
+  <div class="input-group">
+    <input type="text" name="q" class="form-control" placeholder="Buscar por nombre, apellido o correo..." 
+           value="{{ request.GET.q }}">
+    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+  </div>
+</form>
+
+
+
               <div class="card">
-                <h5 class="card-header">Lista de usuarios</h5>
+                <h5 class="card-header">Lista de Usuarios</h5>
                 <div class="table-responsive text-nowrap">
                   <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th>Primer Nombre</th>
-                        <th>Segundo Nombre</th>
-                        <th>Primer Apellido</th>
-                        <th>Segundo Apellido</th>
+                        <th>Nombre de Usuario</th>
+                        <th>Nombre Completo</th>
                         <th>Correo</th>
-                        <th>Telefono</th>   
+                        <th>Teléfono</th>
                         <th>Rol</th>
                         <th>Acciones</th>
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                      {% for usuario in page_obj %}
-                      <tr>
-                        <td>{{ usuario.primer_nombre_usuario }}</td>
-                        <td>{{ usuario.segundo_nombre_usuario }}</td>
-                        <td>{{ usuario.primer_apellido_usuario }}</td>
-                        <td>{{ usuario.segundo_apellido_usuario }}</td>
-                        <td>{{ usuario.correo }}</td>
-                        <td>{{ usuario.telefono }}</td>
-                        <td>{{ usuario.Rol.nombre_rol }}</td>
-                        <td>
+                      {% for user in page_obj.object_list %}
+                      <tr> 
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.perfil.telefono }}</td>
+                        <td>{{ user.perfil.rol.nombre_rol }}</td>
+                        <td class="text-end">
                           <div class="dropdown">
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                               <i class="bx bx-dots-vertical-rounded"></i>
                             </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="{% url 'editar_usuarios' usuario.id %}">
-                                <i class="bx bx-edit-alt me-1"></i> Editar</a>
-                            <!-- Botón de Eliminar con confirmación y envío POST -->
-                              <form method="post" style="display:inline;" action="{% url 'eliminar_usuarios' usuario.id %}">
+                            <ul class="dropdown-menu">
+                              <li>
+                                <a class="dropdown-item" href="{% url 'editar_usuarios' user.id %}">
+                                  <i class="bx bx-edit-alt me-1"></i> Editar
+                                </a>
+                              </li>
+                              <li>
+                                <form method="post" action="{% url 'eliminar_usuarios' user.id %}" style="display: inline;">
                                   {% csrf_token %}
-                                  <button type="submit" class="dropdown-item"
-                                          onclick="return confirm('¿Estás seguro de que deseas eliminar al usuario &quot;{{ usuario.primer_nombre_usuario }} {{ usuario.primer_apellido_usuario }}&quot;?');">
-                                      <i class="bx bx-trash me-1"></i> Eliminar
+                                  <button
+                                    type="submit"
+                                    class="dropdown-item text-danger"
+                                    onclick="return confirm('¿Eliminar a {{ user.first_name }} {{ user.last_name }}? Esta acción no se puede deshacer.');"
+                                  >
+                                    <i class="bx bx-trash me-1"></i> Eliminar
                                   </button>
-                              </form>
-                            </div>
+                                </form>
+                              </li>
+                            </ul>
                           </div>
                         </td>
-                      </tr>
-                      {% endfor %} 
+                      </tr> 
+                      {% empty %}
+                      <tr><td colspan="5">No hay usuarios.</td></tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
@@ -58,4 +77,45 @@
                   <i class="bx bx-plus"></i> Agregar Usuario
                 </a>
               </div>
-{% endblock %}
+
+              <!-- Paginación -->
+              {% if page_obj.has_other_pages %}
+              <div class="mt-4">
+                <nav aria-label="Paginación de usuarios">
+                  <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" aria-label="Primera">
+                          <span aria-hidden="true">««</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" aria-label="Anterior">
+                          <span aria-hidden="true">«</span>
+                        </a>
+                      </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                      <span class="page-link">{{ page_obj.number }} <span class="visually-hidden">(página actual)</span></span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" aria-label="Siguiente">
+                          <span aria-hidden="true">»</span>
+                        </a>
+                      </li>
+                      <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}" aria-label="Última">
+                          <span aria-hidden="true">»»</span>
+                        </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              </div>
+              {% endif %}
+
+
+              {% endblock %}

@@ -1,6 +1,8 @@
 
 # Create your models here.
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.db.models import Sum
 
@@ -12,24 +14,13 @@ class Rol(models.Model):
 
 class Perfil(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    second_name = models.CharField(max_length=100, blank=True, null=True)
+    second_last_name = models.CharField(max_length=100, blank=True, null=True)
+    telefono = models.CharField(max_length=15, blank=True, null=True)
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.rol.nombre_rol if self.rol else 'Sin rol'}"
-
-
-class Usuario(models.Model):
-    primer_nombre_usuario = models.CharField(max_length=100, null=True, blank=True)
-    segundo_nombre_usuario = models.CharField(max_length=100, null=True, blank=True)
-    primer_apellido_usuario = models.CharField(max_length=100, null=True, blank=True)
-    segundo_apellido_usuario = models.CharField(max_length=100, null=True, blank=True)
-    telefono = models.DecimalField(max_digits=10, decimal_places=0, null=True, blank=True)
-    correo = models.EmailField(unique=True, null=True, blank=True)
-    contraseña = models.CharField(max_length=255, null=True, blank=True)
-    Rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True)
-
-    def __str__(self):
-        return self.primer_nombre_usuario or f"Usuario {self.id}"
 
 class Cliente(models.Model):
     primer_nombre_cliente = models.CharField(max_length=100, null=True, blank=True)
@@ -49,6 +40,7 @@ class Producto(models.Model):
     descripcion_producto = models.CharField(max_length=200, null=True, blank=True)
     precio_venta = models.DecimalField(max_digits=20, decimal_places=0, null=True, blank=True)
     costo_unitario = models.DecimalField(max_digits=20, decimal_places=0, null=True, blank=True)
+    imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
 
     def __str__(self):
         return self.nombre_producto or f"Producto {self.id}"
@@ -60,7 +52,6 @@ class Pedido(models.Model):
     fecha_pedido = models.DateField(null=True, blank=True, verbose_name="Fecha_Pedido")
     fecha_entrega = models.DateField(null=True, blank=True, verbose_name="Fecha_Entrega")
     cantidad = models.IntegerField(null=True, blank=True, verbose_name="Cantidad")
-    responsable = models.ForeignKey('Usuario', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Responsable")
         
     def __str__(self):
         return f"Pedido {self.id} - Cliente: {self.cliente}"

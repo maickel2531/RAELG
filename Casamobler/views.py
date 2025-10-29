@@ -1,8 +1,15 @@
 import re
+from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib import auth
 from django.contrib import messages
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -11,9 +18,14 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_RIGHT
 from reportlab.lib import colors
-from django.http import HttpResponse
-from django.contrib.auth.models import User
-from .models import Rol, Perfil, Usuario, Cliente, Producto, Pedido, Pago, Garantia, Remision, DetalleRemision
+from django.contrib.auth.hashers import make_password
+from .models import Rol, Perfil, Cliente, Producto, Pedido, Pago, Garantia, Remision, DetalleRemision
+from .forms import ProductoForm  
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
+
+
 
 
 # Create your views here.
@@ -28,77 +40,22 @@ def inicio(request):
 def dashboard(request):
     return render(request, 'dashboard.html')
 
-
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-
-        # Verificar si el usuario existe
-        if not User.objects.filter(username=username).exists():
-            return render(request, 'login.html', {
-                'error_username': 'El usuario no existe',
-                'username': username  # Para que no se borre lo que escribió
-            })
-
-        # Autenticar usuario
+        username = request.POST['username']
+        password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-        if user:
+        if user is not None:
             login(request, user)
             return redirect('dashboard')
         else:
-            return render(request, 'login.html', {
-                'error_password': 'La contraseña es incorrecta',
-                'username': username
-            })
-
-    return render(request, 'login.html')
-
+            return render(request, 'login.html', {'error_password': 'Credenciales inválidas'})
+    return render(request, 'login.html')  # ← render(request, ...)
 
 # Función para validar contraseña
 def validar_contraseña(password):
     patron = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$"
     return re.match(patron, password) 
-
-
-
-def register_view(request):
-    roles = Rol.objects.all()  # cargar roles
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-        rol_id = request.POST.get('rol')
-
-        # Verificar si el usuario ya existe
-        if User.objects.filter(username=username).exists():
-            return render(request, 'register.html', {
-                'error': 'El usuario ya existe',
-                'roles': roles
-            })
-
-        # Validar contraseña
-        if not validar_contraseña(password):
-            return render(request, 'register.html', {
-                'error': 'La contraseña debe tener al menos una minúscula, una mayúscula, un número, un carácter especial y mínimo 8 caracteres.',
-                'roles': roles
-            })
-
-        # Crear usuario
-        user = User.objects.create_user(username=username, password=password, email=email)
-
-        # Crear perfil con rol
-        rol = Rol.objects.get(id=rol_id)
-        Perfil.objects.create(user=user, rol=rol)
-
-        login(request, user)
-        return redirect('dashboard')
-
-    return render(request, 'register.html', {'roles': roles})
-
-
 
 def logout_view(request):
     logout(request)
@@ -106,108 +63,132 @@ def logout_view(request):
 
 @login_required
 def lista_usuarios(request):
-    usuarios = Usuario.objects.all()
-    paginator = Paginator(usuarios, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    query = request.GET.get('q')
+    if query:
+        users = User.objects.filter(
+            Q(username__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(last_name__icontains=query) |
+            Q(email__icontains=query)
+        ).select_related('perfil__rol')
+    else:
+        users = User.objects.select_related('perfil__rol').all()
+
+    paginator = Paginator(users, 10)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
     return render(request, 'usuario/lista_usuarios.html', {'page_obj': page_obj})
 
 @login_required
 def crear_usuario(request):
     if request.method == 'POST':
-        # Obtener datos del formulario
-        primer_nombre = request.POST.get('primer_nombre_usuario')
-        segundo_nombre = request.POST.get('segundo_nombre_usuario', '')
-        primer_apellido = request.POST.get('primer_apellido_usuario')
-        segundo_apellido = request.POST.get('segundo_apellido_usuario', '')
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        second_name = request.POST.get('second_name', '')
+        last_name = request.POST.get('last_name')
+        second_last_name = request.POST.get('second_last_name', '')
         telefono = request.POST.get('telefono')
-        correo = request.POST.get('correo')
-        contraseña = request.POST.get('contraseña') # En un sistema real, no se debería guardar en texto plano
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
         rol_id = request.POST.get('rol')
 
-        rol = Rol.objects.get(id=rol_id) if rol_id else None
+        # Validaciones
+        if password != password2:
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
 
-        # Validar si el correo ya existe
-        if Usuario.objects.filter(correo=correo).exists():
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'El nombre de usuario ya está en uso.')
+            return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
+
+        if User.objects.filter(email=email).exists():
             messages.error(request, 'El correo ya está registrado.')
             return render(request, 'usuario/crear_usuarios.html', {'roles': Rol.objects.all()})
-            
-        # Validaciones simples
-        if not correo or not contraseña:
-            messages.error(request, 'Correo y contraseña son obligatorios.')
-        else:
-    
 
-            # Crear el usuario personalizado
-            Usuario.objects.create(
-                primer_nombre_usuario=primer_nombre,
-                segundo_nombre_usuario=segundo_nombre,
-                primer_apellido_usuario=primer_apellido,
-                segundo_apellido_usuario=segundo_apellido,
-                telefono=telefono,
-                correo=correo,
-                contraseña=contraseña, # ¡OJO! En un sistema real, usar hash
-                Rol=rol
-            )
-            messages.success(request, f'Usuario "{primer_nombre}" creado exitosamente.')
-            return redirect('lista_usuarios')
+        # Crear usuario → esto dispara la señal y crea un Perfil vacío
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+
+        perfil = Perfil.objects.create(
+            user=user,
+            second_name=second_name,
+            second_last_name=second_last_name,
+            telefono=telefono,
+            rol_id=rol_id
+        )
+        # Actualizar los campos adicionales
+        perfil.second_name = second_name
+        perfil.second_last_name = second_last_name
+        perfil.telefono = telefono
+        perfil.rol_id = rol_id
+        perfil.save()
+
+        messages.success(request, f'Usuario "{username}" creado exitosamente.')
+        return redirect('lista_usuarios')
 
     roles = Rol.objects.all()
     return render(request, 'usuario/crear_usuarios.html', {'roles': roles})
 
 @login_required
-def editar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
+def editar_usuario(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    perfil, created = Perfil.objects.get_or_create(user=user)
+
     if request.method == 'POST':
-        # Obtener datos del formulario
-        usuario.primer_nombre_usuario = request.POST.get('primer_nombre_usuario')
-        usuario.segundo_nombre_usuario = request.POST.get('segundo_nombre_usuario', '')
-        usuario.primer_apellido_usuario = request.POST.get('primer_apellido_usuario')
-        usuario.segundo_apellido_usuario = request.POST.get('segundo_apellido_usuario', '')
-        usuario.telefono = request.POST.get('telefono')
-        usuario.correo = request.POST.get('correo')
-        # No se actualiza la contraseña aquí por simplicidad
-        rol_id = request.POST.get('Rol')
-        usuario.Rol = Rol.objects.get(id=rol_id) if rol_id else None
-
-        usuario.save()
-        messages.success(request, f'Usuario "{usuario.primer_nombre_usuario}" actualizado exitosamente.')
-        return redirect('lista_usuarios')
-
+        user.first_name = request.POST.get('first_name')
+        user.last_name = request.POST.get('last_name')
+        user.email = request.POST.get('email')
+        perfil.telefono = request.POST.get('telefono')
+        perfil.rol_id = request.POST.get('rol')
+        rol_id = request.POST.get('rol')
+        if rol_id:
+            perfil.rol_id = rol_id  # o: perfil.rol = Rol.objects.get(id=rol_id)
+        else:
+            perfil.rol = None
+        user.save()
+        perfil.save()
+        messages.success(request, 'Usuario actualizado.')
+        return redirect('lista_usuarios')  # ← Redirect a la lista de usuarios
     roles = Rol.objects.all()
-    return render(request, 'usuario/editar_usuarios.html', {'usuario': usuario, 'roles': roles})
 
-@login_required
+    return render(request, 'usuario/editar_usuarios.html', {
+        'user': user,
+        'perfil': perfil,
+        'roles': roles
+    })
 # views.py (modificar la vista eliminar_usuario)
 
 @login_required
-def eliminar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
+def eliminar_usuario(request, user_id):
+    user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        nombre_usuario = f"{usuario.primer_nombre_usuario or ''} {usuario.primer_apellido_usuario or ''}".strip()
-        try:
-            usuario.delete()
-            messages.success(request, f'Usuario "{nombre_usuario}" eliminado exitosamente.')
-        except Exception as e:
-            # Opcional: Manejar errores específicos si es necesario
-            messages.error(request, f'Error al eliminar el usuario: {str(e)}')
-
-    # Redirige de vuelta a la lista de usuarios después de intentar eliminar
-    return redirect('lista_usuarios')
-
-    # NOTA: El 'else' no es necesario si solo se maneja POST,
-    # ya que cualquier acceso GET directo a esta URL redirigirá a la lista.
-    # Si quieres que responda distinto a GET, puedes agregarlo:
-    # else:
-    #     messages.error(request, 'Método no permitido.')
-    #     return redirect('lista_usuarios')
-
-
+        user.delete()  # ¡Esto elimina también el Perfil (por CASCADE)!
+        messages.success(request, 'Usuario eliminado.')
+        return redirect('lista_usuarios')
 # --- VISTAS PARA CLIENTE ---
 
 @login_required
 def lista_clientes(request):
-    clientes = Cliente.objects.all()
+    query = request.GET.get('q')
+    if query:
+        clientes = Cliente.objects.filter(
+            Q(primer_nombre_cliente__icontains=query) |
+            Q(segundo_nombre_cliente__icontains=query) |
+            Q(primer_apellido_cliente__icontains=query) |
+            Q(segundo_apellido_cliente__icontains=query) |
+            Q(documento_id__icontains=query) |
+            Q(direccion__icontains=query) |
+            Q(telefono__icontains=query) |
+            Q(correo_electronico__icontains=query)
+        ).all()
+    else:
+        clientes = Cliente.objects.all()    
     paginator = Paginator(clientes, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -278,7 +259,16 @@ def eliminar_cliente(request, cliente_id):
 
 @login_required
 def lista_productos(request):
-    productos = Producto.objects.all()
+    query = request.GET.get('q')
+    if query:
+        productos = Producto.objects.filter(
+            Q(nombre_producto__icontains=query) |
+            Q(descripcion_producto__icontains=query) |
+            Q(precio_venta__icontains=query) |
+            Q(costo_unitario__icontains=query)
+        ).all()
+    else:
+        productos = Producto.objects.all()  
     paginator = Paginator(productos, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -287,24 +277,18 @@ def lista_productos(request):
 @login_required
 def crear_producto(request):
     if request.method == 'POST':
-        nombre_producto = request.POST.get('nombre_producto')
-        descripcion_producto = request.POST.get('descripcion_producto', '')
-        precio_venta = request.POST.get('precio_venta')
-        costo_unitario = request.POST.get('costo_unitario')
-
-        try:
-            Producto.objects.create(
-                nombre_producto=nombre_producto,
-                descripcion_producto=descripcion_producto,
-                precio_venta=precio_venta,
-                costo_unitario=costo_unitario
-            )
-            messages.success(request, f'Producto "{nombre_producto}" creado exitosamente.')
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Producto creado correctamente ✅")
             return redirect('lista_productos')
-        except ValueError:
-            messages.error(request, 'Error al crear el producto. Asegúrese de ingresar valores numéricos válidos para precio y costo.')
+        else:
+            # Mostrar errores para identificar por qué no se renderizan o validan campos
+            messages.error(request, f"Error formulario: {form.errors}")
+    else:
+        form = ProductoForm()
 
-    return render(request, 'producto/crear_productos.html')
+    return render(request, 'producto/crear_productos.html', {'form': form})
 
 @login_required
 def editar_producto(request, producto_id):
@@ -344,10 +328,19 @@ def eliminar_producto(request, producto_id):
 
 @login_required
 def lista_pedidos(request):
-    pedidos = Pedido.objects.select_related('cliente', 'producto', 'responsable').all()
+    query = request.GET.get('q')
+    if query:
+        pedidos = Pedido.objects.filter(
+            Q(id__icontains=query) |
+            Q(cliente__primer_nombre_cliente__icontains=query) |
+            Q(cliente__primer_apellido_cliente__icontains=query) |
+            Q(producto__nombre_producto__icontains=query)        # User
+        ).select_related('cliente', 'producto')
+    else:
+        pedidos = Pedido.objects.select_related('cliente', 'producto')
+
     paginator = Paginator(pedidos, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    page_obj = paginator.get_page(request.GET.get('page'))
     return render(request, 'pedido/lista_pedidos.html', {'page_obj': page_obj})
 
 # views.py
@@ -361,12 +354,10 @@ def crear_pedido(request):
         fecha_pedido = request.POST.get('fecha_pedido')
         fecha_entrega = request.POST.get('fecha_entrega')
         cantidad_str = request.POST.get('cantidad')
-        responsable_id = request.POST.get('responsable')
 
         try:
             producto = Producto.objects.get(id=producto_id) if producto_id else None
             cliente = Cliente.objects.get(id=cliente_id)
-            responsable = Usuario.objects.get(id=responsable_id) if responsable_id else None
 
             cantidad = int(cantidad_str) if cantidad_str else 0
 
@@ -377,23 +368,19 @@ def crear_pedido(request):
                 fecha_pedido=fecha_pedido,
                 fecha_entrega=fecha_entrega,
                 cantidad=cantidad,
-                # No se asigna valor_total aquí, ya que no existe en el modelo
-                responsable=responsable
             )
             messages.success(request, f'Pedido "{pedido_numero}" creado exitosamente.')
             return redirect('lista_pedidos')
-        except (Producto.DoesNotExist, Cliente.DoesNotExist, Usuario.DoesNotExist):
-            messages.error(request, 'Producto, Cliente o Responsable no encontrado.')
+        except (Producto.DoesNotExist, Cliente.DoesNotExist):
+            messages.error(request, 'Producto, Cliente no encontrado.')
         except ValueError:
             messages.error(request, 'La cantidad debe ser un número entero válido.')
 
     clientes = Cliente.objects.all()
     productos = Producto.objects.all()
-    usuarios = Usuario.objects.all()
     return render(request, 'pedido/crear_pedidos.html', {
         'clientes': clientes,
-        'productos': productos,
-        'usuarios': usuarios
+        'productos': productos
     })
 
 @login_required
@@ -403,35 +390,30 @@ def editar_pedido(request, pedido_id):
         pedido.pedido = request.POST.get('pedido')
         producto_id = request.POST.get('producto')
         cliente_id = request.POST.get('cliente')
-        responsable_id = request.POST.get('responsable')
         cantidad_str = request.POST.get('cantidad')
 
-        pedido.producto = Producto.objects.get(id=producto_id) if producto_id else None
-        pedido.cliente = Cliente.objects.get(id=cliente_id)
-        pedido.fecha_pedido = request.POST.get('fecha_pedido')
-        pedido.fecha_entrega = request.POST.get('fecha_entrega')
-        pedido.cantidad = int(cantidad_str) if cantidad_str else 0
-        pedido.responsable = Usuario.objects.get(id=responsable_id) if responsable_id else None
-
         try:
+            pedido.producto = Producto.objects.get(id=producto_id) if producto_id else None
+            pedido.cliente = Cliente.objects.get(id=cliente_id)
+            pedido.fecha_pedido = request.POST.get('fecha_pedido')
+            pedido.fecha_entrega = request.POST.get('fecha_entrega')
+            pedido.cantidad = int(cantidad_str) if cantidad_str else 0
+
             pedido.save()
             messages.success(request, f'Pedido "{pedido.pedido}" actualizado exitosamente.')
             return redirect('lista_pedidos')
-        except (Producto.DoesNotExist, Cliente.DoesNotExist, Usuario.DoesNotExist):
-            messages.error(request, 'Producto, Cliente o Responsable no encontrado.')
+        except (Producto.DoesNotExist, Cliente.DoesNotExist):
+            messages.error(request, 'Producto, Cliente no encontrado.')
         except ValueError:
             messages.error(request, 'La cantidad debe ser un número entero válido.')
 
     clientes = Cliente.objects.all()
     productos = Producto.objects.all()
-    usuarios = Usuario.objects.all()
     return render(request, 'pedido/editar_pedidos.html', {
         'pedido': pedido,
         'clientes': clientes,
         'productos': productos,
-        'usuarios': usuarios
     })
-
 
 @login_required
 def eliminar_pedido(request, pedido_id):
@@ -451,7 +433,17 @@ def eliminar_pedido(request, pedido_id):
 
 @login_required
 def lista_pagos(request):
-    pagos = Pago.objects.select_related('pedido', 'cliente').all()
+    query = request.GET.get('q')
+    if query:
+        pagos = Pago.objects.filter(
+            Q(id__icontains=query) |
+            Q(cliente__primer_nombre_cliente__icontains=query) |
+            Q(cliente__primer_apellido_cliente__icontains=query) |
+            Q(cliente__documento_id__icontains=query) |
+            Q(pedido__pedido__icontains=query)
+        ).select_related('pedido', 'cliente').all()
+    else:
+        pagos = Pago.objects.select_related('pedido', 'cliente').all()
     paginator = Paginator(pagos, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -532,7 +524,17 @@ def eliminar_pago(request, pago_id):
 
 @login_required
 def lista_garantias(request):
-    garantias = Garantia.objects.select_related('cliente', 'producto', 'pedido').all()
+    query = request.GET.get('q')
+    if query:
+        garantias = Garantia.objects.filter(
+            Q(cliente__primer_nombre_cliente__icontains=query) |
+            Q(cliente__primer_apellido_cliente__icontains=query) |
+            Q(cliente__documento_id__icontains=query) |
+            Q(producto__nombre_producto__icontains=query) |
+            Q(pedido__pedido__icontains=query)
+        ).select_related('cliente', 'producto', 'pedido').all()
+    else:
+        garantias = Garantia.objects.select_related('cliente', 'producto', 'pedido').all()  
     paginator = Paginator(garantias, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -620,36 +622,81 @@ def eliminar_garantia(request, garantia_id):
 @login_required
 def remision_pdf(request, remision_id):
     remision = get_object_or_404(Remision, id=remision_id)
-    
-    # Calcular total general
     total_general = sum(item.valor_total for item in remision.detalles.all())
 
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'inline; filename="remision_{remision.id}.pdf"'  # usa 'attachment' si quieres forzar descarga
+    response['Content-Disposition'] = f'inline; filename="remision_{remision.id}.pdf"'
 
-    doc = SimpleDocTemplate(response, pagesize=letter, topMargin=30, bottomMargin=30)
+    doc = SimpleDocTemplate(response, pagesize=letter, topMargin=40, bottomMargin=40, leftMargin=40, rightMargin=40)
     elements = []
     styles = getSampleStyleSheet()
 
-    # Estilos personalizados
+    # === COLORES ===
+    COLOR_RED = colors.HexColor("#e31b23")  # Rojo vibrante (ajusta según tu marca)
+    COLOR_BLACK = colors.HexColor("#000000")
+    COLOR_DARK_GRAY = colors.HexColor("#333333")
+    COLOR_LIGHT_GRAY = colors.HexColor("#f5f5f5")
+
+    # === ESTILOS PERSONALIZADOS ===
     title_style = ParagraphStyle(
-        'CustomTitle',
+        'Title',
         parent=styles['Heading1'],
-        fontSize=20,
+        fontSize=24,
+        alignment=TA_CENTER,
+        spaceAfter=8,
+        textColor=COLOR_BLACK,
+        fontName='Helvetica-Bold'
+    )
+
+    subtitle_style = ParagraphStyle(
+        'Subtitle',
+        fontSize=16,
         alignment=TA_CENTER,
         spaceAfter=20,
-        textColor=colors.HexColor("#2c3e50")
+        textColor=COLOR_RED,
+        fontName='Helvetica-Bold'
     )
-    normal = styles["Normal"]
-    right_align = ParagraphStyle('Right', parent=normal, alignment=TA_RIGHT)
 
-    # Encabezado
+    header_style = ParagraphStyle(
+        'Header',
+        fontSize=10,
+        alignment=TA_CENTER,
+        textColor=COLOR_BLACK,
+        fontName='Helvetica'
+    )
+
+    section_title = ParagraphStyle(
+        'SectionTitle',
+        parent=styles['Heading3'],
+        fontSize=12,
+        textColor=COLOR_BLACK,
+        fontName='Helvetica-Bold',
+        spaceAfter=8,
+        spaceBefore=12
+    )
+
+    normal_style = ParagraphStyle(
+        'Normal',
+        fontSize=10,
+        textColor=COLOR_DARK_GRAY,
+        fontName='Helvetica'
+    )
+
+    total_style = ParagraphStyle(
+        'Total',
+        fontSize=12,
+        alignment=TA_RIGHT,
+        textColor=COLOR_RED,
+        fontName='Helvetica-Bold'
+    )
+
+    # === ENCABEZADO ===
     elements.append(Paragraph("CASA MOBLER", title_style))
-    elements.append(Paragraph("REMISIÓN DE ENTREGA", styles['Heading2']))
-    elements.append(Paragraph(f"Número: {remision.id} &nbsp; | &nbsp; Fecha: {remision.fecha_emision}", normal))
+    elements.append(Paragraph("REMISIÓN DE ENTREGA", subtitle_style))
+    elements.append(Paragraph(f"Número: <b>{remision.id}</b> &nbsp; | &nbsp; Fecha: <b>{remision.fecha_emision}</b>", header_style))
     elements.append(Spacer(1, 20))
 
-    # Datos del cliente
+    # === DATOS DEL CLIENTE ===
     cliente = remision.cliente
     nombre_completo = " ".join(filter(None, [
         cliente.primer_nombre_cliente,
@@ -657,17 +704,20 @@ def remision_pdf(request, remision_id):
         cliente.primer_apellido_cliente,
         cliente.segundo_apellido_cliente
     ]))
-    elements.append(Paragraph("<b>Datos del Cliente</b>", styles['Heading3']))
-    elements.append(Paragraph(f"Nombre: {nombre_completo}", normal))
-    elements.append(Paragraph(f"Documento ID: {cliente.documento_id}", normal))
-    elements.append(Paragraph(f"Teléfono: {cliente.telefono}", normal))
-    elements.append(Paragraph(f"Dirección: {cliente.direccion}", normal))
+
+    elements.append(Paragraph("DATOS DEL CLIENTE", section_title))
+    elements.append(Paragraph(f"<b>Nombre:</b> {nombre_completo}", normal_style))
+    elements.append(Paragraph(f"<b>Documento ID:</b> {cliente.documento_id}", normal_style))
+    elements.append(Paragraph(f"<b>Teléfono:</b> {cliente.telefono}", normal_style))
+    elements.append(Paragraph(f"<b>Dirección:</b> {cliente.direccion}", normal_style))
     if remision.fecha_entrega_estimada:
-        elements.append(Paragraph(f"Fecha de entrega estimada: {remision.fecha_entrega_estimada}", normal))
+        elements.append(Paragraph(f"<b>Fecha de entrega estimada:</b> {remision.fecha_entrega_estimada}", normal_style))
     elements.append(Spacer(1, 15))
 
-    # Tabla de productos
-    data = [["Producto", "Cantidad", "Valor Unitario", "Valor Total"]]
+    # === TABLA DE PRODUCTOS ===
+    data = [
+        ["PRODUCTO", "CANTIDAD", "VALOR UNITARIO", "VALOR TOTAL"]
+    ]
     for item in remision.detalles.all():
         data.append([
             item.producto.nombre_producto,
@@ -676,33 +726,54 @@ def remision_pdf(request, remision_id):
             f"${item.valor_total:,.0f}"
         ])
 
-    table = Table(data, colWidths=[200, 60, 80, 80])
+    # Anchos de columna ajustados
+    col_widths = [220, 70, 90, 90]
+
+    table = Table(data, colWidths=col_widths)
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#2c3e50")),
+        # Cabecera
+        ('BACKGROUND', (0, 0), (-1, 0), COLOR_RED),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-        ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, 0), 10),
-        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+        ('PADDING', (0, 0), (-1, 0), 8),
+
+        # Cuerpo
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
         ('FONTSIZE', (0, 1), (-1, -1), 9),
+        ('ALIGN', (1, 1), (-1, -1), 'RIGHT'),
+        ('ALIGN', (0, 1), (0, -1), 'LEFT'),
+        ('GRID', (0, 0), (-1, -1), 0.5, COLOR_BLACK),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, COLOR_LIGHT_GRAY]),
+        ('PADDING', (0, 1), (-1, -1), 6),
     ]))
     elements.append(table)
     elements.append(Spacer(1, 15))
 
-    # Total
-    elements.append(Paragraph(f"<b>Total a entregar: ${total_general:,.0f}</b>", right_align))
+    # === TOTAL ===
+    elements.append(Paragraph(f"TOTAL A ENTREGAR: <b>${total_general:,.0f}</b>", total_style))
     elements.append(Spacer(1, 15))
 
-    # Observaciones
+    # === OBSERVACIONES ===
     if remision.observaciones:
-        elements.append(Paragraph("<b>Observaciones:</b>", styles['Heading4']))
-        elements.append(Paragraph(remision.observaciones.replace('\n', '<br/>'), normal))
+        elements.append(Paragraph("OBSERVACIONES", section_title))
+        obs_text = remision.observaciones.replace('\n', '<br/>')
+        elements.append(Paragraph(obs_text, normal_style))
+
+    # === PIE DE PÁGINA (opcional) ===
+    elements.append(Spacer(1, 20))
+    elements.append(Paragraph("<i>Documento válido sin firma. Generado electrónicamente.</i>", ParagraphStyle(
+        'Footer',
+        fontSize=8,
+        alignment=TA_CENTER,
+        textColor=colors.grey,
+        fontName='Helvetica-Oblique'
+    )))
 
     doc.build(elements)
     return response
 
-@login_required
 @login_required
 def detalle_remision(request, remision_id):
     remision = get_object_or_404(Remision, id=remision_id)
@@ -714,8 +785,18 @@ def detalle_remision(request, remision_id):
 
 @login_required
 def lista_remisiones(request):
-    remisiones = Remision.objects.select_related('cliente').prefetch_related('detalles__producto').all()
-    paginator = Paginator(remisiones, 10)
+    query = request.GET.get('q')
+    if query:
+        remisiones = Remision.objects.filter(
+            Q(id__icontains=query) |
+            Q(cliente__primer_nombre_cliente__icontains=query) |
+            Q(cliente__primer_apellido_cliente__icontains=query) |
+            Q(cliente__documento_id__icontains=query)
+        ).select_related('cliente').prefetch_related('detalles__producto').all()
+    else:
+        remisiones = Remision.objects.select_related('cliente').prefetch_related('detalles__producto').all()
+
+    paginator = Paginator(remisiones, 10)  # 10 remisiones por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'remisiones/lista_remisiones.html', {'page_obj': page_obj})
@@ -761,3 +842,16 @@ def crear_remision(request):
         'clientes': clientes,
         'productos': productos
     })
+    return render(request, 'remisiones/lista_remisiones.html', {'page_obj': page_obj})
+
+@login_required
+def eliminar_remision(request, remision_id):
+    remision = get_object_or_404(Remision, id=remision_id)
+    if request.method == 'POST':
+        remision_id_guardado = remision.id
+        remision.delete()
+        messages.success(request, f'Remisión #{remision_id_guardado} eliminada exitosamente.')
+        return redirect('lista_remisiones')
+    
+    # Si es GET, redirige (opcional: podrías mostrar una página de confirmación)
+    return redirect('lista_remisiones')

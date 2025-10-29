@@ -1,0 +1,125 @@
+/* ===== NAVBAR PREMIUM CASAMOBLER ===== */
+:root {
+  --casamobler-red: #C62828;
+  --casamobler-red-light: #EF9A9A;
+  --navbar-bg: #0F0F0F;
+  --text-body: #E0E0E0;
+  --text-muted: #999;
+}
+
+/* ===== NAVBAR MÁS GRANDE Y ELEGANTE ===== */
+.layout-navbar.bg-navbar-theme {
+  background: var(--navbar-bg) !important;
+  border-bottom: 1px solid #222 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2) !important;
+  /* Aumentamos la altura */
+  min-height: 72px !important; /* antes era ~56px */
+  padding: 0.75rem 0 !important; /* más espacio arriba y abajo */
+}
+
+/* Centrar verticalmente los elementos */
+#navbar-collapse,
+.navbar-nav-right,
+.navbar-nav {
+  height: 100%;
+  align-items: center !important;
+}
+
+/* Ajustar el toggle del menú en móvil */
+.layout-menu-toggle .nav-link {
+  padding: 0.5rem !important;
+}
+
+/* Ajustar el input de búsqueda */
+.navbar-search {
+  height: 42px;
+  font-size: 0.95rem;
+  padding-left: 8px !important;
+}
+
+/* Ajustar el avatar */
+.avatar img {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+/* Fondo del navbar */
+
+/* Búsqueda */
+.navbar-search {
+  color: var(--text-body) !important;
+  width: 220px;
+  transition: width 0.3s ease;
+}
+
+.navbar-search:focus {
+  outline: none;
+  color: white !important;
+  width: 260px;
+}
+
+.navbar-search::placeholder {
+  color: var(--text-muted) !important;
+  font-size: 0.9rem;
+}
+
+/* Avatar */
+.avatar.avatar-online::after {
+  background: var(--casamobler-red) !important;
+  border: 2px solid var(--navbar-bg) !important;
+}
+
+.border-red-accent {
+  border-color: var(--casamobler-red) !important;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  background: var(--navbar-bg) !important;
+  border: 1px solid #222 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.dropdown-header {
+  background: #151515 !important;
+  border-bottom: 1px solid #222 !important;
+}
+
+.dropdown-item {
+  color: var(--text-body) !important;
+  transition: all 0.25s ease;
+  font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+  background: rgba(198, 40, 40, 0.1) !important;
+  color: white !important;
+  padding-left: 1.25rem !important;
+}
+
+.dropdown-item i {
+  width: 1.2rem;
+  text-align: center;
+}
+
+.text-danger {
+  color: var(--casamobler-red) !important;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .navbar-search {
+    width: 160px;
+  }
+  .navbar-search:focus {
+    width: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-search {
+    display: none;
+  }
+}

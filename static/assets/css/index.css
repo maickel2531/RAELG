@@ -376,7 +376,7 @@ select:disabled {
 }
 
 [list]:not([type=date]):not([type=datetime-local]):not([type=month]):not([type=week]):not([type=time])::-webkit-calendar-picker-indicator {
-  display: none !important;
+  display: none ;
 }
 
 button,
@@ -483,7 +483,7 @@ progress {
 }
 
 [hidden] {
-  display: none !important;
+  display: none ;
 }
 
 .lead {
@@ -8185,7 +8185,7 @@ textarea.form-control-lg {
 /* rtl:end:remove */
 .text-primary {
   --bs-text-opacity: 1;
-  color: rgb(132 35 35), var(--bs-text-opacity)) !important;
+  color: rgb(132 35 35), var(--bs-text-opacity) !important;
 }
 
 .text-secondary {

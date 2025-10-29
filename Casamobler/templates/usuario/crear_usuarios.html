@@ -1,115 +1,108 @@
 {% extends 'base.html' %}
 {% block content %}
-              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Usuario /</span> Crear Usuario</h4>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuración de Usuario /</span> Crear Usuario</h4>
 
-              <div class="row">
-                <div class="col-md-12">
-                  <ul class="nav nav-pills flex-column flex-md-row mb-3">
-                    <li class="nav-item">
-                      <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Usuario</a>
-                    </li>
-                  </ul>
-                  <div class="card mb-4">
-                    <h5 class="card-header">Datos de Usuario</h5>
-                    <!-- Account -->
-                    <div class="card-body">
-                      <div class="d-flex align-items-start align-items-sm-center gap-4">
-                        <img
-                          src="../assets/img/avatars/1.png"
-                          alt="user-avatar"
-                          class="d-block rounded"
-                          height="100"
-                          width="100"
-                          id="uploadedAvatar"
-                        />
-                        <div class="button-wrapper">
-                          <label for="upload" class="btn btn-dark me-2 mb-4" tabindex="0">
-                            <span class="d-none d-sm-block">Subir foto</span>
-                            <i class="bx bx-upload d-block d-sm-none"></i>
-                            <input
-                              type="file"
-                              id="upload"
-                              class="account-file-input"
-                              hidden
-                              accept="image/png, image/jpeg"
-                            />
-                          </label>
-                          <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                            <i class="bx bx-reset d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Borrar foto</span>
-                          </button>
-
-                          <p class="text-muted mb-0">Formatos permitidos: JPG, GIF o PNG. Tamaño máximo de 800K</p>
-                        </div>
-                      </div>
-                    </div>
-                    <hr class="my-0" />
-                    <div class="card-body">
-                      <form  method="POST" action="{% url 'crear_usuarios' %}">
-                        {% csrf_token %}
-                        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
-                        <div class="row">
-                          
-                          <div class="mb-3 col-md-6">
-                            <label for="primer_nombre_usuario" class="form-label">Primer Nombre</label>
-                            <input class="form-control" type="text" name="primer_nombre_usuario"  required/>
-                          </div>
-                          
-                          <div class="mb-3 col-md-6">
-                            <label for="segundo_nombre_usuario" class="form-label">Segundo Nombre</label>
-                            <input class="form-control" type="text" name="segundo_nombre_usuario" />
-                          </div>
-
-                          <div class="mb-3 col-md-6">  
-                            <label for="primer_apellido_usuario" class="form-label">Primer Apellido</label>
-                            <input class="form-control" type="text" name="primer_apellido_usuario"    required/>
-                          </div>
-
-                          <div class="mb-3 col-md-6">
-                            <label for="segundo_apellido_usuario" class="form-label">Segundo Apellido</label>
-                            <input class="form-control" type="text" name="segundo_apellido_usuario"  required/>
-                          </div>
-
-                          <div class="mb-3 col-md-6">
-                            <label for="correo" class="form-label">Correo</label>
-                            <input class="form-control" type="email" name="correo"   required/>
-                          </div>
-
-                          <div class="mb-3 col-md-6">   
-                            <label for="telefono" class="form-label">Telefono</label>
-                            <input class="form-control" type="text" name="telefono" pattern="[0-9]{10}" title="El teléfono debe contener exactamente 10 dígitos" required/>
-                          </div>
-
-                          <div class="mb-3 col-md-6">
-                            <label for="rol" class="form-label">Rol</label>
-                            <select class="form-select" name="rol" required>
-                              <option value="" disabled selected>Seleccione un rol</option>
-                              {% for rol in roles %}
-                                <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
-                              {% endfor %}
-                            </select>
-                          </div>
-
-                          <div class="mb-3 col-md-6">
-                            <label for="contraseña" class="form-label">Contraseña</label>
-                            <input class="form-control" type="password" name="contraseña"  pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial." required/>
-                            <div class="form-text">
-                              <p>La contraseña debe tener al menos 8 caracteres, incluyendo una minúscula, una mayúscula, un número y un carácter especial.</p>
-                            </div>
-                          </div>
-
-                        </div>
-
-                        <div class="mt-2">
-                          <button type="submit" class="btn btn-dark me-2">Crear Usuario</button>
-                          <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
-                        </div>
-                        
-                      </form>
-                    </div>
-                    <!-- /Account -->
-                  </div>
-                </div>
+<div class="row">
+  <div class="col-md-12">
+    <ul class="nav nav-pills flex-column flex-md-row mb-3">
+      <li class="nav-item">
+        <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Usuario</a>
+      </li>
+    </ul>
+    <div class="card mb-4">
+      <h5 class="card-header">Datos de Usuario</h5>
+      <hr class="my-0" />
+      <div class="card-body">
+        <form method="POST" action="{% url 'crear_usuarios' %}">
+          {% csrf_token %}
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
+            {% endfor %}
+          {% endif %}
+
+          <div class="row">
+            <!-- Nombre de usuario (login) -->
+            <div class="mb-3 col-md-6">
+              <label for="username" class="form-label">Nombre de usuario </label>
+              <input class="form-control" type="text" id="username" name="username" required />
+              <div class="form-text">Este será tu nombre para iniciar sesión.</div>
             </div>
+
+            <!-- Correo electrónico -->
+            <div class="mb-3 col-md-6">
+              <label for="email" class="form-label">Correo electrónico </label>
+              <input class="form-control" type="email" id="email" name="email" required />
+            </div>
+
+            <!-- Primer Nombre -->
+            <div class="mb-3 col-md-6">
+              <label for="first_name" class="form-label">Primer Nombre </label>
+              <input class="form-control" type="text" id="first_name" name="first_name" required />
+            </div>
+
+            <!-- Segundo Nombre (opcional) -->
+            <div class="mb-3 col-md-6">
+              <label for="second_name" class="form-label">Segundo Nombre</label>
+              <input class="form-control" type="text" id="second_name" name="second_name" />
+            </div>
+
+            <!-- Primer Apellido -->
+            <div class="mb-3 col-md-6">
+              <label for="last_name" class="form-label">Primer Apellido </label>
+              <input class="form-control" type="text" id="last_name" name="last_name" required />
+            </div>
+
+            <!-- Segundo Apellido (opcional) -->
+            <div class="mb-3 col-md-6">
+              <label for="second_last_name" class="form-label">Segundo Apellido</label>
+              <input class="form-control" type="text" id="second_last_name" name="second_last_name" />
+            </div>
+
+            <!-- Teléfono -->
+            <div class="mb-3 col-md-6">
+              <label for="telefono" class="form-label">Teléfono </label>
+              <input class="form-control" type="text" id="telefono" name="telefono" pattern="[0-9]{10}" title="Debe tener 10 dígitos" required />
+            </div>
+
+            <!-- Rol -->
+            <div class="mb-3 col-md-6">
+              <label for="rol" class="form-label">Rol </label>
+              <select class="form-select" id="rol" name="rol" required>
+                <option value="" disabled selected>Seleccione un rol</option>
+                {% for rol in roles %}
+                  <option value="{{ rol.id }}">{{ rol.nombre_rol }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Contraseña -->
+            <div class="mb-3 col-md-6">
+              <label for="password" class="form-label">Contraseña </label>
+              <input class="form-control" type="password" id="password" name="password" 
+                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                     title="Mínimo 8 caracteres: una mayúscula, una minúscula, un número y un símbolo." required />
+              <div class="form-text">Mínimo 8 caracteres: una mayúscula, una minúscula, un número y un símbolo.</div>
+            </div>
+
+            <!-- Confirmar contraseña -->
+            <div class="mb-3 col-md-6">
+              <label for="password2" class="form-label">Confirmar contraseña </label>
+              <input class="form-control" type="password" id="password2" name="password2" required />
+              <div class="form-text">Debe ser la misma que la contraseña anterior.</div>
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-dark me-2">Crear Usuario</button>
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-outline-secondary">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

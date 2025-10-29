@@ -1,56 +1,70 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h2>Crear Nueva Remisión</h2>
+              <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Remision /</span> Crear Remision</h4>
 
-<form method="post">
-  {% csrf_token %}
-  
-  <div class="mb-3">
-    <label class="form-label">Cliente *</label>
-    <select name="cliente" class="form-control" required>
-      <option value="">-- Seleccione un cliente --</option>
-      {% for c in clientes %}
-        <option value="{{ c.id }}">
-          {{ c.primer_nombre_cliente }} {{ c.primer_apellido_cliente }} ({{ c.documento_id }})
-        </option>
-      {% endfor %}
-    </select>
-  </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Remision</a>
+                    </li>
+                  </ul>
+                  <div class="card mb-4">
+                    <h5 class="card-header">Datos de Remision</h5>
+                    <!-- Account -->
+                    <hr class="my-0" />
+                    <div class="card-body">
+                      <form  method="POST" action="{% url 'crear_remision' %}">
+                        {% csrf_token %}
+                        {% if error %}<p style="color:red;">{{ error }}</p>{% endif %}
+                        <div class="row">
+                          <div class="mb-3 col-md-6">
+                            <label for="cliente" class="form-label">Cliente</label>
+                            <select class="form-control" name="cliente" required>
+                              <option value="">-- Seleccione un cliente --</option>
+                              {% for c in clientes %}
+                                <option value="{{ c.id }}">
+                                  {{ c.primer_nombre_cliente }} {{ c.primer_apellido_cliente }} ({{ c.documento_id }})
+                                </option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="fecha_entrega_estimada" class="form-label">Fecha de Entrega Estimada</label>
+                            <input class="form-control" type="date" name="fecha_entrega_estimada" required/>
+                          </div>
+                        </div>
 
-  <div class="mb-3">
-    <label class="form-label">Fecha de entrega estimada</label>
-    <input type="date" name="fecha_entrega_estimada" class="form-control">
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label">Observaciones</label>
-    <textarea name="observaciones" class="form-control" rows="3"></textarea>
-  </div>
-
-  <h4>Productos en la remisión</h4>
-  <div id="productos-container">
-    <div class="producto-item mb-2">
-      <select name="producto_id" class="form-control d-inline" style="width: 60%;" required>
-        <option value="">-- Producto --</option>
-        {% for p in productos %}
-          <option value="{{ p.id }}">{{ p.nombre_producto }} (${{ p.precio_venta }})</option>
-        {% endfor %}
-      </select>
-      <input type="number" name="cantidad" class="form-control d-inline" style="width: 30%;" placeholder="Cantidad" min="1" required>
-    </div>
-  </div>
-
-  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="agregarProducto()">
-    + Agregar otro producto
-  </button>
-
-  <div class="mt-4">
-    <button type="submit" class="btn btn-primary">Crear Remisión</button>
-    <a href="{% url 'lista_remisiones' %}" class="btn btn-secondary">Cancelar</a>
-  </div>
-</form>
-
+                        <div class="row">
+                          <div class="mb-3 col-md-6">
+                            <label for="producto_id" class="form-label">Producto</label>
+                            <select class="form-control" name="producto_id" required>
+                              <option value="">-- Seleccione un producto --</option>
+                              {% for p in productos %}
+                                <option value="{{ p.id }}">{{ p.nombre_producto }} (${{ p.precio_venta }})</option>
+                              {% endfor %}
+                            </select>
+                            <input type="number" name="cantidad" class="form-control d-inline" style="width: 30%;" placeholder="Cantidad" min="1" required>
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="observaciones" class="form-label">Observaciones</label>
+                            <textarea class="form-control" name="observaciones" rows="3"></textarea>
+                          </div>
+                        </div>
+                        
+                        <div class="mt-2">
+                          <button type="submit" class="btn btn-dark me-2">Crear Remision</button>
+                          <button type="reset" class="btn btn-outline-secondary">Cancelar</button>
+                        </div>
+                      </form>
+                    </div>
+                    <!-- /Account -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            
 <script>
 function agregarProducto() {
   const container = document.getElementById('productos-container');

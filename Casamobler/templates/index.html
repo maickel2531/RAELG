@@ -1,105 +1,177 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="Casamobler - Gestión inmobiliaria" />
-        <meta name="author" content="CasaMobler" />
-        <title>Casamobler</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="{% static 'assets/img/fondoi.jpg' %}" />
-        <!-- Custom Google font-->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{% static 'assets/css/index.css' %}" rel="stylesheet" />
-    </head>
-    <body class="d-flex flex-column h-100">
-        <main class="flex-shrink-0">
-            <!-- Navigation-->
-            <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-                <div class="container px-5">
-                    <a class="navbar-brand" href="/"><span class="fw-bolder text-primary">CasaMobler</span></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-                            <li class="nav-item"><a class="nav-link" href="/"></a></li>
-                            <li class="nav-item"><a class="nav-link" href="/about/"></a></li>
-                            <li class="nav-item"><a class="nav-link" href="/contact/"></a></li>
-                            
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- Header-->
-            <header class="py-5">
-                <div class="container px-5 pb-5">
-                    <div class="row gx-5 align-items-center">
-                        <div class="col-xxl-5">
-                            <!-- Header text content-->
-                            <div class="text-center text-xxl-start">
-                                <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase"> &middot;  &middot; </div></div>
-                                <div class="fs-3 fw-light text-muted">Te ayudamos a formar tu hogar ideal</div>
-                                <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Vive el espacio que mereces, inspírate y hazlo tuyo</span></h1>
-                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                                    <a class="btn btn-dark btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"  href="{% url 'login' %}">Iniciar sesión</a>  
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xxl-7">
-                            <!-- Header profile picture-->
-                            <div class="d-flex justify-content-center mt-5 mt-xxl-0">
-                                <div class="profile bg-gradient-primary-to-secondary">
-                                    <img class="profile-img"  src="{% static 'assets/img/casa_mobler.jpeg' %}" alt="..." />
-                                    <!-- Puedes agregar los SVG dots si los necesitas -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-            <!-- About Section-->
-            <section class="bg-light py-5">
-                <div class="container px-5">
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-xxl-8">
-                            <div class="text-center my-5">
-                                <h2 class="display-5 fw-bolder"><span class="text-gradient d-inline">Sobre nosotros</span></h2>
-                                <p class="lead fw-light mb-4">Somos CasaMobler y ayudamos a las familias a formar su hogar.</p>
-                                <p class="text-muted">Casamobler es la mayor empresa de gestión inmobiliaria en el mundo. Con nuestra experiencia y conocimientos, nos ayudamos a crear un hogar que sea único y atractivo para las familias.</p>
-                                <div class="d-flex justify-content-center fs-2 gap-4">
-                                    <a class="text-gradient" href="#"><i class="bi bi-twitter"></i></a>
-                                    <a class="text-gradient" href="#"><i class="bi bi-linkedin"></i></a>
-                                    <a class="text-gradient" href="#"><i class="bi bi-github"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-        <!-- Footer-->
-        <footer class="bg-white py-4 mt-auto">
-            <div class="container px-5">
-                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0">&copy; CasaMobler {{ now|date:"Y" }}</div></div>
-                    <div class="col-auto">
-                        <a class="small" href="#"></a>
-                        <span class="mx-1">&middot;</span>
-                        <a class="small" href="#"></a>
-                        <span class="mx-1">&middot;</span>
-                        <a class="small" href="/contact/"></a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="{% static 'assets/js/scripts.js' %}"></script>
-    </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CASAMOBLER | Muebles de Ensueño</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'assets/css/custom-index.css' %}"> 
+  <link rel="icon" type="image/x-icon" href="{% static 'assets/img/fondoi.jpg' %}" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container">
+      <nav class="nav">
+        <div class="logo">CASAMOBLER</div>
+        <ul class="nav-menu">
+          <li><a href="#home">Inicio</a></li>
+          <li><a href="#collection">Colección</a></li>
+          <li><a href="#about">Experiencia</a></li>
+          <li><a href="#testimonials">Testimonios</a></li>
+        </ul>
+      <a href="{% url 'login' %}" class="btn btn-outline">Iniciar Sesión</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+
+<section id="home" class="hero">
+  <div class="hero-video-container">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="{% static 'assets/img/video1.mp4' %}" type="video/mp4">
+    </video>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>MUEBLES DE ENSUEÑO</h1>
+    <p>Donde el lujo se encuentra con la artesanía excepcional. Piezas únicas diseñadas para transformar tu espacio en un santuario de elegancia y confort.</p>
+    <div class="hero-buttons">
+      <a href="#collection" class="btn">Descubrir Colección</a>
+    </div>
+  </div>
+</section>
+
+  <!-- COLLECTION SECTION --> 
+
+
+<section id="collection" class="section">
+  <div class="container">
+    <h2 class="section-title">Colección Exclusiva</h2>
+    <div class="products-grid">
+      <!-- Producto 1 -->
+      <div class="product-card">
+        <div class="product-video">
+          <video autoplay muted loop playsinline>
+            <source src="{% static 'assets/img/video2.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Nuestro local</h3>
+          <p class="product-price">Visita nuestro local para ver los diseños mas exclusivos</p>
+
+        </div>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="product-card">
+        <div class="product-video">
+          <video autoplay muted loop playsinline>
+            <source src="{% static 'assets/img/video3.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Sala de estar</h3>
+          <p class="product-price">Todos nuestros productos le daran ese toque elegante a tu hogar</p>
+        </div>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="product-card">
+        <div class="product-video">
+          <video autoplay muted loop playsinline>
+            <source src="{% static 'assets/img/video4.mp4' %}" type="video/mp4">
+          </video>
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Comedor</h3>
+          <p class="product-price">Disfruta de tus comidas en un ambiente sobrio y de lujo</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- WHY US SECTION -->
+  <section id="about" class="section">
+    <div class="container">
+      <h2 class="section-title">Experiencia CASAMOBLER</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">✨</div>
+          <h3>Diseño Exclusivo</h3>
+          <p>Cada pieza es única, creada por diseñadores internacionales reconocidos por su visión innovadora. Nuestros muebles no solo son funcionales, son obras de arte.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🪵</div>
+          <h3>Calidad Premium</h3>
+          <p>Materiales nobles seleccionados a mano y artesanía meticulosa en cada detalle. Trabajamos con maderas exóticas, cueros auténticos y acabados que resisten el paso del tiempo.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🏆</div>
+          <h3>Premios Internacionales</h3>
+          <p>Reconocidos globalmente por la excelencia en diseño y funcionalidad residencial. Nuestros productos han sido galardonados en los principales eventos de diseño del mundo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="testimonials">
+    <div class="container">
+      <h2 class="section-title">Testimonios de Excelencia</h2>
+      <div class="testimonial-cards">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"El sofá Chesterfield superó todas mis expectativas. La calidad del cuero y la atención al detalle son incomparables. Mi sala ahora es el centro de atención en cada reunión."</p>
+          <p class="testimonial-author">— Sofía Martínez</p>
+          <p class="testimonial-role">Arquitecta & Diseñadora de Interiores</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Transformaron mi espacio con piezas que combinan historia y modernidad. Un verdadero placer trabajar con CASAMOBLER. El servicio personalizado fue excepcional."</p>
+          <p class="testimonial-author">— Carlos Rivera</p>
+          <p class="testimonial-role">Diseñador de Interiores</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-col">
+          <h3>CASAMOBLER</h3>
+          <p style="color: var(--light-gray); line-height: 1.8; margin-bottom: 25px;">
+            Muebles de ensueño para espacios extraordinarios. 
+            Donde cada pieza cuenta una historia de lujo y elegancia.
+          </p>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/casamobler/" aria-label="Instagram">IG</a>
+            <a href="https://www.facebook.com/casamobler/" aria-label="Facebook">FB</a>
+            <a href="https://wa.me/573174310297?text=Hola%20Casamobler%20👋" aria-label="WhatsApp">WH</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>Navegación</h3>
+          <ul class="footer-links">
+            <li><a href="#home">Inicio</a></li>
+            <li><a href="#collection">Colección</a></li>
+            <li><a href="#about">Experiencia</a></li>
+            <li><a href="#testimonials">Testimonios</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        © 2025 CASAMOBLER. Todos los derechos reservados. Muebles de Ensueño.
+      </div>
+    </div>
+  </footer>
+
+</body>
 </html>

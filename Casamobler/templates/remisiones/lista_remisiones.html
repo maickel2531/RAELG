@@ -3,36 +3,71 @@
 <!-- templates/remisiones/lista_remisiones.html -->
 
 {% block content %}
-<h2>Lista de Remisiones</h2>
-<a href="#" class="btn btn-primary mb-3">Crear Remisión</a>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Configuracion de Remisiones /</span> Lista de Remisiones</h4>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Cliente</th>
-      <th>Fecha</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for r in page_obj %}
-    <tr>
-      <td>{{ r.id }}</td>
-      <td>
-        {{ r.cliente.primer_nombre_cliente }} {{ r.cliente.primer_apellido_cliente }}
-      </td>
-      <td>{{ r.fecha_emision }}</td>
-      <td>
-        <a href="{% url 'detalle_remision' r.id %}" class="btn btn-sm btn-info">Ver</a>
-        <a href="{% url 'remision_pdf' r.id %}" target="_blank" class="btn btn-sm btn-success">Imprimir</a>
-      </td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">No hay remisiones.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+<!-- Formulario de búsqueda -->
+<form method="get" class="mb-3">
+  <div class="input-group">
+    <input type="text" name="q" class="form-control" placeholder="Buscar remision por ID, cliente o fecha..." 
+           value="{{ request.GET.q }}">
+    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+  </div>
+</form>
+              <div class="card">
+                <h5 class="card-header">Lista de Remisiones</h5>
+                <div class="table-responsive text-nowrap">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Fecha de Entrega Estimada</th>
+                        <th>Observaciones</th>
+                        <th>Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                      {% for r in page_obj %}
+                      <tr>
+                        <td>{{ r.id }}</td>
+                        <td>{{ r.cliente.primer_nombre_cliente }} {{ r.cliente.primer_apellido_cliente }}</td>
+                        <td>{{ r.fecha_emision }}</td>
+                        <td>{{ r.fecha_entrega_estimada }}</td>
+                        <td>{{ r.observaciones }}</td>
+                        <td>
+                          <div class="dropdown">
+                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                              <i class="bx bx-dots-vertical-rounded"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="{% url 'detalle_remision' r.id %}">
+                                <i class="bx bx-document-details me-1"></i> Detalle</a>
+                              <a class="dropdown-item" href="{% url 'remision_pdf' r.id %}">
+                                <i class="bx bx-file-pdf me-1"></i> Imprimir</a>
+                              <form method="post" style="display:inline;" action="{% url 'eliminar_remision' r.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar la remisión &quot;{{ r.id }}&quot;?');">
+                                  <i class="bx bx-trash me-1"></i> Eliminar
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {% empty %}
+                      <tr><td colspan="5">No hay remisiones.</td></tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="mt-2">
+                <a  class="btn btn-dark" href="{% url 'crear_remision' %}">
+                  <i class="bx bx-plus"></i> Agregar Remisión
+                </a>
+              </div>
 
 <!-- Paginación -->
 <div class="pagination">
@@ -52,4 +87,5 @@
     {% endif %}
   </span>
 </div>
+
 {% endblock %}

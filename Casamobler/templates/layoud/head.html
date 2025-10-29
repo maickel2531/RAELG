@@ -15,7 +15,7 @@
 <!-- beautify ignore:start -->
 <html
   lang="en"
-  class="light-style layout-menu-fixed"
+  class="dark-style layout-menu-fixed"
   dir="ltr"
   data-theme="theme-default"
   data-assets-path="../assets/"
@@ -65,6 +65,16 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets/js/config.js' %}"></script>
+
+    <!-- Fuentes premium -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{% static 'assets/css/custom-dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/custom-sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/custom-navbar.css' %}">
+
+
   </head>
   {% block base %}{% endblock %}
 </html>

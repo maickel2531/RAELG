@@ -55,15 +55,6 @@
                             <label for="cantidad" class="form-label">Cantidad</label>
                             <input class="form-control" type="number"  value = "{{ pedido.cantidad }}" name="cantidad"  required/>
                           </div>
-                          <div class="mb-3 col-md-6">
-                            <label for="responsable" class="form-label">Responsable</label>
-                            <select class="form-select" value = "{{ pedido.responsable }}" name="responsable" required>
-                              <option value="" disabled selected>Seleccione un usuario</option>
-                              {% for usuario in usuarios %}
-                                <option value="{{ usuario.id }}">{{ usuario.primer_nombre_usuario }}</option>
-                              {% endfor %}
-                            </select>
-                          </div>
                         </div>
 
                         <div class="mt-2">

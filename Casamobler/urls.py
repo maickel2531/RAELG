@@ -6,15 +6,15 @@ urlpatterns = [
     path('', views.home, name='home'),  # Página principal
     path('dashboard/', views.dashboard, name='dashboard'),  # Dashboard
     path('login/', views.login_view, name='login'),         # Login
-    path('logout/', views.logout_view, name='logout'),      # Logout
-    path('register/', views.register_view, name='register'),      # Registro    
+    path('logout/', views.logout_view, name='logout'),      # Logout   
     path('inicio/', views.inicio, name='inicio'),      # Inicio
     path('', views.index, name='index'),
         # USUARIO (Modelo Personalizado)
+        
     path('usuarios/', views.lista_usuarios, name='lista_usuarios'),
     path('usuarios/crear/', views.crear_usuario, name='crear_usuarios'),
-    path('usuarios/<int:usuario_id>/editar/', views.editar_usuario, name='editar_usuarios'),
-    path('usuarios/<int:usuario_id>/eliminar/', views.eliminar_usuario, name='eliminar_usuarios'),
+    path('usuarios/<int:user_id>/editar/', views.editar_usuario, name='editar_usuarios'),
+    path('usuarios/<int:user_id>/eliminar/', views.eliminar_usuario, name='eliminar_usuarios'),
 
     # CLIENTE
     path('clientes/', views.lista_clientes, name='lista_clientes'),
@@ -51,6 +51,7 @@ urlpatterns = [
     path('remisiones/<int:remision_id>/', views.detalle_remision, name='detalle_remision'),
     path('remision/<int:remision_id>/pdf/', views.remision_pdf, name='remision_pdf'),
     path('remisiones/crear/', views.crear_remision, name='crear_remision'),
+    path('remisiones/<int:remision_id>/eliminar/', views.eliminar_remision, name='eliminar_remision'),
 
     ]
     # myapp/urls.py (añadir después de tus URLs existentes)

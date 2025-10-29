@@ -1,166 +1,174 @@
 {% load static %}
 {% block sidebar %}
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-          <div class="app-brand demo">
-            <a href="{% url 'dashboard' %}" class="app-brand-link gap-2">
-              <span class="app-brand-logo demo">
-                <img src="{% static 'assets/img/logo2.jpg' %}" alt="Logo" width="40" />
-              </span>
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">CasaMobler</span>
-            </a>
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <!-- Brand -->
+  <div class="app-brand demo">
+    <a href="{% url 'dashboard' %}" class="app-brand-link gap-2">
+      <span class="app-brand-logo demo">
+        <img src="{% static 'assets/img/logo2.jpg' %}" alt="Casamobler" width="40" />
+      </span>
+      <span class="app-brand-text demo menu-text fw-bold ms-2">Casamobler</span>
+    </a>
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+      <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+  </div>
 
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-              <i class="bx bx-chevron-left bx-sm align-middle"></i>
-            </a>
-          </div>
+  <div class="menu-inner-shadow"></div>
 
-          <div class="menu-inner-shadow"></div>
+  <ul class="menu-inner py-1">
+    <!-- Dashboard -->
+    <li class="menu-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <a href="{% url 'dashboard' %}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+        <div>Dashboard</div>
+      </a>
+    </li>
 
-          <ul class="menu-inner py-1">
-            <!-- Dashboard -->
-            <li class="menu-item active">
-              <a href="{% url 'dashboard' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Dashboard</div>
-              </a>
-            </li>
+    <!-- Servicios Header -->
+    <li class="menu-header small text-uppercase mt-3">
+      <span class="menu-header-text">SERVICIOS</span>
+    </li>
 
-            <!-- Usuarios -->
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Servicios</span>
-            </li>
-            <!-- Usuarios -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Layouts">Usuarios</div>
-              </a>
+    <!-- Usuarios -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-user"></i>
+        <div>Usuarios</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_usuarios' %}" class="menu-link">
+            <div>Crear Usuario</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_usuarios' %}" class="menu-link">
+            <div>Lista de Usuarios</div>
+          </a>
+        </li>
+      </ul>
+    </li>
 
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_usuarios' %}" class="menu-link">
-                    <div data-i18n="Without menu">Crear Usuario</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_usuarios' %}" class="menu-link">
-                    <div data-i18n="Without navbar">Lista de Usuarios</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <!-- Clientes -->
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class=' menu-icon tf-icons bx bx-box'></i>
-                <div data-i18n="Account Settings">Clientes</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_clientes'%}" class="menu-link">
-                    <div data-i18n="Account">Crear Cliente</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_clientes' %}" class="menu-link">
-                    <div data-i18n="Notifications">Lista de Clientes</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-menu"></i>
-                <div data-i18n="Authentications">Productos</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_productos' %}" class="menu-link">
-                    <div data-i18n="">Crear Producto</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_productos' %}" class="menu-link">
-                    <div data-i18n="">Lista de pedidos</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-chevron-left"></i>
-                <div data-i18n="Authentications">Pedidos</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_pedidos' %}" class="menu-link" >
-                    <div data-i18n="Basic">Crear Pedido</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_pedidos' %}" class="menu-link" >
-                    <div data-i18n="Basic">Lista de pedidos</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-paper-plane"></i>
-                <div data-i18n="Authentications">Pagos</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_pagos' %}" class="menu-link">
-                    <div data-i18n="Basic">Crear Pago</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_pagos' %}" class="menu-link">
-                    <div data-i18n="Basic">Lista de pagos</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            </li>
-            <!-- Garantias -->
-            <!-- User interface -->
-            <li class="menu-item">
-              <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-wallet"></i>
-                <div data-i18n="User interface">Garantias</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_garantias' %}" class="menu-link">
-                    <div data-i18n="Accordion">Crear Garantia</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_garantias' %}" class="menu-link">
-                    <div data-i18n="Alerts">Lista de Garantias</div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="menu-item">
-              <a href="javascript:void(0);" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-file"></i>
-                <div>Remisiones</div>
-              </a>
-              <ul class="menu-sub">
-                <li class="menu-item">
-                  <a href="{% url 'crear_remision' %}" class="menu-link">
-                    <div data-i18n="Crear Remision">Crear Remision</div>
-                  </a>
-                </li>
-                <li class="menu-item">
-                  <a href="{% url 'lista_remisiones' %}" class="menu-link">
-                    <div>Lista de Remisiones</div>
-                  </a>
-                </li>
-                <!-- Si más adelante creas 'crear_remision', añádelo aquí -->
-              </ul>
-            </li>
-        </aside>
+    <!-- Clientes -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-group"></i>
+        <div>Clientes</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_clientes' %}" class="menu-link">
+            <div>Crear Cliente</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_clientes' %}" class="menu-link">
+            <div>Lista de Clientes</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Productos -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-cube"></i>
+        <div>Productos</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_productos' %}" class="menu-link">
+            <div>Crear Producto</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_productos' %}" class="menu-link">
+            <div>Lista de Productos</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Pedidos -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-package"></i>
+        <div>Pedidos</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_pedidos' %}" class="menu-link">
+            <div>Crear Pedido</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_pedidos' %}" class="menu-link">
+            <div>Lista de Pedidos</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Pagos -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-credit-card"></i>
+        <div>Pagos</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_pagos' %}" class="menu-link">
+            <div>Crear Pago</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_pagos' %}" class="menu-link">
+            <div>Lista de Pagos</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Garantías -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-shield"></i>
+        <div>Garantías</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_garantias' %}" class="menu-link">
+            <div>Crear Garantía</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_garantias' %}" class="menu-link">
+            <div>Lista de Garantías</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <!-- Remisiones -->
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons bx bx-file"></i>
+        <div>Remisiones</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'crear_remision' %}" class="menu-link">
+            <div>Crear Remisión</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{% url 'lista_remisiones' %}" class="menu-link">
+            <div>Lista de Remisiones</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</aside>
 {% endblock %}
